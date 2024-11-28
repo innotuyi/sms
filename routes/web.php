@@ -11,9 +11,9 @@ Route::get('/terms-of-use', [HomeController::class, 'terms_of_use'])->name('term
 
 Route::group(['middleware' => 'auth'], function () {
 
-    Route::get('/', [HomeController::class, ''])->name('home');
-    Route::get('/home', [HomeController::class, ''])->name('home');
-    Route::get('/dashboard', [HomeController::class, ''])->name('dashboard');
+    Route::get('/', [HomeController::class, 'dashboard'])->name('home');
+    Route::get('/home', [HomeController::class, 'dashboard'])->name('home');
+    Route::get('/dashboard', [HomeController::class, 'dashboard'])->name('dashboard');
 
     Route::group(['prefix' => 'my_account'], function() {
         Route::get('/', 'MyAccountController@edit_profile')->name('my_account');
