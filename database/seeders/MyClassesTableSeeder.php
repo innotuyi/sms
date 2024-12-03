@@ -24,11 +24,11 @@ class MyClassesTableSeeder extends Seeder
             ['name' => 'Nursery 3', 'class_type_id' => $ct[2]],
             ['name' => 'Primary 1', 'class_type_id' => $ct[3]],
             ['name' => 'Primary 2', 'class_type_id' => $ct[3]],
-            ['name' => 'JSS 2', 'class_type_id' => $ct[4]],
-            ['name' => 'JSS 3', 'class_type_id' => $ct[4]],
-            ['name' => 'SSS 1', 'class_type_id' => $ct[5]],
-            ['name' => 'SSS 2', 'class_type_id' => $ct[5]],
-            ['name' => 'SSS 3', 'class_type_id' => $ct[5]],
+            ['name' => 'S1', 'class_type_id' => $ct[4]],
+            ['name' => 'S2', 'class_type_id' => $ct[4]],
+            ['name' => 'S4', 'class_type_id' => $ct[5]],
+            ['name' => 'S5', 'class_type_id' => $ct[5]],
+            ['name' => 'S6', 'class_type_id' => $ct[5]],
             ];
 
         DB::table('my_classes')->insert($data);

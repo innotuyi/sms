@@ -103,7 +103,7 @@
                     </div>
                     <div class="row">
 
-                        <div class="col-md-6">
+                        {{-- <div class="col-md-6">
                             <div class="form-group">
                                 <label for="bg_id">Blood Group: </label>
                                 <select class="select form-control" id="bg_id" name="bg_id" data-fouc data-placeholder="Choose..">
@@ -113,7 +113,7 @@
                                     @endforeach
                                 </select>
                             </div>
-                        </div>
+                        </div> --}}
 
                         <div class="col-md-6">
                             <div class="form-group">
