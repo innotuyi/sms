@@ -36,4 +36,18 @@ return [
         'secret' => env('STRIPE_SECRET'),
     ],
 
+    'rwanda_locations' => [
+
+
+        'host' => env('RAPIDAPI_HOST'),
+
+
+
+
+        'key' => env('RAPIDAPI_KEY'),
+    ],
+
+
+
+
 ];

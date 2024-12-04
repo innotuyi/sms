@@ -1,15 +1,6 @@
 <?php
 
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\SupportTeam\DormController;
-use App\Http\Controllers\SupportTeam\ExamController;
-use App\Http\Controllers\SupportTeam\GradeController;
-use App\Http\Controllers\SupportTeam\MyClassController;
-use App\Http\Controllers\SupportTeam\PaymentController;
-use App\Http\Controllers\SupportTeam\SectionController;
-use App\Http\Controllers\SupportTeam\StudentRecordController;
-use App\Http\Controllers\SupportTeam\SubjectController;
-use App\Http\Controllers\SupportTeam\UserController;
 
 Auth::routes();
 
@@ -146,15 +137,15 @@ Route::group(['middleware' => 'auth'], function () {
 
         });
 
-        Route::resource('students', [StudentRecordController::class]);
-        Route::resource('users', [UserController::class]);
-        Route::resource('classes', [MyClassController::class]);
-        Route::resource('sections', [SectionController::class]);
-        Route::resource('subjects', [SubjectController::class]);
-        Route::resource('grades', [GradeController::class]);
-        Route::resource('exams', [ExamController::class]);
-        Route::resource('dorms', [DormController::class]);
-        Route::resource('payments', [PaymentController::class]);
+        Route::resource('students', 'StudentRecordController');
+        Route::resource('users', 'UserController');
+        Route::resource('classes', 'MyClassController');
+        Route::resource('sections', 'SectionController');
+        Route::resource('subjects', 'SubjectController');
+        Route::resource('grades', 'GradeController');
+        Route::resource('exams', 'ExamController');
+        Route::resource('dorms', 'DormController');
+        Route::resource('payments', 'PaymentController');
 
     });
 

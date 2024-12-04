@@ -70,9 +70,65 @@
                                 <input name="dob" value="{{ old('dob') }}" type="text" class="form-control date-pick" placeholder="Select Date...">
 
                             </div>
-                        </div>
+                    </div>
 
-                        <div class="col-md-3">
+                     <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="nal_id">Province: <span class="text-danger">*</span></label>
+                                <select data-placeholder="Choose..." required name="nal_id" id="nal_id" class="select-search form-control">
+                                    <option value=""></option>
+                                    @foreach($nationals as $nal)
+                                        <option></option>
+                                    @endforeach
+                                </select>
+                            </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="province">Province:</label>
+                        <select id="province" class="form-control">
+                            <option value="">Select Province</option>
+                            @foreach($provinces as $province)
+                                <option value="{{ $province['id'] }}">{{ $province['name'] }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="district">District:</label>
+                        <select id="district" class="form-control" disabled>
+                            <option value="">Select District</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="sector">Sector:</label>
+                        <select id="sector" class="form-control" disabled>
+                            <option value="">Select Sector</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="cell">Cell:</label>
+                        <select id="cell" class="form-control" disabled>
+                            <option value="">Select Cell</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="village">Village:</label>
+                        <select id="village" class="form-control" disabled>
+                            <option value="">Select Village</option>
+                        </select>
+                    </div>
+                    
+
+
+                        
+
+
+
+
+                        {{-- <div class="col-md-3">
                             <div class="form-group">
                                 <label for="nal_id">Nationality: <span class="text-danger">*</span></label>
                                 <select data-placeholder="Choose..." required name="nal_id" id="nal_id" class="select-search form-control">
@@ -99,7 +155,7 @@
                             <select required data-placeholder="Select State First" class="select-search form-control" name="lga_id" id="lga_id">
                                 <option value=""></option>
                             </select>
-                        </div>
+                        </div> --}}
                     </div>
                     <div class="row">
 
@@ -209,6 +265,8 @@
                         </div>
                     </div>
                 </fieldset>
+
+                
 
             </form>
         </div>
