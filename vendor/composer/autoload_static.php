@@ -348,8 +348,8 @@ class ComposerStaticInitea995b8cb853bf0aff0cfe4706707e10
         ),
         'Psr\\Http\\Message\\' => 
         array (
-            0 => __DIR__ . '/..' . '/psr/http-message/src',
-            1 => __DIR__ . '/..' . '/psr/http-factory/src',
+            0 => __DIR__ . '/..' . '/psr/http-factory/src',
+            1 => __DIR__ . '/..' . '/psr/http-message/src',
         ),
         'Psr\\Http\\Client\\' => 
         array (
@@ -610,6 +610,7 @@ class ComposerStaticInitea995b8cb853bf0aff0cfe4706707e10
         'App\\Http\\Controllers\\Auth\\VerificationController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/VerificationController.php',
         'App\\Http\\Controllers\\Controller' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller.php',
         'App\\Http\\Controllers\\HomeController' => __DIR__ . '/../..' . '/app/Http/Controllers/HomeController.php',
+        'App\\Http\\Controllers\\LocationController' => __DIR__ . '/../..' . '/app/Http/Controllers/LocationController.php',
         'App\\Http\\Controllers\\MyAccountController' => __DIR__ . '/../..' . '/app/Http/Controllers/MyAccountController.php',
         'App\\Http\\Controllers\\MyParent\\MyController' => __DIR__ . '/../..' . '/app/Http/Controllers/MyParent/MyController.php',
         'App\\Http\\Controllers\\SuperAdmin\\SettingController' => __DIR__ . '/../..' . '/app/Http/Controllers/SuperAdmin/SettingController.php',
@@ -714,6 +715,7 @@ class ComposerStaticInitea995b8cb853bf0aff0cfe4706707e10
         'App\\Repositories\\StudentRepo' => __DIR__ . '/../..' . '/app/Repositories/StudentRepo.php',
         'App\\Repositories\\TimeTableRepo' => __DIR__ . '/../..' . '/app/Repositories/TimeTableRepo.php',
         'App\\Repositories\\UserRepo' => __DIR__ . '/../..' . '/app/Repositories/UserRepo.php',
+        'App\\Services\\RwandaLocationService' => __DIR__ . '/../..' . '/app/Services/RwandaLocationService.php',
         'App\\User' => __DIR__ . '/../..' . '/app/User.php',
         'Asm89\\Stack\\Cors' => __DIR__ . '/..' . '/asm89/stack-cors/src/Cors.php',
         'Asm89\\Stack\\CorsService' => __DIR__ . '/..' . '/asm89/stack-cors/src/CorsService.php',

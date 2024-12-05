@@ -71,62 +71,61 @@
 
                             </div>
                     </div>
-
-                     <div class="col-md-3">
-                            <div class="form-group">
-                                <label for="nal_id">Province: <span class="text-danger">*</span></label>
-                                <select data-placeholder="Choose..." required name="nal_id" id="nal_id" class="select-search form-control">
-                                    <option value=""></option>
-                                    @foreach($nationals as $nal)
-                                        <option></option>
-                                    @endforeach
-                                </select>
-                            </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="province">Province:</label>
-                        <select id="province" class="form-control">
-                            <option value="">Select Province</option>
-                            @foreach($provinces as $province)
-                                <option value="{{ $province['id'] }}">{{ $province['name'] }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="district">District:</label>
-                        <select id="district" class="form-control" disabled>
-                            <option value="">Select District</option>
-                        </select>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="sector">Sector:</label>
-                        <select id="sector" class="form-control" disabled>
-                            <option value="">Select Sector</option>
-                        </select>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="cell">Cell:</label>
-                        <select id="cell" class="form-control" disabled>
-                            <option value="">Select Cell</option>
-                        </select>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="village">Village:</label>
-                        <select id="village" class="form-control" disabled>
-                            <option value="">Select Village</option>
-                        </select>
-                    </div>
-                    
-
-
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="province">Province:</label>
+                            <select id="province" class="form-control">
+                                <option value="">Select Province</option>
+                                @foreach($provinces as $province)
+                                    <option value="{{ $province }}">{{ $province }}</option>
+                                @endforeach
+                            </select>
+                        </div>
                         
 
+                    </div>
 
+                    <div class="col-md-3">
+                        
+                        <div class="form-group">
+                            <label for="district">District:</label>
+                            <select id="district" class="form-control" disabled>
+                                <option value="">Select District</option>
+                            </select>
+                        </div>
+                    </div>
 
+                    <div class="col-md-3">
+                        
+                        <div class="form-group">
+                            <label for="sector">Sector:</label>
+                            <select id="sector" class="form-control" disabled>
+                                <option value="">Select Sector</option>
+                            </select>
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-3">
+                        
+                        <div class="form-group">
+                            <label for="cell">Cell:</label>
+                            <select id="cell" class="form-control" disabled>
+                                <option value="">Select Cell</option>
+                            </select>
+                        </div>
+                    </div>
+                        
+                        <div class="form-group">
+                            <label for="village">Village:</label>
+                            <select id="village" class="form-control" disabled>
+                                <option value="">Select Village</option>
+                            </select>
+                        </div>
+                           
+                    </div>
+
+                    
 
                         {{-- <div class="col-md-3">
                             <div class="form-group">

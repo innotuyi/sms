@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\LocationController;
+use App\Http\Controllers\SupportTeam\StudentRecordController;
 
 Auth::routes();
 
@@ -172,3 +174,12 @@ Route::group(['namespace' => 'MyParent','middleware' => 'my_parent',], function(
     Route::get('/my_children', 'MyController@children')->name('my_children');
 
 });
+
+
+
+Route::get('/locations',[StudentRecordController::class, 'create']);
+Route::get('/locations/districts',[StudentRecordController::class,'fetchDistricts']);
+Route::get('/locations/sectors',[StudentRecordController::class,'fetchSectors']);
+Route::get('/locations/cells',[StudentRecordController::class,'fetchCells']);
+Route::get('/locations/villages',[StudentRecordController::class,'fetchVillages']);
+

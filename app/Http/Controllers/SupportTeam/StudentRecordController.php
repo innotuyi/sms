@@ -11,6 +11,8 @@ use App\Repositories\MyClassRepo;
 use App\Repositories\StudentRepo;
 use App\Repositories\UserRepo;
 use App\Http\Controllers\Controller;
+use App\Services\RwandaLocationService;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
@@ -18,9 +20,9 @@ use Illuminate\Support\Str;
 
 class StudentRecordController extends Controller
 {
-    protected $loc, $my_class, $user, $student;
+    protected $loc, $my_class, $user, $student, $locationService;
 
-   public function __construct(LocationRepo $loc, MyClassRepo $my_class, UserRepo $user, StudentRepo $student)
+   public function __construct(LocationRepo $loc, MyClassRepo $my_class, UserRepo $user, StudentRepo $student, RwandaLocationService $locationService)
    {
        $this->middleware('teamSA', ['only' => ['edit','update', 'reset_pass', 'create', 'store', 'graduated'] ]);
        $this->middleware('super_admin', ['only' => ['destroy',] ]);
@@ -29,6 +31,7 @@ class StudentRecordController extends Controller
         $this->my_class = $my_class;
         $this->user = $user;
         $this->student = $student;
+        $this->locationService = $locationService;
    }
 
     public function reset_pass($st_id)
@@ -41,13 +44,95 @@ class StudentRecordController extends Controller
 
     public function create()
     {
+
+        
         $data['my_classes'] = $this->my_class->all();
         $data['parents'] = $this->user->getUserByType('parent');
         $data['dorms'] = $this->student->getAllDorms();
-        $data['states'] = $this->loc->getStates();
-        $data['nationals'] = $this->loc->getAllNationals();
+
+        $provincesResponse = $this->locationService->fetchProvinces();
+        // Extract the 'data' key containing provinces
+        $data['provinces'] = $provincesResponse['data'] ?? [];
+
+        //dd( $data['provinces']);
+
+        // $data['provinces'] = $this->locationService->fetchProvinces(); 
+        
+        // dd( $data['provinces']);
+
         return view('pages.support_team.students.add', $data);
     }
+
+      // Fetch districts based on province
+      public function fetchDistricts(Request $request)
+      {
+  
+          $districts = $this->locationService->fetchDistricts($request->province);
+
+
+          return response()->json([
+            'status' => 'success',
+            'statusCode' => 200,
+            'message' => "All districts from province: {$request->province}",
+            'data' => $districts,
+        ]);
+  
+        
+
+      }
+  
+      // Fetch sectors based on province and district
+      public function fetchSectors(Request $request)
+      {
+          $sectors = $this->locationService->fetchSectors($request->province, $request->district);
+  
+          return response()->json([
+            'status' => 'success',
+            'statusCode' => 200,
+            'message' => "All sectors from district: {$request->district}",
+            'data' => $sectors,
+        ]);
+        
+      }
+  
+      // Fetch cells based on province, district, and sector
+  
+      public function fetchCells(Request $request)
+      {
+          $cells = $this->locationService->fetchCells($request->province, $request->district, $request->sector);
+          return response()->json([
+            'status' => 'success',
+            'statusCode' => 200,
+            'message' => "All cells from sector: {$request->sector}",
+            'data' => $cells,
+        ]);
+        
+      }
+  
+      // Fetch villages based on province, district, sector, and cell
+  
+      public function fetchVillages(Request $request)
+      {
+  
+          $villages = $this->locationService->fetchVillages($request->province, $request->district, $request->sector, $request->cell);
+  
+          return response()->json([
+            'status' => 'success',
+            'statusCode' => 200,
+            'message' => "All villages from cell: {$request->cell}",
+            'data' => $villages,
+        ]);
+        
+      }
+
+
+
+
+
+
+
+
+
 
     public function store(StudentRecordCreate $req)
     {
