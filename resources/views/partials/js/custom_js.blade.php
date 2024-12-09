@@ -380,4 +380,23 @@
         }
 
     });
+
+
+    
+    function togglePocketMoneyAmount() {
+        var pocketMoneySelect = document.getElementById('pocket_money_to_go_home');
+        var pocketMoneyAmountField = document.getElementById('pocket_money_amount_field');
+        
+        // If "Yes" is selected, show the amount field, otherwise hide it
+        if (pocketMoneySelect.value === 'yes') {
+            pocketMoneyAmountField.style.display = 'block';
+        } else {
+            pocketMoneyAmountField.style.display = 'none';
+        }
+    }
+
+    // Run the function on page load to check the current selection
+    window.onload = function() {
+        togglePocketMoneyAmount();
+    }
 </script>
