@@ -268,6 +268,14 @@
                                 class="form-control" value="{{ old('arrival_time') }}">
                         </div>
                     </div>
+                    <!-- Departure Time -->
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="departure_time">Departure Date and Time:</label>
+                            <input type="datetime-local" name="departure_time" id="departure_time" class="form-control"
+                                value="{{ old('departure_time') }}">
+                        </div>
+                    </div>
 
                     <!-- Brought By -->
                     <div class="col-md-3">
@@ -286,6 +294,15 @@
                         </div>
                     </div>
 
+                    <!-- Other Kind of Insurance -->
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="other_insurance">Spicify any sickness :</label>
+                            <input type="text" name="other_insurance" id="other_insurance" class="form-control"
+                                placeholder="Enter Other Insurance" value="{{ old('other_insurance') }}">
+                        </div>
+                    </div>
+
                     <!-- Health Insurance -->
                     <div class="col-md-3">
                         <div class="form-group">
@@ -301,10 +318,14 @@
                             </select>
                         </div>
                     </div>
-                </div>
 
-                <!-- School Fees -->
-                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="special_insurance">Special Kind of Insurance:</label>
+                            <input type="text" name="special_insurance" id="special_insurance" class="form-control"
+                                placeholder="Enter Special Insurance" value="{{ old('special_insurance') }}">
+                        </div>
+                    </div>
                     <div class="col-md-3">
                         <label for="fees_status">School Fees Status: <span class="text-danger">*</span></label>
                         <select name="fees_status" id="fees_status" required class="form-control select-search"
@@ -316,6 +337,11 @@
                             </option>
                         </select>
                     </div>
+                </div>
+
+                <!-- School Fees -->
+                <div class="row">
+
 
                     <!-- Fees Details -->
                     <div class="col-md-3">
@@ -341,6 +367,14 @@
                                 value="{{ old('balance_date') }}">
                         </div>
                     </div>
+                    <!-- Specify Other Organization Paying Fees -->
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="other_organization">Other Organization Paying Fees:</label>
+                            <input type="text" name="other_organization" id="other_organization" class="form-control"
+                                placeholder="Specify Other Organization" value="{{ old('other_organization') }}">
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Pocket Money -->
@@ -356,50 +390,44 @@
                     <!-- Go Home -->
 
                     <!-- Pocket Money to Go Home -->
-<div class="col-md-3">
-    <div class="form-group">
-        <label for="pocket_money_to_go_home">Has Pocket Money to Go Home:</label>
-        <select name="pocket_money_to_go_home" id="pocket_money_to_go_home" class="form-control select-search" onchange="togglePocketMoneyAmount()">
-            <option value="">Choose...</option>
-            <option value="yes" {{ old('pocket_money_to_go_home') == 'yes' ? 'selected' : '' }}>Yes</option>
-            <option value="no" {{ old('pocket_money_to_go_home') == 'no' ? 'selected' : '' }}>No</option>
-        </select>
-    </div>
-</div>
-
-<!-- Pocket Money Amount (Appears only if Yes is selected) -->
-<div class="col-md-3" id="pocket_money_amount_field" style="display: none;">
-    <div class="form-group">
-        <label for="pocket_money_amount">Amount of Pocket Money:</label>
-        <input type="number" name="pocket_money_amount" id="pocket_money_amount" placeholder="Amount" class="form-control" value="{{ old('pocket_money_amount') }}">
-    </div>
-</div>
-       </div>
-
-                <!-- Hygiene Materials -->
-                <div class="row">
-                    <div class="col-md-6">
-                        <label for="hygiene_materials">Hygiene Materials Submitted:</label>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="hygiene_materials[]" value="Soap"
-                                id="soap"
-                                {{ is_array(old('hygiene_materials')) && in_array('Soap', old('hygiene_materials')) ? 'checked' : '' }}>
-                            <label class="form-check-label" for="soap">Soap</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="hygiene_materials[]"
-                                value="Toothpaste" id="toothpaste"
-                                {{ is_array(old('hygiene_materials')) && in_array('Toothpaste', old('hygiene_materials')) ? 'checked' : '' }}>
-                            <label class="form-check-label" for="toothpaste">Toothpaste</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="hygiene_materials[]" value="Towels"
-                                id="towels"
-                                {{ is_array(old('hygiene_materials')) && in_array('Towels', old('hygiene_materials')) ? 'checked' : '' }}>
-                            <label class="form-check-label" for="towels">Towels</label>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="pocket_money_to_go_home">Has Pocket Money to Go Home:</label>
+                            <select name="pocket_money_to_go_home" id="pocket_money_to_go_home"
+                                class="form-control select-search" onchange="togglePocketMoneyAmount()">
+                                <option value="">Choose...</option>
+                                <option value="yes" {{ old('pocket_money_to_go_home') == 'yes' ? 'selected' : '' }}>Yes
+                                </option>
+                                <option value="no" {{ old('pocket_money_to_go_home') == 'no' ? 'selected' : '' }}>No
+                                </option>
+                            </select>
                         </div>
                     </div>
+
+                    <!-- Pocket Money Amount (Appears only if Yes is selected) -->
+                    <div class="col-md-3" id="pocket_money_amount_field" style="display: none;">
+                        <div class="form-group">
+                            <label for="pocket_money_amount">Amount of Pocket Money:</label>
+                            <input type="number" name="pocket_money_amount" id="pocket_money_amount"
+                                placeholder="Amount" class="form-control" value="{{ old('pocket_money_amount') }}">
+                        </div>
+                    </div>
+                    <!-- Hygiene Materials -->
+                        <div class="col-md-3">
+                            <label for="hygiene_materials_complete">Hygiene Materials Submitted:</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="hygiene_materials_complete"
+                                    value="1" id="hygiene_materials_complete"
+                                    {{ old('hygiene_materials_complete') ? 'checked' : '' }}>
+                                <label class="form-check-label" for="hygiene_materials_complete">
+                                    I confirm that all required hygiene materials (Soap, Toothpaste, Towels, etc.) have been
+                                    submitted.
+                                </label>
+                        </div>
+                    </div>
+
                 </div>
+
             </fieldset>
 
 
