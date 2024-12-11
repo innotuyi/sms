@@ -97,6 +97,7 @@ return array(
     'App\\Models\\Pin' => $baseDir . '/app/Models/Pin.php',
     'App\\Models\\Promotion' => $baseDir . '/app/Models/Promotion.php',
     'App\\Models\\Receipt' => $baseDir . '/app/Models/Receipt.php',
+    'App\\Models\\School' => $baseDir . '/app/Models/School.php',
     'App\\Models\\Section' => $baseDir . '/app/Models/Section.php',
     'App\\Models\\Setting' => $baseDir . '/app/Models/Setting.php',
     'App\\Models\\Skill' => $baseDir . '/app/Models/Skill.php',
