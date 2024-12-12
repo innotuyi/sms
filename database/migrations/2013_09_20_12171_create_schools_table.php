@@ -15,7 +15,7 @@ class CreateSchoolsTable extends Migration
     {
         Schema::create('schools', function (Blueprint $table) {
             $table->id();
-            $table->string('school_code')->unique();
+            $table->string('school_code')->default('SCH01')->unique();
             $table->string('school_name');
             $table->timestamps();
         });

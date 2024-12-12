@@ -83,7 +83,7 @@
                     <div class="col-md-3">
                         <div class="form-group">
                             <label for="province">Province:</label>
-                            <select id="province" class="form-control" required>
+                            <select id="province"  name="province" class="form-control" required>
                                 <option value="">Select Province</option>
                                 @foreach ($provinces as $province)
                                     <option value="{{ $province }}">{{ $province }}</option>
@@ -98,7 +98,7 @@
 
                         <div class="form-group">
                             <label for="district">District:</label>
-                            <select id="district" class="form-control" disabled>
+                            <select id="district" name="district" class="form-control" disabled>
                                 <option value="">Select District</option>
                             </select>
                         </div>
@@ -108,7 +108,7 @@
 
                         <div class="form-group">
                             <label for="sector">Sector:</label>
-                            <select id="sector" class="form-control" disabled>
+                            <select id="sector" name="sector" class="form-control" disabled>
                                 <option value="">Select Sector</option>
                             </select>
                         </div>
@@ -120,7 +120,7 @@
 
                         <div class="form-group">
                             <label for="cell">Cell:</label>
-                            <select id="cell" class="form-control" disabled>
+                            <select id="cell" name="cell" class="form-control" disabled>
                                 <option value="">Select Cell</option>
                             </select>
                         </div>
@@ -130,7 +130,7 @@
                             <div class="form-group">
                                 <div class="form-group">
                                     <label for="village">Village:</label>
-                                    <select id="village" class="form-control" disabled>
+                                    <select id="village" name="village" class="form-control" disabled>
                                         <option value="">Select Village</option>
                                     </select>
                                 </div>
@@ -298,7 +298,7 @@
                     <div class="col-md-3">
                         <div class="form-group">
                             <label for="other_insurance">Spicify any sickness :</label>
-                            <input type="text" name="other_insurance" id="other_insurance" class="form-control"
+                            <input type="text" name="sickness" id="other_insurance" class="form-control"
                                 placeholder="Enter Other Insurance" value="{{ old('other_insurance') }}">
                         </div>
                     </div>
@@ -429,16 +429,6 @@
                 </div>
 
             </fieldset>
-
-
-
-
-
-
-
-
-
-
         </form>
     </div>
 @endsection

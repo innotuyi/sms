@@ -87,7 +87,7 @@ class Qs
 
     public static function getUserRecord($remove = [])
     {
-        $data = ['name', 'email', 'phone', 'phone2', 'dob', 'gender', 'address', 'bg_id', 'nal_id', 'state_id', 'lga_id'];
+        $data = ['name', 'email', 'phone', 'phone2', 'dob', 'gender', 'address', 'bg_id', 'province', 'district', 'sector', 'cell', 'village'];
 
         return $remove ? array_values(array_diff($data, $remove)) : $data;
     }
@@ -101,7 +101,33 @@ class Qs
 
     public static function getStudentData($remove = [])
     {
-        $data = ['my_class_id', 'section_id', 'my_parent_id', 'dorm_id', 'dorm_room_no', 'year_admitted', 'house', 'age'];
+        $data = [
+            'my_class_id', 
+            'section_id', 
+            'my_parent_id', 
+            'dorm_id', 
+            'dorm_room_no', 
+            'year_admitted', 
+            'house', 
+            'age',
+            'school_id',          // Missing field: school_id
+            'arrival_time',       // Missing nullable field
+            'departure_time',     // Missing nullable field
+            'brought_by',         // Missing nullable field
+            'sickness',           // Missing nullable field
+            'insurance',          // Missing nullable field
+            'special_insurance',  // Missing nullable field
+            'fees_status',        // Missing nullable field
+            'fees_paid',          // Missing nullable field
+            'remaining_fees',     // Missing nullable field
+            'balance_date',       // Missing nullable field
+            'other_organization', // Missing nullable field
+            'pocket_money',       // Missing nullable field
+            'pocket_money_to_go_home', // Missing nullable field
+            'pocket_money_amount',     // Missing nullable field
+            'hygiene_materials_complete' // Missing nullable field
+        ];
+        
 
         return $remove ? array_values(array_diff($data, $remove)) : $data;
 

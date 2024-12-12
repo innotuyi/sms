@@ -30,14 +30,28 @@ class StudentRecordCreate extends FormRequest
             'photo' => 'sometimes|nullable|image|mimes:jpeg,gif,png,jpg|max:2048',
             'address' => 'required|string|min:6|max:120',
             'bg_id' => 'sometimes|nullable',
-            'state_id' => 'required',
-            'lga_id' => 'required',
-            'nal_id' => 'required',
             'my_class_id' => 'required',
             'section_id' => 'required',
             'my_parent_id' => 'sometimes|nullable',
             'dorm_id' => 'sometimes|nullable',
+            'school_id' => 'required|exists:schools,id', // Ensure school_id exists in the schools table
+            'arrival_time' => 'sometimes|nullable|date_format:Y-m-d H:i:s',
+            'departure_time' => 'sometimes|nullable|date_format:Y-m-d H:i:s',
+            'brought_by' => 'sometimes|nullable|string|max:255',
+            'sickness' => 'sometimes|nullable|string|max:255',
+            'insurance' => 'sometimes|nullable|string|max:255',
+            'special_insurance' => 'sometimes|nullable|string|max:255',
+            'fees_status' => 'sometimes|nullable|string|max:255',
+            'fees_paid' => 'sometimes|nullable|integer|min:0',
+            'remaining_fees' => 'sometimes|nullable|integer|min:0',
+            'balance_date' => 'sometimes|nullable|date',
+            'other_organization' => 'sometimes|nullable|string|max:255',
+            'pocket_money' => 'sometimes|nullable|integer|min:0',
+            'pocket_money_to_go_home' => 'sometimes|nullable|string|max:255',
+            'pocket_money_amount' => 'sometimes|nullable|integer|min:0',
+            'hygiene_materials_complete' => 'sometimes|nullable|string|max:255',
         ];
+        
     }
 
     public function attributes()
