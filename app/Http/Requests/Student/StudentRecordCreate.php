@@ -35,8 +35,8 @@ class StudentRecordCreate extends FormRequest
             'my_parent_id' => 'sometimes|nullable',
             'dorm_id' => 'sometimes|nullable',
             'school_id' => 'required|exists:schools,id', // Ensure school_id exists in the schools table
-            'arrival_time' => 'sometimes|nullable|date_format:Y-m-d H:i:s',
-            'departure_time' => 'sometimes|nullable|date_format:Y-m-d H:i:s',
+            'arrival_time' => 'sometimes|nullable|date_format:Y-m-d\TH:i',
+            'departure_time' => 'sometimes|nullable|date_format:Y-m-d\TH:i',
             'brought_by' => 'sometimes|nullable|string|max:255',
             'sickness' => 'sometimes|nullable|string|max:255',
             'insurance' => 'sometimes|nullable|string|max:255',
@@ -51,7 +51,6 @@ class StudentRecordCreate extends FormRequest
             'pocket_money_amount' => 'sometimes|nullable|integer|min:0',
             'hygiene_materials_complete' => 'sometimes|nullable|string|max:255',
         ];
-        
     }
 
     public function attributes()

@@ -131,6 +131,11 @@ class StudentRecordController extends Controller
       public function store(StudentRecordCreate $req)
       {
           $data =  $req->only(Qs::getUserRecord());
+
+          dd($data);
+
+
+
           $sr =  $req->only(Qs::getStudentData());
       
           // Retrieve the class type
