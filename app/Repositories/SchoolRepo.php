@@ -8,8 +8,8 @@ class SchoolRepo {
 
 
 
-    public function find($id)
+    public function fetchSchools()
     {
-        return School::find($id);
+        return School::all();
     }
 }

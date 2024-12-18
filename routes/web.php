@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LocationController;
+use App\Http\Controllers\StudentController;
 use App\Http\Controllers\SupportTeam\StudentRecordController;
 
 Auth::routes();
@@ -140,6 +141,9 @@ Route::group(['middleware' => 'auth'], function () {
         });
 
         Route::resource('students', 'StudentRecordController');
+
+        Route::post('/admit', [StudentController::class, 'registerStudent'])->name('admit.student');
+        
         Route::resource('users', 'UserController');
         Route::resource('classes', 'MyClassController');
         Route::resource('sections', 'SectionController');

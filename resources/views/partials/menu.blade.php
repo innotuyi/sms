@@ -51,7 +51,11 @@
                     </a>
                 </li>
 
-               
+                @if(Qs::userIsTeamSA())
+                {{--Manage Users--}}
+                <li class="nav-item">
+                    <a href="{{ route('users.index') }}" class="nav-link {{ in_array(Route::currentRouteName(), ['users.index', 'users.show', 'users.edit']) ? 'active' : '' }}"><i class="icon-users4"></i> <span> Users</span></a>
+                </li>              
                 {{--Manage Students--}}
                 @if(Qs::userIsTeamSAT())
                     <li class="nav-item nav-item-submenu {{ in_array(Route::currentRouteName(), ['students.create', 'students.list', 'students.edit', 'students.show', 'students.promotion', 'students.promotion_manage', 'students.graduated']) ? 'nav-item-expanded nav-item-open' : '' }} ">
@@ -94,32 +98,26 @@
                         </ul>
                     </li>
                 @endif
-
-                @if(Qs::userIsTeamSA())
-                {{--Manage Users--}}
-                <li class="nav-item">
-                    <a href="{{ route('users.index') }}" class="nav-link {{ in_array(Route::currentRouteName(), ['users.index', 'users.show', 'users.edit']) ? 'active' : '' }}"><i class="icon-users4"></i> <span> Users</span></a>
-                </li>
-
                 {{--Manage Classes--}}
                 <li class="nav-item">
                     <a href="{{ route('classes.index') }}" class="nav-link {{ in_array(Route::currentRouteName(), ['classes.index','classes.edit']) ? 'active' : '' }}"><i class="icon-windows2"></i> <span> Classes</span></a>
                 </li>
+                         {{--Manage Sections--}}
+                         <li class="nav-item">
+                            <a href="{{ route('sections.index') }}" class="nav-link {{ in_array(Route::currentRouteName(), ['sections.index','sections.edit',]) ? 'active' : '' }}"><i class="icon-fence"></i> <span>Sections</span></a>
+                        </li>
+        
+                        {{--Manage Subjects--}}
+                        <li class="nav-item">
+                            <a href="{{ route('subjects.index') }}" class="nav-link {{ in_array(Route::currentRouteName(), ['subjects.index','subjects.edit',]) ? 'active' : '' }}"><i class="icon-pin"></i> <span>Subjects</span></a>
+                        </li>
 
                 {{--Manage Dorms--}}
                 <li class="nav-item">
                     <a href="{{ route('dorms.index') }}" class="nav-link {{ in_array(Route::currentRouteName(), ['dorms.index','dorms.edit']) ? 'active' : '' }}"><i class="icon-home9"></i> <span> Dormitories</span></a>
                 </li>
 
-                {{--Manage Sections--}}
-                <li class="nav-item">
-                    <a href="{{ route('sections.index') }}" class="nav-link {{ in_array(Route::currentRouteName(), ['sections.index','sections.edit',]) ? 'active' : '' }}"><i class="icon-fence"></i> <span>Sections</span></a>
-                </li>
-
-                {{--Manage Subjects--}}
-                <li class="nav-item">
-                    <a href="{{ route('subjects.index') }}" class="nav-link {{ in_array(Route::currentRouteName(), ['subjects.index','subjects.edit',]) ? 'active' : '' }}"><i class="icon-pin"></i> <span>Subjects</span></a>
-                </li>
+       
             @endif
 
                

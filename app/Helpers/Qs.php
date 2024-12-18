@@ -26,7 +26,7 @@ class Qs
 
     public static function getAppCode()
     {
-        return self::getSetting('system_title') ?: 'RANG';
+        return self::getSetting('system_title') ?: 'Ra';
     }
 
     public static function getDefaultUserImage()
@@ -88,6 +88,8 @@ class Qs
     public static function getUserRecord($remove = [])
     {
         $data = ['name', 'email', 'phone', 'phone2', 'dob', 'gender', 'address', 'bg_id', 'province', 'district', 'sector', 'cell', 'village'];
+
+        dd($data);
 
         return $remove ? array_values(array_diff($data, $remove)) : $data;
     }

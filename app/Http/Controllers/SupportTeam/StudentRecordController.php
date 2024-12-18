@@ -45,6 +45,9 @@ class StudentRecordController extends Controller
         return back()->with('flash_success', __('msg.p_reset'));
     }
 
+
+
+
     public function create()
     {
 
@@ -56,6 +59,10 @@ class StudentRecordController extends Controller
         $provincesResponse = $this->locationService->fetchProvinces();
         // Extract the 'data' key containing provinces
         $data['provinces'] = $provincesResponse['data'] ?? [];
+
+        $data['schools'] = $this->my_school->fetchSchools();
+
+        
 
         //dd( $data['provinces']);
 
@@ -130,51 +137,59 @@ class StudentRecordController extends Controller
 
       public function store(StudentRecordCreate $req)
       {
-          $data =  $req->only(Qs::getUserRecord());
 
-          dd($data);
+        try {
+            $data =  $req->only(Qs::getUserRecord());
 
+            $sr =  $req->only(Qs::getStudentData());
+        
+            // Retrieve the class type
+            $ct = $this->my_class->findTypeByClass($req->my_class_id)->code;
+        
+            // Prepare user data
+            $data['user_type'] = 'student';
+            $data['name'] = ucwords($req->name);
+            $data['code'] = strtoupper(Str::random(10));
+            $data['password'] = Hash::make('student');
+            $data['photo'] = Qs::getDefaultUserImage();
+            
+            // Retrieve the school code
+            $school = $this->my_school->find($req->school_id);  // Assuming you have access to the school model
+            $schoolCode = strtoupper($school->code);  // Assuming 'code' is the school code field in the schools table
+        
+            // Generate a unique admission number using school code and a random unique ID
+            $uniqueId = mt_rand(1000, 99999);  // Random unique ID
+            $data['username'] = strtoupper($schoolCode . '/' . $ct . '/' . $sr['year_admitted'] . '/' . $uniqueId);
+        
+            // Handle photo upload
+            if ($req->hasFile('photo')) {
+                $photo = $req->file('photo');
+                $f = Qs::getFileMetaData($photo);
+                $f['name'] = 'photo.' . $f['ext'];
+                $f['path'] = $photo->storeAs(Qs::getUploadPath('student') . $data['code'], $f['name']);
+                $data['photo'] = asset('storage/' . $f['path']);
+            }
+        
+            // Create user
+            $user = $this->user->create($data);
+        
+            // Create student record
+            $sr['adm_no'] = $data['username'];  // Use the generated username as the admission number
+            $sr['user_id'] = $user->id;
+            $sr['session'] = Qs::getSetting('current_session');
+            $this->student->createRecord($sr);  // Create Student
+        
+            return Qs::jsonStoreOk();  // Return success response
+        } catch (\Throwable $th) {
+            // Log the error message
+        \Log::error('Error storing student record: '.$th->getMessage());
 
+        // Return a JSON response with the error message
+        return response()->json(['error' => 'An error occurred while processing your request. Please try again.'], 500);
+        }
 
-          $sr =  $req->only(Qs::getStudentData());
-      
-          // Retrieve the class type
-          $ct = $this->my_class->findTypeByClass($req->my_class_id)->code;
-      
-          // Prepare user data
-          $data['user_type'] = 'student';
-          $data['name'] = ucwords($req->name);
-          $data['code'] = strtoupper(Str::random(10));
-          $data['password'] = Hash::make('student');
-          $data['photo'] = Qs::getDefaultUserImage();
-          
-          // Retrieve the school code
-          $school = $this->my_school->find($req->school_id);  // Assuming you have access to the school model
-          $schoolCode = strtoupper($school->code);  // Assuming 'code' is the school code field in the schools table
-      
-          // Generate a unique admission number using school code and a random unique ID
-          $uniqueId = mt_rand(1000, 99999);  // Random unique ID
-          $data['username'] = strtoupper($schoolCode . '/' . $ct . '/' . $sr['year_admitted'] . '/' . $uniqueId);
-      
-          // Handle photo upload
-          if ($req->hasFile('photo')) {
-              $photo = $req->file('photo');
-              $f = Qs::getFileMetaData($photo);
-              $f['name'] = 'photo.' . $f['ext'];
-              $f['path'] = $photo->storeAs(Qs::getUploadPath('student') . $data['code'], $f['name']);
-              $data['photo'] = asset('storage/' . $f['path']);
-          }
-      
-          // Create user
-          $user = $this->user->create($data);
-      
-          // Create student record
-          $sr['adm_no'] = $data['username'];  // Use the generated username as the admission number
-          $sr['user_id'] = $user->id;
-          $sr['session'] = Qs::getSetting('current_session');
-          $this->student->createRecord($sr);  // Create Student
-      
-          return Qs::jsonStoreOk();  // Return success response
+        
+       
       }
       
     public function listByClass($class_id)

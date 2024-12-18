@@ -11,38 +11,53 @@
     <title> @yield('page_title') | {{ config('app.name') }} </title>
 
     @include('partials.inc_top')
+
+    <style>
+        /* Hide all fieldsets by default */
+        .step {
+            display: none;
+        }
+
+        /* Optionally, add smooth transitions */
+        fieldset {
+            transition: all 0.3s ease-in-out;
+        }
+    </style>
 </head>
 
-<body class="{{ in_array(Route::currentRouteName(), ['payments.invoice', 'marks.tabulation', 'marks.show', 'ttr.manage', 'ttr.show']) ? 'sidebar-xs' : '' }}">
+<body
+    class="{{ in_array(Route::currentRouteName(), ['payments.invoice', 'marks.tabulation', 'marks.show', 'ttr.manage', 'ttr.show']) ? 'sidebar-xs' : '' }}">
 
-@include('partials.top_menu')
-<div class="page-content">
-    @include('partials.menu')
-    <div class="content-wrapper">
-        @include('partials.header')
+    @include('partials.top_menu')
+    <div class="page-content">
+        @include('partials.menu')
+        <div class="content-wrapper">
+            @include('partials.header')
 
-        <div class="content">
-            {{--Error Alert Area--}}
-            @if($errors->any())
-                <div class="alert alert-danger border-0 alert-dismissible">
-                    <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
+            <div class="content">
+                {{-- Error Alert Area --}}
+                @if ($errors->any())
+                    <div class="alert alert-danger border-0 alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
 
-                        @foreach($errors->all() as $er)
+                        @foreach ($errors->all() as $er)
                             <span><i class="icon-arrow-right5"></i> {{ $er }}</span> <br>
                         @endforeach
 
-                </div>
-            @endif
-            <div id="ajax-alert" style="display: none"></div>
+                    </div>
+                @endif
+                <div id="ajax-alert" style="display: none"></div>
 
-            @yield('content')
+                @yield('content')
+            </div>
+
+
         </div>
-
-
     </div>
-</div>
 
-@include('partials.inc_bottom')
-@yield('scripts')
+    @include('partials.inc_bottom')
+    @yield('scripts')
+
 </body>
+
 </html>
