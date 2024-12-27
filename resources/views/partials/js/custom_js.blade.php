@@ -172,11 +172,11 @@
         });
     }
 
-    // $('form#ajax-reg').on('submit', function(ev) {
-    //     ev.preventDefault();
-    //     submitForm($(this), 'store');
-    //     $('#ajax-reg-t-0').get(0).click();
-    // });
+    $('form#ajax-reg').on('submit', function(ev) {
+        ev.preventDefault();
+        submitForm($(this), 'store');
+        $('#ajax-reg-t-0').get(0).click();
+    });
 
     $('form.ajax-pay').on('submit', function(ev) {
         ev.preventDefault();
@@ -204,12 +204,12 @@
         bal < 1 ? $('#' + form_id).fadeOut('slow').remove() : '';
     });
 
-    // $('form.ajax-store').on('submit', function(ev) {
-    //     ev.preventDefault();
-    //     submitForm($(this), 'store');
-    //     var div = $(this).data('reload');
-    //     div ? reloadDiv(div) : '';
-    // });
+    $('form.ajax-store').on('submit', function(ev) {
+        ev.preventDefault();
+        submitForm($(this), 'store');
+        var div = $(this).data('reload');
+        div ? reloadDiv(div) : '';
+    });
 
     $('form.ajax-update').on('submit', function(ev) {
         ev.preventDefault();
@@ -233,56 +233,56 @@
         $(div).load(url);
     }
 
-    // function submitForm(form, formType) {
-    //     var btn = form.find('button[type=submit]');
-    //     disableBtn(btn);
+    function submitForm(form, formType) {
+        var btn = form.find('button[type=submit]');
+        disableBtn(btn);
 
 
-    //     var ajaxOptions = {
-    //         url: form.attr('action'),
-    //         type: 'POST',
-    //         cache: false,
-    //         processData: false,
-    //         dataType: 'json',
-    //         contentType: false,
-    //         data: new FormData(form[0])
-    //     };
-    //     var req = $.ajax(ajaxOptions);
-    //     req.done(function(resp) {
-    //         resp.ok && resp.msg ?
-    //             flash({
-    //                 msg: resp.msg,
-    //                 type: 'success'
-    //             }) :
-    //             flash({
-    //                 msg: resp.msg,
-    //                 type: 'danger'
-    //             });
-    //         hideAjaxAlert();
-    //         enableBtn(btn);
-    //         formType == 'store' ? clearForm(form) : '';
-    //         scrollTo('body');
-    //         return resp;
-    //     });
-    //     req.fail(function(e) {  
+        var ajaxOptions = {
+            url: form.attr('action'),
+            type: 'POST',
+            cache: false,
+            processData: false,
+            dataType: 'json',
+            contentType: false,
+            data: new FormData(form[0])
+        };
+        var req = $.ajax(ajaxOptions);
+        req.done(function(resp) {
+            resp.ok && resp.msg ?
+                flash({
+                    msg: resp.msg,
+                    type: 'success'
+                }) :
+                flash({
+                    msg: resp.msg,
+                    type: 'danger'
+                });
+            hideAjaxAlert();
+            enableBtn(btn);
+            formType == 'store' ? clearForm(form) : '';
+            scrollTo('body');
+            return resp;
+        });
+        req.fail(function(e) {  
             
-    //         console.error(e);
-    //         if (e.status == 422) {
-    //             var errors = e.responseJSON.errors;
-    //             displayAjaxErr(errors);
-    //         }
-    //         if (e.status == 500) {
-    //             displayAjaxErr([e.status + ' ' + e.statusText +
-    //                 'Please Check for Duplicate entry or Contact School Administrator/IT Personnel'
-    //             ])
-    //         }
-    //         if (e.status == 404) {
-    //             displayAjaxErr([e.status + ' ' + e.statusText + ' - Requested Resource or Record Not Found'])
-    //         }
-    //         enableBtn(btn);
-    //         return e.status;
-    //     });
-    // }
+            console.error(e);
+            if (e.status == 422) {
+                var errors = e.responseJSON.errors;
+                displayAjaxErr(errors);
+            }
+            if (e.status == 500) {
+                displayAjaxErr([e.status + ' ' + e.statusText +
+                    'Please Check for Duplicate entry or Contact School Administrator/IT Personnel'
+                ])
+            }
+            if (e.status == 404) {
+                displayAjaxErr([e.status + ' ' + e.statusText + ' - Requested Resource or Record Not Found'])
+            }
+            enableBtn(btn);
+            return e.status;
+        });
+    }
 
     function disableBtn(btn) {
         var btnText = btn.data('text') ? btn.data('text') : 'Submitting';

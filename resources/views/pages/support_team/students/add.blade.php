@@ -299,6 +299,15 @@
                                     </div>
                                 </div>
 
+                                   <!-- Departure Time -->
+                                   <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="departure_time">Home departure/Date-time:</label>
+                                        <input type="datetime-local" name="departure_time" id="departure_time"
+                                            class="form-control" value="{{ old('departure_time') }}">
+                                    </div>
+                                </div>
+
                                 <!-- Arrival Date and Time -->
                                 <div class="col-md-3">
                                     <div class="form-group">
@@ -308,16 +317,6 @@
                                             class="form-control" value="{{ old('arrival_time') }}">
                                     </div>
                                 </div>
-
-                                <!-- Departure Time -->
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label for="departure_time">Departure Date and Time:</label>
-                                        <input type="datetime-local" name="departure_time" id="departure_time"
-                                            class="form-control" value="{{ old('departure_time') }}">
-                                    </div>
-                                </div>
-
                                 <!-- Brought By -->
                                 <div class="col-md-3">
                                     <div class="form-group">

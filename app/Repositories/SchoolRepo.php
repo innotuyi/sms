@@ -12,4 +12,10 @@ class SchoolRepo {
     {
         return School::all();
     }
+
+
+    public function find($id) {
+
+        return School::find($id);
+    }
 }
