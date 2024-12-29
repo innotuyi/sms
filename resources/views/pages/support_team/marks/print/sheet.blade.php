@@ -4,7 +4,7 @@
     <tr>
         <td><strong>NAME:</strong> {{ strtoupper($sr->user->name) }}</td>
         <td><strong>ADM NO:</strong> {{ $sr->adm_no }}</td>
-        <td><strong>HOUSE:</strong> {{ strtoupper($sr->house) }}</td>
+        {{-- <td><strong>HOUSE:</strong> {{ strtoupper($sr->house) }}</td> --}}
         <td><strong>CLASS:</strong> {{ strtoupper($my_class->name) }}</td>
     </tr>
     <tr>

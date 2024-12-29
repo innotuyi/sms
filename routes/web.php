@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\StudentController;
@@ -186,4 +187,10 @@ Route::get('/locations/districts',[StudentRecordController::class,'fetchDistrict
 Route::get('/locations/sectors',[StudentRecordController::class,'fetchSectors']);
 Route::get('/locations/cells',[StudentRecordController::class,'fetchCells']);
 Route::get('/locations/villages',[StudentRecordController::class,'fetchVillages']);
+
+
+
+Route::get('/attendance/{sectionId?}', [AttendanceController::class, 'index'])->name('attendance.index');
+Route::post('/attendance', [AttendanceController::class, 'store'])->name('attendance.store');
+
 

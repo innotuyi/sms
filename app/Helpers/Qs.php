@@ -89,8 +89,6 @@ class Qs
     {
         $data = ['name', 'email', 'phone', 'phone2', 'dob', 'gender', 'address', 'bg_id', 'province', 'district', 'sector', 'cell', 'village'];
 
-        dd($data);
-
         return $remove ? array_values(array_diff($data, $remove)) : $data;
     }
 
