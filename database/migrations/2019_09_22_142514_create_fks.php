@@ -67,14 +67,14 @@ class CreateFks extends Migration
             $table->foreign('section_id')->references('id')->on('sections')->onDelete('cascade');
         });
 
-        Schema::table('books', function (Blueprint $table) {
-            $table->foreign('my_class_id')->references('id')->on('my_classes')->onDelete('cascade');
-        });
+        // Schema::table('books', function (Blueprint $table) {
+        //     $table->foreign('my_class_id')->references('id')->on('my_classes')->onDelete('cascade');
+        // });
 
-        Schema::table('book_requests', function (Blueprint $table) {
-            $table->foreign('book_id')->references('id')->on('books')->onDelete('cascade');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-        });
+        // Schema::table('book_requests', function (Blueprint $table) {
+        //     $table->foreign('book_id')->references('id')->on('books')->onDelete('cascade');
+        //     $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+        // });
 
         Schema::table('staff_records', function (Blueprint $table) {
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

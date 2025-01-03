@@ -1,8 +1,16 @@
 <?php
 
 use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\BookController;
+use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\LeaveController;
+use App\Http\Controllers\LoanController;
 use App\Http\Controllers\LocationController;
+use App\Http\Controllers\PastPaperController;
+use App\Http\Controllers\PayrollController;
+use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\ResourceController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\SupportTeam\StudentRecordController;
 
@@ -192,5 +200,81 @@ Route::get('/locations/villages',[StudentRecordController::class,'fetchVillages'
 
 Route::get('/attendance/{sectionId?}', [AttendanceController::class, 'index'])->name('attendance.index');
 Route::post('/attendance', [AttendanceController::class, 'store'])->name('attendance.store');
+
+
+ // Route for updating the permission status (approve/reject)
+Route::put('/permissions/{permission}', [PermissionController::class, 'updatePermissionStatus'])->name('permissions.update');
+
+// Route for showing permissions (index page)
+Route::get('/permissions', [PermissionController::class, 'index'])->name('permissions.index');
+
+// Route for requesting permission
+Route::post('/permissions/{student_id}', [PermissionController::class, 'requestPermission'])->name('permissions.request');
+
+Route::get('/parent/permissions', [PermissionController::class, 'childPermissions'])->name('parent.permissions');
+
+
+
+Route::get('books', [BookController::class, 'index'])->name('books.index');
+Route::get('books/search', [BookController::class, 'search'])->name('books.search');
+
+Route::get('loans', [LoanController::class, 'index'])->name('loans.index');;;
+Route::post('loans/borrow', [LoanController::class, 'borrow'])->name('loans.borrow');
+Route::post('loans/{id}/return', [LoanController::class, 'return']);
+
+Route::get('resources', [ResourceController::class, 'index'])->name('ressource.index');
+Route::post('resources/upload', [ResourceController::class, 'upload'])->name('ressource.upload');
+
+Route::get('past-papers', [PastPaperController::class, 'index'])->name('past_papers.index');
+
+Route::resource('past_papers', 'PastPaperController');
+
+// // Display a list of all books
+// Route::get('/books', [BookController::class, 'index'])->name('books.index');
+
+// // Show the form to create a new book
+// Route::get('/books/create', [BookController::class, 'create'])->name('books.create');
+
+// // Show the form to edit an existing book
+// Route::get('books/edit/{id}', [BookController::class, 'editBook'])->name('books.edit');
+
+// // Store a new book in the database
+// Route::post('/books', [BookController::class, 'store'])->name('books.store');
+
+// // Update the details of an existing book
+// Route::put('/books/{id}', [BookController::class, 'update'])->name('books.update');
+
+// // Delete a book from the inventory
+// Route::delete('books/{id}', [BookController::class, 'destroy'])->name('books.destroy');
+
+
+Route::resource('books', 'BookController');
+
+Route::middleware(['auth'])->group(function () {
+    Route::resource('expenses', 'ExpenseController');
+    Route::post('expenses/{expense}/approve', [ExpenseController::class, 'approve'])->name('expenses.approve');
+    Route::post('expenses/{expense}/reject', [ExpenseController::class, 'reject'])->name('expenses.reject');
+});
+
+// Route::put('/expenses/{id}/approve', 'ExpenseController@approve')->name('expenses.approve');
+// Route::put('/expenses/{id}/reject',  'ExpenseController@reject')->name('expenses.reject');
+
+Route::put('/expenses/{id}/approve', [ExpenseController::class, 'approve'])->name('expenses.approve');
+Route::put('/expenses/{id}/reject',  [ExpenseController::class, 'reject'])->name('expenses.reject');
+
+Route::get('/leaves', [LeaveController::class, 'index'])->name('leaves.index');
+Route::post('/leaves', [LeaveController::class, 'store'])->name('leaves.store');
+Route::put('/leaves/{id}/approve', [LeaveController::class, 'approve'])->name('leaves.approve');
+Route::put('/leaves/{id}/reject', [LeaveController::class, 'reject'])->name('leaves.reject');
+
+
+Route::get('/payrolls', [PayrollController::class, 'index'])->name('payrolls.index');
+Route::post('/payrolls', [PayrollController::class, 'store'])->name('payrolls.store');
+Route::delete('/payrolls/{id}', [PayrollController::class, 'delete'])->name('payrolls.delete');
+
+
+
+
+
 
 

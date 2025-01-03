@@ -4,5 +4,9 @@
 </li>
 
 <li class="nav-item">
-    <a href="{{ route('my_children') }}" class="nav-link"><i class="icon-users4"></i>Permission</a>
+    <a href="{{ route('parent.permissions') }}" class="nav-link"><i class="icon-users4"></i>Permission</a>
 </li>
+
+{{-- <li class="nav-item">
+    <a href="{{ route('my_children') }}" class="nav-link"><i class="icon-users4"></i>Permission</a>
+</li> --}}
