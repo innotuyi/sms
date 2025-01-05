@@ -15,7 +15,9 @@ class PayrollController extends Controller
             JOIN users u ON p.user_id = u.id
         ');
 
-        return view('payrolls.index', compact('payrolls'));
+        $users = DB::table('users')->select('id', 'name')->get();
+
+        return view('payrolls.index', compact('payrolls', 'users'));
     }
 
     public function store(Request $request)

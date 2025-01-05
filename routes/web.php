@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\BookController;
+use App\Http\Controllers\BusAttendanceController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LeaveController;
@@ -11,8 +12,12 @@ use App\Http\Controllers\PastPaperController;
 use App\Http\Controllers\PayrollController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ResourceController;
+use App\Http\Controllers\RoutingController;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\StudentRoutingController;
+use App\Http\Controllers\StudentTransportController;
 use App\Http\Controllers\SupportTeam\StudentRecordController;
+use App\Http\Controllers\VehicleController;
 
 Auth::routes();
 
@@ -271,6 +276,53 @@ Route::put('/leaves/{id}/reject', [LeaveController::class, 'reject'])->name('lea
 Route::get('/payrolls', [PayrollController::class, 'index'])->name('payrolls.index');
 Route::post('/payrolls', [PayrollController::class, 'store'])->name('payrolls.store');
 Route::delete('/payrolls/{id}', [PayrollController::class, 'delete'])->name('payrolls.delete');
+
+
+Route::prefix('vehicles')->group(function () {
+    Route::get('/', [VehicleController::class, 'index'])->name('vehicles.index'); // List all vehicles
+    Route::get('/create', [VehicleController::class, 'create'])->name('vehicles.create'); // Show form to add a new vehicle
+    Route::post('/', [VehicleController::class, 'store'])->name('vehicles.store'); // Store new vehicle
+    Route::get('/{id}/edit', [VehicleController::class, 'edit'])->name('vehicles.edit'); // Show form to edit a vehicle
+    Route::put('/{id}', [VehicleController::class, 'update'])->name('vehicles.update'); // Update vehicle details
+    Route::delete('/{id}', [VehicleController::class, 'destroy'])->name('vehicles.destroy'); // Delete a vehicle
+});
+// Student  Routing
+
+    Route::get('/', [RoutingController::class, 'index'])->name('routes.index'); // View routes
+    Route::get('/create', [RoutingController::class, 'create'])->name('routes.create'); // Add a route
+    Route::post('/', [RoutingController::class, 'store'])->name('routes.store'); // Save a new route
+    Route::get('/{id}/edit', [RoutingController::class, 'edit'])->name('routes.edit'); // Edit a route
+    Route::put('/{id}', [RoutingController::class, 'update'])->name('routes.update'); // Update route
+    Route::delete('/{id}', [RoutingController::class, 'destroy'])->name('routes.destroy'); // Delete a route
+
+
+    Route::resource('student_transports', 'StudentTransportController');
+
+
+Route::resource('bus_attendance', 'BusAttendanceController');
+
+
+// // Safety Management
+// Route::prefix('safety')->group(function () {
+//     Route::get('/', [SafetyController::class, 'index'])->name('safety.index'); // View safety records
+//     Route::post('/', [SafetyController::class, 'store'])->name('safety.store'); // Add safety report
+//     Route::get('/{id}', [SafetyController::class, 'show'])->name('safety.show'); // View detailed safety report
+// });
+
+// // Route Optimization
+// Route::prefix('optimization')->group(function () {
+//     Route::get('/', [RouteOptimizationController::class, 'index'])->name('optimization.index'); // View optimized routes
+//     Route::post('/process', [RouteOptimizationController::class, 'process'])->name('optimization.process'); // Process optimization
+// });
+
+
+// //Vehicle Tracking Management
+// Route::prefix('tracking')->group(function () {
+//     Route::get('/', [VehicleTrackingController::class, 'index'])->name('tracking.index'); // View tracked vehicles
+//     Route::post('/update', [VehicleTrackingController::class, 'update'])->name('tracking.update'); // Update tracking data
+// });
+
+
 
 
 

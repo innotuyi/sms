@@ -63,9 +63,13 @@
 
                             <div class="form-group">
                                 <label for="user_id">Employee</label>
-                                <input type="number" name="user_id" class="form-control" id="user_id" required>
-                            </div>
-
+                                <select name="user_id" class="form-control" id="user_id" required>
+                                    <option value="" disabled selected>Select an Employee</option>
+                                    @foreach($users as $user)
+                                        <option value="{{ $user->id }}">{{ $user->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>                          
                             <div class="form-group">
                                 <label for="basic_salary">Basic Salary</label>
                                 <input type="number" name="basic_salary" class="form-control" id="basic_salary" step="0.01" required>
