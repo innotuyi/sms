@@ -23,6 +23,19 @@ class ExpenseController extends Controller
         return view('expenses.index', compact('expenses'));
     }
 
+    public function edit($id)
+    {
+        $expense = DB::table('expenses')->find($id); // Get the specific expense
+        return response()->json($expense); // Return the expense details as JSON for the modal
+    }
+    public function destroy($id)
+    {
+        DB::table('expenses')->where('id', $id)->delete();
+
+        return redirect()->route('expenses.index')->with('success', 'Expense deleted successfully!');
+    }
+
+
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -86,10 +99,19 @@ class ExpenseController extends Controller
     // }
     public function approve($id)
     {
+        // Debugging: Check if the ID is being passed correctly
+        if (!$id) {
+            return redirect()->back()->with('error', 'Invalid expense ID.');
+        }
 
-        $expense = Expense::findOrFail($id);
+        $expense = Expense::find($id);
+
+        if (!$expense) {
+            return redirect()->back()->with('error', 'Expense not found.');
+        }
+
         $expense->status = 'Approved';
-        $expense->approved_by = auth()->id(); // Assuming you store the approver's ID
+        $expense->approved_by = auth()->id(); // Assuming authentication
         $expense->approved_at = now();
         $expense->save();
 
@@ -98,7 +120,17 @@ class ExpenseController extends Controller
 
     public function reject($id)
     {
-        $expense = Expense::findOrFail($id);
+        // Debugging: Check if the ID is being passed correctly
+        if (!$id) {
+            return redirect()->back()->with('error', 'Invalid expense ID.');
+        }
+
+        $expense = Expense::find($id);
+
+        if (!$expense) {
+            return redirect()->back()->with('error', 'Expense not found.');
+        }
+
         $expense->status = 'Rejected';
         $expense->approved_by = auth()->id();
         $expense->approved_at = now();

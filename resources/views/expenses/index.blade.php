@@ -36,31 +36,32 @@
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $expense->description }}</td>
-                                <td>{{ $expense->amount }}</td>
+                                <td>{{ number_format($expense->amount, 2) }}</td>
                                 <td>{{ $expense->category }}</td>
-                                <td>{{ $expense->status }}</td>
-                                <td>{{ $expense->requested_by }}</td>
+                                <td>{{ $expense->requested_by_name }}</td>
+                                <td>{{ $expense->approved_by_name }}</td>
                                 <td>
-                                    <td>
-                                        <a href="{{ route('expenses.edit', $expense->id) }}" class="btn btn-warning">Edit</a>
-                                        {{-- <form action="{{ route('expenses.destroy', $expense->id) }}" method="POST" style="display:inline;">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-danger">Delete</button>
-                                        </form> --}}
+                                    {{-- <a href="{{ route('expenses.edit', $expense->id) }}" class="btn btn-warning">Edit</a> --}}
+                                    
+                                    <form action="{{ route('expenses.destroy', $expense->id) }}" method="POST" style="display:inline;">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                    </form>
+                                    
+                                    @if($expense->status === 'Pending')
                                         <form action="{{ route('expenses.approve', $expense->id) }}" method="POST" style="display:inline;">
                                             @csrf
-                                            @method('put')
+                                            @method('PUT')
                                             <button type="submit" class="btn btn-success">Approve</button>
                                         </form>
+
                                         <form action="{{ route('expenses.reject', $expense->id) }}" method="POST" style="display:inline;">
                                             @csrf
-                                            @method('put')
+                                            @method('PUT')
                                             <button type="submit" class="btn btn-danger">Reject</button>
                                         </form>
-                                    </td>
-                                    
-                                    </form>
+                                    @endif
                                 </td>
                             </tr>
                         @endforeach
@@ -74,11 +75,6 @@
                     <div class="col-md-12">
                         <form action="{{ route('expenses.store') }}" method="POST">
                             @csrf
-
-                            <div class="form-group">
-                                <label for="description">Title</label>
-                                <textarea name="title" class="form-control" id="description" required>{{ old('description') }}</textarea>
-                            </div>
 
                             <div class="form-group">
                                 <label for="description">Description</label>
@@ -104,16 +100,6 @@
                             <div class="form-group">
                                 <label for="requested_by">Requested By</label>
                                 <input type="text" name="requested_by" class="form-control" id="requested_by" value="{{ old('requested_by') }}" required>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="status">Status</label>
-                                <select name="status" class="form-control" id="status" required>
-                                    <option value="" disabled selected>Select Status</option>
-                                    <option value="Pending">Pending</option>
-                                    <option value="Approved">Approved</option>
-                                    <option value="Rejected">Rejected</option>
-                                </select>
                             </div>
 
                             <button type="submit" class="btn btn-primary">Add Expense</button>

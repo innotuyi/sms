@@ -1,7 +1,11 @@
 <?php
 
+
+Auth::routes();
+
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\BookController;
+use App\Http\Controllers\BusAttendanceController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LeaveController;
@@ -11,10 +15,14 @@ use App\Http\Controllers\PastPaperController;
 use App\Http\Controllers\PayrollController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ResourceController;
+use App\Http\Controllers\RoutingController;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\StudentRoutingController;
+use App\Http\Controllers\StudentTransportController;
 use App\Http\Controllers\SupportTeam\StudentRecordController;
+use App\Http\Controllers\VehicleController;
 
-Auth::routes();
+
 
 //Route::get('/test', 'TestController@index')->name('test');
 Route::get('/privacy-policy', [HomeController::class, 'privacy_policy'])->name('privacy_policy');
@@ -22,10 +30,9 @@ Route::get('/terms-of-use', [HomeController::class, 'terms_of_use'])->name('term
 
 
 Route::group(['middleware' => 'auth'], function () {
-
-    Route::get('/', [HomeController::class, 'dashboard'])->name('home');
     Route::get('/home', [HomeController::class, 'dashboard'])->name('home');
     Route::get('/dashboard', [HomeController::class, 'dashboard'])->name('dashboard');
+
 
     Route::group(['prefix' => 'my_account'], function() {
         Route::get('/', 'MyAccountController@edit_profile')->name('my_account');
@@ -252,15 +259,17 @@ Route::resource('books', 'BookController');
 
 Route::middleware(['auth'])->group(function () {
     Route::resource('expenses', 'ExpenseController');
-    Route::post('expenses/{expense}/approve', [ExpenseController::class, 'approve'])->name('expenses.approve');
-    Route::post('expenses/{expense}/reject', [ExpenseController::class, 'reject'])->name('expenses.reject');
+    Route::put('expenses/{expense}/approve', [ExpenseController::class, 'approve'])->name('expenses.approve');
+    Route::put('expenses/{expense}/reject', [ExpenseController::class, 'reject'])->name('expenses.reject');
 });
 
-// Route::put('/expenses/{id}/approve', 'ExpenseController@approve')->name('expenses.approve');
-// Route::put('/expenses/{id}/reject',  'ExpenseController@reject')->name('expenses.reject');
+// Route::put('expenses/approve/{id}', 'ExpenseController@approve')->name('expenses.approve');
+// Route::put('expenses/reject/{id}', 'ExpenseController@reject')->name('expenses.reject');
 
-Route::put('/expenses/{id}/approve', [ExpenseController::class, 'approve'])->name('expenses.approve');
-Route::put('/expenses/{id}/reject',  [ExpenseController::class, 'reject'])->name('expenses.reject');
+// Route::put('/approve/{id}', [ExpenseController::class, 'approve'])->name('expenses.approve');
+// Route::put('/reject/{id}', [ExpenseController::class, 'reject'])->name('expenses.reject');
+
+
 
 Route::get('/leaves', [LeaveController::class, 'index'])->name('leaves.index');
 Route::post('/leaves', [LeaveController::class, 'store'])->name('leaves.store');
@@ -271,6 +280,38 @@ Route::put('/leaves/{id}/reject', [LeaveController::class, 'reject'])->name('lea
 Route::get('/payrolls', [PayrollController::class, 'index'])->name('payrolls.index');
 Route::post('/payrolls', [PayrollController::class, 'store'])->name('payrolls.store');
 Route::delete('/payrolls/{id}', [PayrollController::class, 'delete'])->name('payrolls.delete');
+
+
+Route::prefix('vehicles')->group(function () {
+    Route::get('/', [VehicleController::class, 'index'])->name('vehicles.index'); // List all vehicles
+    Route::get('/create', [VehicleController::class, 'create'])->name('vehicles.create'); // Show form to add a new vehicle
+    Route::post('/', [VehicleController::class, 'store'])->name('vehicles.store'); // Store new vehicle
+    Route::get('/{id}/edit', [VehicleController::class, 'edit'])->name('vehicles.edit'); // Show form to edit a vehicle
+    Route::put('/{id}', [VehicleController::class, 'update'])->name('vehicles.update'); // Update vehicle details
+    Route::delete('/{id}', [VehicleController::class, 'destroy'])->name('vehicles.destroy'); // Delete a vehicle
+});
+
+
+
+// Student  Routing
+
+    Route::get('/', [RoutingController::class, 'index'])->name('routes.index'); // View routes
+    Route::get('/create', [RoutingController::class, 'create'])->name('routes.create'); // Add a route
+    Route::post('/', [RoutingController::class, 'store'])->name('routes.store'); // Save a new route
+    Route::get('/{id}/edit', [RoutingController::class, 'edit'])->name('routes.edit'); // Edit a route
+    Route::put('/{id}', [RoutingController::class, 'update'])->name('routes.update'); // Update route
+    Route::delete('/{id}', [RoutingController::class, 'destroy'])->name('routes.destroy'); // Delete a route
+
+
+    Route::resource('student_transports', 'StudentTransportController');
+
+
+Route::resource('bus_attendance', 'BusAttendanceController');
+
+
+
+
+
 
 
 

@@ -392,7 +392,33 @@
              </ul>
          </li>
      @endif
-     {{-- End Leave --}}
+     {{-- End payroll --}}
+
+         {{-- Payroll --}}
+         @if (Qs::userIsTeamSAT())
+         <li class="nav-item nav-item-submenu">
+             <a href="#" class="nav-link"><i class="icon-books"></i> <span>Transport Manage</span></a>
+             <ul class="nav nav-group-sub" data-submenu-title="Manage Exams">
+                 {{-- past papers --}}
+                 <li class="nav-item">
+                     <a href="{{ route('vehicles.index') }}" class="nav-link">Vehicles</a>
+                 </li>
+
+                 <li class="nav-item">
+                    <a href="{{ route('routes.index') }}" class="nav-link">Routes</a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('student_transports.index') }}" class="nav-link">Students</a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('bus_attendance.index') }}" class="nav-link">Bus Attendance</a>
+                </li>
+
+            
+             </ul>
+         </li>
+     @endif
+     {{-- End payroll --}}
 
 
                 {{-- Library --}}

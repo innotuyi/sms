@@ -17,10 +17,10 @@ class LeaveController extends Controller
     public function store(Request $request)
     {
         DB::insert(
-            'INSERT INTO leaves (user_id, type, reason, start_date, end_date, status, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, NOW(), NOW())',
+            'INSERT INTO leaves (user_id, leave_type, reason, start_date, end_date, status, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, NOW(), NOW())',
             [
                 $request->user_id,
-                $request->type,
+                $request->leave_type,
                 $request->reason,
                 $request->start_date,
                 $request->end_date,

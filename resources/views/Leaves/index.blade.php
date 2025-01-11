@@ -36,7 +36,7 @@
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $leave->user_name }}</td>
-                                <td>{{ $leave->type }}</td>
+                                <td>{{ $leave->leave_type }}</td>
                                 <td>{{ $leave->reason }}</td>
                                 <td>{{ $leave->start_date }}</td>
                                 <td>{{ $leave->end_date }}</td>
@@ -73,7 +73,7 @@
 
                             <div class="form-group">
                                 <label for="type">Leave Type</label>
-                                <select name="type" class="form-control" id="type" required>
+                                <select name="leave_type" class="form-control" id="type" required>
                                     <option value="Sick">Sick</option>
                                     <option value="Annual">Annual</option>
                                     <option value="Maternity">Maternity</option>

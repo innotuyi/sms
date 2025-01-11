@@ -41,7 +41,6 @@ class HomeController extends Controller
         if(Qs::userIsTeamSAT()){
             $d['users'] = $this->user->getAll();
         }
-
         return view('pages.support_team.dashboard', $d);
     }
 }
