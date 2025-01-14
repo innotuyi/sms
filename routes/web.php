@@ -22,6 +22,7 @@ use App\Http\Controllers\StudentRoutingController;
 use App\Http\Controllers\StudentTransportController;
 use App\Http\Controllers\SupportTeam\StudentRecordController;
 use App\Http\Controllers\VehicleController;
+<<<<<<< HEAD
 
 
 // Route::get('/', function () {
@@ -29,6 +30,8 @@ use App\Http\Controllers\VehicleController;
 // })->name('home');
 
 
+=======
+>>>>>>> 5b3e2ac69adc74a852f718d75ad25d5815ebffa3
 
 
 //Route::get('/test', 'TestController@index')->name('test');
@@ -297,9 +300,12 @@ Route::prefix('vehicles')->group(function () {
     Route::put('/{id}', [VehicleController::class, 'update'])->name('vehicles.update'); // Update vehicle details
     Route::delete('/{id}', [VehicleController::class, 'destroy'])->name('vehicles.destroy'); // Delete a vehicle
 });
+<<<<<<< HEAD
 
 
 
+=======
+>>>>>>> 5b3e2ac69adc74a852f718d75ad25d5815ebffa3
 // Student  Routing
 
     Route::get('/', [RoutingController::class, 'index'])->name('routes.index'); // View routes
@@ -308,6 +314,7 @@ Route::prefix('vehicles')->group(function () {
     Route::get('/{id}/edit', [RoutingController::class, 'edit'])->name('routes.edit'); // Edit a route
     Route::put('/{id}', [RoutingController::class, 'update'])->name('routes.update'); // Update route
     Route::delete('/{id}', [RoutingController::class, 'destroy'])->name('routes.destroy'); // Delete a route
+<<<<<<< HEAD
     Route::resource('student_transports', 'StudentTransportController');
 
 Route::resource('bus_attendance', 'BusAttendanceController');
@@ -324,6 +331,35 @@ Route::get('/reset-password', [LoginController::class, 'login'])->name('password
 
 
 
+=======
+
+
+    Route::resource('student_transports', 'StudentTransportController');
+
+
+Route::resource('bus_attendance', 'BusAttendanceController');
+
+
+// // Safety Management
+// Route::prefix('safety')->group(function () {
+//     Route::get('/', [SafetyController::class, 'index'])->name('safety.index'); // View safety records
+//     Route::post('/', [SafetyController::class, 'store'])->name('safety.store'); // Add safety report
+//     Route::get('/{id}', [SafetyController::class, 'show'])->name('safety.show'); // View detailed safety report
+// });
+
+// // Route Optimization
+// Route::prefix('optimization')->group(function () {
+//     Route::get('/', [RouteOptimizationController::class, 'index'])->name('optimization.index'); // View optimized routes
+//     Route::post('/process', [RouteOptimizationController::class, 'process'])->name('optimization.process'); // Process optimization
+// });
+
+
+// //Vehicle Tracking Management
+// Route::prefix('tracking')->group(function () {
+//     Route::get('/', [VehicleTrackingController::class, 'index'])->name('tracking.index'); // View tracked vehicles
+//     Route::post('/update', [VehicleTrackingController::class, 'update'])->name('tracking.update'); // Update tracking data
+// });
+>>>>>>> 5b3e2ac69adc74a852f718d75ad25d5815ebffa3
 
 
 
