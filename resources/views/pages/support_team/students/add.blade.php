@@ -272,6 +272,15 @@
                                             class="form-control" value="{{ old('house') }}">
                                     </div>
                                 </div>
+
+                                 <!-- Sport House -->
+                                 <div class="col-md-3 mb-2">
+                                    <div class="form-group">
+                                        <label>Destination:</label>
+                                        <input type="text" name="destination" placeholder="Destination"
+                                            class="form-control" value="{{ old('destination') }}">
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

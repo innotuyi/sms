@@ -19,6 +19,7 @@ class StudentRecord extends Eloquent
         'dorm_room_no', 
         'year_admitted', 
         'house', 
+        'destination',
         'age',
         'session',
         'user_id',

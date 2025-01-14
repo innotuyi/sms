@@ -24,6 +24,7 @@ class StudentTransportController extends Controller
                 'users.name as student_name', // Fetch student name from `users`
                 'vehicles.vehicle_type as vehicle_name', // Renamed alias to match in the view
                 'routes.route_name',
+                // 'studen_records.destination',
                 'student__transports.created_at'
             )
             ->get();

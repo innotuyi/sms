@@ -1,9 +1,10 @@
 <?php
 
 
-Auth::routes();
+//Auth::routes();
 
 use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\BusAttendanceController;
 use App\Http\Controllers\ExpenseController;
@@ -21,6 +22,12 @@ use App\Http\Controllers\StudentRoutingController;
 use App\Http\Controllers\StudentTransportController;
 use App\Http\Controllers\SupportTeam\StudentRecordController;
 use App\Http\Controllers\VehicleController;
+
+
+// Route::get('/', function () {
+//     return view('welcome'); // Replace 'welcome' with your desired view
+// })->name('home');
+
 
 
 
@@ -273,8 +280,8 @@ Route::middleware(['auth'])->group(function () {
 
 Route::get('/leaves', [LeaveController::class, 'index'])->name('leaves.index');
 Route::post('/leaves', [LeaveController::class, 'store'])->name('leaves.store');
-Route::put('/leaves/{id}/approve', [LeaveController::class, 'approve'])->name('leaves.approve');
-Route::put('/leaves/{id}/reject', [LeaveController::class, 'reject'])->name('leaves.reject');
+Route::put('/leaves/{leave}/approve', [LeaveController::class, 'approve'])->name('leaves.approve');
+Route::put('/leaves/{leave}/reject', [LeaveController::class, 'reject'])->name('leaves.reject');
 
 
 Route::get('/payrolls', [PayrollController::class, 'index'])->name('payrolls.index');
@@ -301,12 +308,19 @@ Route::prefix('vehicles')->group(function () {
     Route::get('/{id}/edit', [RoutingController::class, 'edit'])->name('routes.edit'); // Edit a route
     Route::put('/{id}', [RoutingController::class, 'update'])->name('routes.update'); // Update route
     Route::delete('/{id}', [RoutingController::class, 'destroy'])->name('routes.destroy'); // Delete a route
-
-
     Route::resource('student_transports', 'StudentTransportController');
 
-
 Route::resource('bus_attendance', 'BusAttendanceController');
+
+Route::get('/', [LoginController::class, 'login'])->name('login');
+
+
+Route::get('/reset-password', [LoginController::class, 'login'])->name('password.request');
+
+
+
+
+
 
 
 
