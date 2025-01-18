@@ -17,9 +17,11 @@ use App\Http\Controllers\PayrollController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ResourceController;
 use App\Http\Controllers\RoutingController;
+use App\Http\Controllers\SchoolController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\StudentRoutingController;
 use App\Http\Controllers\StudentTransportController;
+use App\Http\Controllers\SuperAdmin\SettingController;
 use App\Http\Controllers\SupportTeam\StudentRecordController;
 use App\Http\Controllers\VehicleController;
 
@@ -189,6 +191,38 @@ Route::group(['namespace' => 'SuperAdmin','middleware' => 'super_admin', 'prefix
 
 });
 
+
+
+Route::get('/test', [SettingController::class, 'test'])->name('settings.test'); // For the main page
+Route::post('/settings/assign', [SettingController::class, 'assignSetting'])->name('super_admin.assign_setting'); // For assigning settings
+Route::get('/settings/{id}/edit', [SettingController::class, 'edit'])->name('settings.edit'); // For editing a setting
+Route::delete('/settings/{id}', [SettingController::class, 'destroy'])->name('settings.destroy'); // For deleting a setting
+
+
+Route::get('/school', [SchoolController::class, 'index'])->name('school.index'); // For the main page
+Route::post('/school/store', [SchoolController::class, 'store'])->name('school.store'); // For the main page
+Route::get('/school/edit', [SchoolController::class, 'edit'])->name('school.edit'); // For the main page
+Route::get('/school/{id}', [SchoolController::class, 'update'])->name('school.update'); // For the main page
+Route::delete('/school{id}', [SchoolController::class, 'destroy'])->name('school.destroy'); // For the main page
+
+
+
+
+
+
+// Route::get('/settings', [SettingController::class, 'index'])->name('settings.index'); // For the main page
+// Route::post('/settings/assign', [SettingController::class, 'assignSetting'])->name('super_admin.assign_setting'); // For assigning settings
+// Route::get('/settings/{id}/edit', [SettingController::class, 'edit'])->name('settings.edit'); // For editing a setting
+// Route::delete('/settings/{id}', [SettingController::class, 'destroy'])->name('settings.destroy'); // For deleting a setting
+
+
+
+
+
+
+
+
+
 /************************ PARENT ****************************/
 Route::group(['namespace' => 'MyParent','middleware' => 'my_parent',], function(){
 
@@ -304,7 +338,37 @@ Route::prefix('vehicles')->group(function () {
 
 Route::resource('bus_attendance', 'BusAttendanceController');
 
-Route::get('/', [LoginController::class, 'login'])->name('login');
+Route::get('/', [LoginController::class, 'showLoginForm']);
+
+// routes/web.php
+
+Route::get('/single/{school}', [SchoolController::class, 'show'])->name('school.show');
+Route::get('/districts/{province}/{district}', [SchoolController::class, 'showByDistrict'])->name('districts.show');
+
+
+Route::get('/get-districts/{province}', function ($province) {
+    $districts = DB::table('schools')
+        ->select('district')
+        ->where('province', $province)
+        ->distinct()
+        ->get();
+
+    return response()->json(['districts' => $districts->pluck('district')]);
+});
+
+Route::get('/get-schools/{province}/{district}', function ($province, $district) {
+    $schools = DB::table('schools')
+        ->where('province', $province)
+        ->where('district', $district)
+        ->get();
+
+    return response()->json(['schools' => $schools]);
+});
+
+
+Route::post('/login', [LoginController::class, 'login'])->name('login');
+Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+
 
 
 Route::get('/reset-password', [LoginController::class, 'login'])->name('password.request');
@@ -313,6 +377,12 @@ Route::get('/reset-password', [LoginController::class, 'login'])->name('password
 
 
 Route::resource('bus_attendance', 'BusAttendanceController');
+
+Route::resource('routes', 'RoutingController');
+
+
+
+
 
 
 // // Safety Management

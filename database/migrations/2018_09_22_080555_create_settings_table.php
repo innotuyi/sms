@@ -15,9 +15,11 @@ class CreateSettingsTable extends Migration
     {
         Schema::create('settings', function (Blueprint $table) {
             $table->increments('id');
+            $table->unsignedBigInteger('school_id')->nullable(); // Add the foreign key column
             $table->string('type');
             $table->string('description')->nullable();
             $table->timestamps();
+            $table->foreign('school_id')->references('id')->on('schools')->onDelete('cascade');
         });
     }
 

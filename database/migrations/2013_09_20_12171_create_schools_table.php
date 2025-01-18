@@ -17,6 +17,15 @@ class CreateSchoolsTable extends Migration
             $table->id();
             $table->string('school_code')->default('SCH01')->unique();
             $table->string('school_name');
+            $table->string('address')->nullable();
+            $table->string('phone_number')->nullable();
+            $table->string('email')->unique()->nullable();
+            $table->string('principal_name')->nullable();
+            $table->string('province')->nullable();
+            $table->string('district')->nullable();
+            $table->integer('established_year')->nullable();
+            $table->string('school_type')->nullable(); // e.g., Public, Private
+            $table->string('registration_number')->nullable();
             $table->timestamps();
         });
     }

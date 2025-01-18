@@ -64,6 +64,9 @@
                             <li class="nav-item"><a href="{{ route('tt.index') }}"
                                     class="nav-link {{ in_array(Route::currentRouteName(), ['tt.index']) ? 'active' : '' }}">Timetables</a>
                             </li>
+
+                            <li class="nav-item"><a href="{{ route('school.index') }}" class="nav-link">School</a>
+                        </li>
                         </ul>
                     </li>
                 @endif
