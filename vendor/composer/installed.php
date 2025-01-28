@@ -3,7 +3,7 @@
         'name' => 'laravel/laravel',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '3c306c4c3b050c1780e226b2935a43460f68abca',
+        'reference' => '1670871cf49eed735622845057378e9de15b4628',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -45,6 +45,15 @@
             'install_path' => __DIR__ . '/../barryvdh/reflection-docblock',
             'aliases' => array(),
             'dev_requirement' => true,
+        ),
+        'box/spout' => array(
+            'pretty_version' => 'v3.3.0',
+            'version' => '3.3.0.0',
+            'reference' => '9bdb027d312b732515b884a341c0ad70372c6295',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../box/spout',
+            'aliases' => array(),
+            'dev_requirement' => false,
         ),
         'brick/math' => array(
             'pretty_version' => '0.12.1',
@@ -514,7 +523,7 @@
         'laravel/laravel' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '3c306c4c3b050c1780e226b2935a43460f68abca',
+            'reference' => '1670871cf49eed735622845057378e9de15b4628',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

@@ -11,16 +11,19 @@ class School extends Model
     protected $fillable = [
         'school_code',
         'school_name',
+        'school_status',
+        'school_level',
+        'province',
+        'district',
         'address',
         'phone_number',
         'email',
         'principal_name',
-        'province',
-        'district',
         'established_year',
         'school_type',
         'registration_number',
     ];
+    
 }
 
 

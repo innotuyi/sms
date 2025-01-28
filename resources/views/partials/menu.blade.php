@@ -66,6 +66,12 @@
                             </li>
 
                             <li class="nav-item"><a href="{{ route('school.index') }}" class="nav-link">School</a>
+
+                         <li class="nav-item"><a href="{{ route('child-applications.index') }}" class="nav-link">Application</a>
+
+                            <a href="{{ route('school.import.form') }}" class="btn btn-primary">Import Schools</a>
+
+
                         </li>
                         </ul>
                     </li>

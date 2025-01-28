@@ -202,8 +202,8 @@
         <div class="banner-text">Welcome to Rangishuri - Your trusted partner for school concerns.</div>
     </div>
     <div class="auth-links">
-        <a href="#">Register</a>
-        <a href="#">Login</a>
+        <a href="/">Register</a>
+        <a href="/">Login</a>
     </div>
 </nav>
 
@@ -227,6 +227,7 @@
         </div>
     @endforeach
 </div>
+
 
 </body>
 </html>

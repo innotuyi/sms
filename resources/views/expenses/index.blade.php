@@ -77,6 +77,11 @@
                             @csrf
 
                             <div class="form-group">
+                                <label for="amount">Title</label>
+                                <input type="text" name="title" class="form-control" id="amount" value="{{ old('title') }}" required>
+                            </div>
+
+                            <div class="form-group">
                                 <label for="description">Description</label>
                                 <textarea name="description" class="form-control" id="description" required>{{ old('description') }}</textarea>
                             </div>

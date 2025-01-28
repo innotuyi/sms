@@ -7,6 +7,7 @@ use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\BusAttendanceController;
+use App\Http\Controllers\ChildApplicationController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LeaveController;
@@ -18,6 +19,7 @@ use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ResourceController;
 use App\Http\Controllers\RoutingController;
 use App\Http\Controllers\SchoolController;
+use App\Http\Controllers\SchoolImportController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\StudentRoutingController;
 use App\Http\Controllers\StudentTransportController;
@@ -344,6 +346,8 @@ Route::get('/', [LoginController::class, 'showLoginForm']);
 
 Route::get('/single/{school}', [SchoolController::class, 'show'])->name('school.show');
 Route::get('/districts/{province}/{district}', [SchoolController::class, 'showByDistrict'])->name('districts.show');
+Route::get('schools/import', [SchoolImportController::class, 'showImportForm'])->name('school.import.form');
+Route::post('schools/import', [SchoolImportController::class, 'import'])->name('school.import');
 
 
 Route::get('/get-districts/{province}', function ($province) {
@@ -379,6 +383,10 @@ Route::get('/reset-password', [LoginController::class, 'login'])->name('password
 Route::resource('bus_attendance', 'BusAttendanceController');
 
 Route::resource('routes', 'RoutingController');
+
+
+Route::resource('child-applications', 'ChildApplicationController');
+
 
 
 

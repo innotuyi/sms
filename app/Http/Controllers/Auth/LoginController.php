@@ -16,28 +16,39 @@ class LoginController extends Controller
      */
     public function showLoginForm()
     {
-        // Fetch provinces and their associated districts
+        // Fetch distinct provinces
         $provinces = DB::table('schools')
-            ->select('province', 'district')
-            ->groupBy('province', 'district')
+            ->select('province')
+            ->distinct()
             ->get();
-        
-        // Fetch all schools for each district
+
+        // Fetch all schools grouped by province and district, ensuring no duplication
         $schoolsByDistrict = [];
         foreach ($provinces as $province) {
-            $schoolsByDistrict[$province->province][$province->district] = DB::table('schools')
+            $schoolsByDistrict[$province->province] = DB::table('schools')
+                ->select('district')
                 ->where('province', $province->province)
-                ->where('district', $province->district)
-                ->get();
+                ->distinct() // Fetch distinct districts for the province
+                ->get()
+                ->mapWithKeys(function ($district) use ($province) {
+                    // Fetch unique schools for each district
+                    $uniqueSchools = DB::table('schools')
+                        ->select('id', 'school_code', 'school_name', 'district', 'province') // Only fetch necessary fields
+                        ->where('province', $province->province)
+                        ->where('district', $district->district)
+                        ->groupBy('id', 'school_code', 'school_name', 'district', 'province') // Group by relevant fields
+                        ->get();
+
+                    return [$district->district => $uniqueSchools];
+                });
         }
-        
-        // Pass the data to the view
         return view('auth.login', compact('provinces', 'schoolsByDistrict'));
     }
-    
-    
-    
-    
+
+
+
+
+
 
     /**
      * Handle login submissions.
@@ -78,5 +89,4 @@ class LoginController extends Controller
         Auth::logout();
         return redirect('/')->with('status', 'You have been logged out.');
     }
-
 }
