@@ -21,32 +21,44 @@ class LoginController extends Controller
             ->select('province')
             ->distinct()
             ->get();
-
-        // Fetch all schools grouped by province and district, ensuring no duplication
-        $schoolsByDistrict = [];
+    
+        // Fetch all schools grouped by province → district → sector
+        $schoolsBySector = [];
         foreach ($provinces as $province) {
-            $schoolsByDistrict[$province->province] = DB::table('schools')
+            // Get all districts in the province
+            $districts = DB::table('schools')
                 ->select('district')
                 ->where('province', $province->province)
-                ->distinct() // Fetch distinct districts for the province
-                ->get()
-                ->mapWithKeys(function ($district) use ($province) {
-                    // Fetch unique schools for each district
-                    $uniqueSchools = DB::table('schools')
-                        ->select('id', 'school_code', 'school_name', 'district', 'province') // Only fetch necessary fields
+                ->distinct()
+                ->get();
+    
+            foreach ($districts as $district) {
+                // Get all sectors in the district
+                $sectors = DB::table('schools')
+                    ->select('sector')
+                    ->where('province', $province->province)
+                    ->where('district', $district->district)
+                    ->distinct()
+                    ->get();
+    
+                foreach ($sectors as $sector) {
+                    // Fetch all schools in the sector
+                    $schools = DB::table('schools')
+                        ->select('id', 'school_name')
                         ->where('province', $province->province)
                         ->where('district', $district->district)
-                        ->groupBy('id', 'school_code', 'school_name', 'district', 'province') // Group by relevant fields
+                        ->where('sector', $sector->sector)
                         ->get();
-
-                    return [$district->district => $uniqueSchools];
-                });
+    
+                    // Store data in an associative array
+                    $schoolsBySector[$province->province][$district->district][$sector->sector] = $schools;
+                }
+            }
         }
-        return view('auth.login', compact('provinces', 'schoolsByDistrict'));
+    
+        return view('auth.login', compact('provinces', 'schoolsBySector'));
     }
-
-
-
+    
 
 
 

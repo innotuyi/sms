@@ -50,7 +50,7 @@ class SchoolController extends Controller
 
     }
 
-    public function show($id)
+    public function  show($id)
     {
 
          // Fetch provinces and their associated districts

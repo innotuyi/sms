@@ -128,8 +128,7 @@
     @endsection --}}
 
 
-
-    @extends('layouts.login_master')
+@extends('layouts.login_master')
 
 @section('content')
 <style>

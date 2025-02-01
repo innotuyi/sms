@@ -28,6 +28,11 @@
                             <th>Address</th>
                             <th>Province</th>
                             <th>District</th>
+                            <th>Sector</th>
+                            <th>level</th>
+                            <th>Grade</th>
+                            <th>Combination</th>
+                            <th>Area</th>
                             <th>Established Year</th>
                             <th>Actions</th>
                         </tr>
@@ -42,6 +47,11 @@
                                 <td>{{ $school->address ?? 'N/A' }}</td>
                                 <td>{{ $school->province ?? 'N/A' }}</td>
                                 <td>{{ $school->district ?? 'N/A' }}</td>
+                                <td>{{ $school->sector ?? 'N/A' }}</td>
+                                <td>{{ $school->grade ?? 'N/A' }}</td>
+                                <td>{{ $school->level ?? 'N/A' }}</td>
+                                <td>{{ $school->combination ?? 'N/A' }}</td>
+                                <td>{{ $school->area ?? 'N/A' }}</td>
                                 <td>{{ $school->established_year ?? 'N/A' }}</td>
                                 <td>
                                     <form action="{{ route('school.destroy', $school->id) }}" method="POST" style="display:inline;">

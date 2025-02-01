@@ -49,9 +49,8 @@ class SchoolImportController extends Controller
                         'sector' => $cells[6] ?? null,  
                         'grade' => $cells[7] ?? null,  
                         'level' => $cells[8] ?? null,  
-                        'trade' => $cells[9] ?? null,  
-                        'combination' => $cells[10] ?? null,  
-                        'area' => $cells[11] ?? null,  
+                        'combination' => $cells[9] ?? null,  
+                        'area' => $cells[10] ?? null,  
                         // Add other columns as necessary
                     ]);
                 }

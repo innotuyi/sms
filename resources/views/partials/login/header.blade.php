@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
     <style>
         body {
             margin: 0;
@@ -213,12 +216,21 @@
         <div class="dropdown">
             <button class="dropbtn">{{ $province->province }}</button>
             <div class="dropdown-menu">
-                @foreach ($schoolsByDistrict[$province->province] as $district => $schools)
+                @foreach ($schoolsBySector[$province->province] ?? [] as $district => $sectors)
                     <div class="district">
                         <a href="#" class="district-link">{{ $district }}</a>
-                        <div class="district-schools">
-                            @foreach ($schools as $school)
-                                <a href="{{ route('school.show', $school->id) }}" class="school-link">{{ $school->school_name }}</a>
+                        <div class="district-sectors" style="display: none;">
+                            @foreach ($sectors as $sector => $schools)
+                                <div class="sector">
+                                    <a href="#" class="sector-link" data-sector="{{ $sector }}">{{ $sector }}</a>
+                                    <div class="school-list" style="display: none;">
+                                        @foreach ($schools as $school)
+                                            <a href="{{ route('school.show', $school->id) }}" class="school-link">
+                                                {{ $school->school_name }}
+                                            </a>
+                                        @endforeach
+                                    </div>
+                                </div>
                             @endforeach
                         </div>
                     </div>
@@ -229,5 +241,45 @@
 </div>
 
 
+
+
+
+<script>
+function toggleSectors(event, districtId) {
+    event.preventDefault();
+    let sectorsDiv = document.getElementById("sectors-" + districtId);
+    if (sectorsDiv) {
+        sectorsDiv.style.display = (sectorsDiv.style.display === "none") ? "block" : "none";
+    }
+}
+
+function toggleSchools(event, sectorId) {
+    event.preventDefault();
+    let schoolsDiv = document.getElementById("schools-" + sectorId);
+    if (schoolsDiv) {
+        schoolsDiv.style.display = (schoolsDiv.style.display === "none") ? "block" : "none";
+    }
+}
+</script>
+
+
+<script>
+$(document).ready(function () {
+    // Toggle Districts
+    $(".district-link").click(function (e) {
+        e.preventDefault();
+        $(this).next(".district-sectors").slideToggle();
+    });
+
+    // Toggle Schools when clicking a sector
+    $(".sector-link").click(function (e) {
+        e.preventDefault();
+        $(this).next(".school-list").slideToggle();
+    });
+});
+
+
+
+</script>
 </body>
 </html>
