@@ -50,23 +50,51 @@ class SchoolController extends Controller
 
     }
 
-    public function  show($id)
+    public function show($id)
     {
 
-         // Fetch provinces and their associated districts
-         $provinces = DB::table('schools')
-         ->select('province', 'district')
-         ->groupBy('province', 'district')
-         ->get();
-     
-     // Fetch all schools for each district
-     $schoolsByDistrict = [];
-     foreach ($provinces as $province) {
-         $schoolsByDistrict[$province->province][$province->district] = DB::table('schools')
-             ->where('province', $province->province)
-             ->where('district', $province->district)
-             ->get();
-     }
+
+                // Fetch distinct provinces
+                $provinces = DB::table('schools')
+                ->select('province')
+                ->distinct()
+                ->get();
+        
+            // Fetch all schools grouped by province → district → sector
+            $schoolsBySector = [];
+            foreach ($provinces as $province) {
+                // Get all districts in the province
+                $districts = DB::table('schools')
+                    ->select('district')
+                    ->where('province', $province->province)
+                    ->distinct()
+                    ->get();
+        
+                foreach ($districts as $district) {
+                    // Get all sectors in the district
+                    $sectors = DB::table('schools')
+                        ->select('sector')
+                        ->where('province', $province->province)
+                        ->where('district', $district->district)
+                        ->distinct()
+                        ->get();
+        
+                    foreach ($sectors as $sector) {
+                        // Fetch all schools in the sector
+                        $schools = DB::table('schools')
+                            ->select('id', 'school_name')
+                            ->where('province', $province->province)
+                            ->where('district', $district->district)
+                            ->where('sector', $sector->sector)
+                            ->get();
+        
+                        // Store data in an associative array
+                        $schoolsBySector[$province->province][$district->district][$sector->sector] = $schools;
+                    }
+                }
+            }
+
+
         // Fetch school details
         $school = DB::table('schools')->find($id);
 
@@ -74,7 +102,7 @@ class SchoolController extends Controller
             abort(404, 'School not found');
         }
 
-        return view('school.show', compact(['school', 'provinces', 'schoolsByDistrict']));
+        return view('school.show', compact(['school', 'provinces', 'schoolsBySector']));
     }
 
     public function showByDistrict($province, $district)
