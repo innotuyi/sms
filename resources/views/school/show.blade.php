@@ -13,18 +13,12 @@
                     <div class="row">
                         <div class="col-md-6">
                             <ul class="list-group">
-                                <li class="list-group-item"><strong>Address:</strong> {{ $school->address }}</li>
-                                <li class="list-group-item"><strong>Phone:</strong> {{ $school->phone_number }}</li>
-                                <li class="list-group-item"><strong>Email:</strong> {{ $school->email }}</li>
-                                <li class="list-group-item"><strong>Principal:</strong> {{ $school->principal_name }}</li>
-                            </ul>
-                        </div>
-                        <div class="col-md-6">
-                            <ul class="list-group">
                                 <li class="list-group-item"><strong>Province:</strong> {{ $school->province }}</li>
                                 <li class="list-group-item"><strong>District:</strong> {{ $school->district }}</li>
-                                <li class="list-group-item"><strong>Established Year:</strong> {{ $school->established_year }}</li>
-                                <li class="list-group-item"><strong>School Type:</strong> {{ $school->school_type }}</li>
+                                <li class="list-group-item"><strong>School Type:</strong> {{ $school->school_status }}</li>
+
+
+                            
                             </ul>
                         </div>
                     </div>
@@ -37,13 +31,13 @@
                                 </div>
                                 <div class="card-body">
                                     <div class="row">
-                                        <div class="col-md-4">
+                                        {{-- <div class="col-md-4">
                                             <div class="card text-center" data-toggle="modal" data-target="#optionAvailableModal">
                                                 <div class="card-body">
                                                     <h5 class="card-title">Option Available</h5>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> --}}
                                         <div class="col-md-4">
                                             <div class="card text-center" data-toggle="modal" data-target="#studiesFacilitiesModal">
                                                 <div class="card-body">

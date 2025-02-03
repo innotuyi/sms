@@ -1,9 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
     <style>
         body {
             margin: 0;
@@ -13,7 +12,8 @@
 
         /* Navigation Bar Styling */
         .navbar {
-            background-color: #1B3A57; /* Dark blue */
+            background-color: #1B3A57;
+            /* Dark blue */
             color: white;
             display: flex;
             justify-content: space-between;
@@ -23,7 +23,7 @@
         }
 
         .brand {
-            font-size: 24px; 
+            font-size: 24px;
             font-weight: bold;
             display: flex;
             align-items: center;
@@ -31,11 +31,11 @@
 
         .brand .banner-text {
             margin-left: 10px;
-            font-size: 14px; 
-            color: #AEDFF7; 
+            font-size: 14px;
+            color: #AEDFF7;
             font-style: italic;
             background: rgba(255, 255, 255, 0.1);
-            padding: 4px 8px; 
+            padding: 4px 8px;
             border-radius: 4px;
             box-shadow: 0 2px 4px rgba(255, 255, 255, 0.2);
         }
@@ -59,6 +59,29 @@
         .auth-links a:hover {
             background-color: #AEDFF7;
             color: #1B3A57;
+        }
+
+        /* Search Button Styling */
+        .search-button-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .search-button-container button {
+            background-color: #AEDFF7;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #1B3A57;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .search-button-container button:hover {
+            background-color: #1B3A57;
+            color: white;
         }
 
         /* Region Dropdown Styling */
@@ -120,52 +143,16 @@
             transform: scale(1.05);
         }
 
-        /* Show schools under each district */
-        .district {
-            position: relative;
-            display: inline-block;
-            width: 100%;
-            margin: 5px 0;
-        }
-
-        .district-schools {
+        /* Search Form Hidden by Default */
+        .search-container {
             display: none;
-            position: absolute;
-            left: 105%; /* Position to the right of the district */
-            top: 0;
-            background-color: transparent; /* Remove dark blue background */
-            padding: 10px;
-            border-radius: 4px;
-            color: #1B3A57;
-            max-width: 350px; /* Adjust max-width to give more room */
-            z-index: 2;
-            visibility: hidden; /* Initially hidden */
-            opacity: 0; /* For smooth transition */
-            transition: opacity 0.3s ease-in-out;
-            box-shadow: none; /* Remove shadow */
-        }
-
-        .district:hover .district-schools {
-            display: block;
-            visibility: visible;
-            opacity: 1; /* Fade-in effect */
-        }
-
-        .district-schools a {
-            color: #1B3A57;
-            padding: 8px 12px;
-            text-decoration: none;
-            display: block;
-            font-weight: normal;
-            margin-bottom: 5px; /* Add breathing space between school names */
-            border-radius: 4px;
-            white-space: nowrap; /* Prevent wrapping of school names */
-        }
-
-        .district-schools a:hover {
-            background-color: #AEDFF7;
-            color: white;
-            transform: scale(1.05);
+            /* Initially hidden */
+            margin: 20px auto;
+            max-width: 800px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
         /* Responsive Design */
@@ -196,90 +183,168 @@
         }
     </style>
 </head>
+
 <body>
 
-<!-- Navigation Bar with Banner -->
-<nav class="navbar">
-    <div class="brand">
-        <div>Rangishuri</div>
-        <div class="banner-text">Welcome to Rangishuri - Your trusted partner for school concerns.</div>
-    </div>
-    <div class="auth-links">
-        <a href="/">Register</a>
-        <a href="/">Login</a>
-    </div>
-</nav>
-
-<!-- Region Dropdowns Section -->
-<div class="region-links">
-    @foreach ($provinces as $province)
-        <div class="dropdown">
-            <button class="dropbtn">{{ $province->province }}</button>
-            <div class="dropdown-menu">
-                @foreach ($schoolsBySector[$province->province] ?? [] as $district => $sectors)
-                    <div class="district">
-                        <a href="#" class="district-link">{{ $district }}</a>
-                        <div class="district-sectors" style="display: none;">
-                            @foreach ($sectors as $sector => $schools)
-                                <div class="sector">
-                                    <a href="#" class="sector-link" data-sector="{{ $sector }}">{{ $sector }}</a>
-                                    <div class="school-list" style="display: none;">
-                                        @foreach ($schools as $school)
-                                            <a href="{{ route('school.show', $school->id) }}" class="school-link">
-                                                {{ $school->school_name }}
-                                            </a>
-                                        @endforeach
-                                    </div>
-                                </div>
-                            @endforeach
-                        </div>
-                    </div>
-                @endforeach
-            </div>
+    <!-- Navigation Bar with Banner -->
+    <nav class="navbar">
+        <div class="brand">
+            <div>Rangishuri</div>
+            <div class="banner-text">Welcome to Rangishuri - Your trusted partner for school concerns.</div>
         </div>
-    @endforeach
-</div>
+        <div class="auth-links">
+            <a href="/">Register</a>
+            <a href="/">Login</a>
+        </div>
+        <!-- Search Button on Same Level as Navbar -->
+        <div class="search-button-container">
+            <button id="searchButton" class="btn btn-primary">Search Schools</button>
+        </div>
+    </nav>
 
+    <!-- Region Dropdowns Section -->
+    <div class="region-links">
+        @foreach ($provinces as $province)
+            <div class="dropdown">
+                <button class="dropbtn">{{ $province->province }}</button>
+                <div class="dropdown-menu">
+                    @foreach ($schoolsBySector[$province->province] ?? [] as $district => $sectors)
+                        <div class="district">
+                            <a href="#" class="district-link">{{ $district }}</a>
+                            <div class="district-sectors" style="display: none;">
+                                @foreach ($sectors as $sector => $schools)
+                                    <div class="sector">
+                                        <a href="#" class="sector-link"
+                                            data-sector="{{ $sector }}">{{ $sector }}</a>
+                                        <div class="school-list" style="display: none;">
+                                            @foreach ($schools as $school)
+                                                <a href="{{ route('school.show', $school->id) }}" class="school-link">
+                                                    {{ $school->school_name }}
+                                                </a>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        @endforeach
+    </div>
 
+    <!-- Search Form -->
+    <div class="search-container">
+        <h3 style="text-align: center; color: #1B3A57; margin-bottom: 20px;">Search Schools</h3>
+        <form id="searchForm" action="{{ route('schools.filter') }}" method="GET">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="province">Province</label>
+                        <select class="form-control" id="province" name="province">
+                            <option value="">Select Province</option>
+                            @foreach ($provinces as $province)
+                                <option value="{{ $province->province }}">{{ $province->province }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="district">District</label>
+                        <select class="form-control" id="district" name="district">
+                            <option value="">Select District</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="sector">Sector</label>
+                        <select class="form-control" id="sector" name="sector">
+                            <option value="">Select Sector</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="combination">Combination</label>
+                        <input type="text" class="form-control" id="combination" name="combination"
+                            placeholder="MCB, MCE, MBC, ..." />
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-3">
+                <button type="submit" class="btn btn-primary">Search</button>
+                <button type="reset" class="btn btn-secondary">Reset</button>
+            </div>
+        </form>
+    </div>
 
+    <script>
+    $(document).ready(function() {
+        // Toggle Districts
+        $(".district-link").click(function(e) {
+            e.preventDefault();
+            $(this).next(".district-sectors").slideToggle();
+        });
 
+        // Toggle Schools when clicking a sector
+        $(".sector-link").click(function(e) {
+            e.preventDefault();
+            $(this).next(".school-list").slideToggle();
+        });
 
-<script>
-function toggleSectors(event, districtId) {
-    event.preventDefault();
-    let sectorsDiv = document.getElementById("sectors-" + districtId);
-    if (sectorsDiv) {
-        sectorsDiv.style.display = (sectorsDiv.style.display === "none") ? "block" : "none";
-    }
-}
+        // Show/Hide search form
+        $('#searchButton').click(function() {
+            $('.search-container').slideToggle();
+        });
 
-function toggleSchools(event, sectorId) {
-    event.preventDefault();
-    let schoolsDiv = document.getElementById("schools-" + sectorId);
-    if (schoolsDiv) {
-        schoolsDiv.style.display = (schoolsDiv.style.display === "none") ? "block" : "none";
-    }
-}
+        // Populate districts based on selected province
+        $('#province').change(function() {
+            let province = $(this).val();
+            $('#district').html('<option value="">Select District</option>');
+            $('#sector').html('<option value="">Select Sector</option>');
+
+            if (province) {
+                $.ajax({
+                    url: "{{ route('get.districts') }}",
+                    type: "GET",
+                    data: { province: province },
+                    success: function(response) {
+                        if (response.districts.length > 0) {
+                            $.each(response.districts, function(key, district) {
+                                $('#district').append('<option value="' + district + '">' + district + '</option>');
+                            });
+                        }
+                    }
+                });
+            }
+        });
+
+        // Populate sectors based on selected district
+        $('#district').change(function() {
+            let district = $(this).val();
+            $('#sector').html('<option value="">Select Sector</option>');
+
+            if (district) {
+                $.ajax({
+                    url: "{{ route('get.sectors') }}",
+                    type: "GET",
+                    data: { district: district },
+                    success: function(response) {
+                        if (response.sectors.length > 0) {
+                            $.each(response.sectors, function(key, sector) {
+                                $('#sector').append('<option value="' + sector + '">' + sector + '</option>');
+                            });
+                        }
+                    }
+                });
+            }
+        });
+    });
 </script>
 
 
-<script>
-$(document).ready(function () {
-    // Toggle Districts
-    $(".district-link").click(function (e) {
-        e.preventDefault();
-        $(this).next(".district-sectors").slideToggle();
-    });
-
-    // Toggle Schools when clicking a sector
-    $(".sector-link").click(function (e) {
-        e.preventDefault();
-        $(this).next(".school-list").slideToggle();
-    });
-});
-
-
-
-</script>
 </body>
+
 </html>

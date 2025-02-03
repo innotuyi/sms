@@ -388,6 +388,12 @@ Route::resource('routes', 'RoutingController');
 Route::resource('child-applications', 'ChildApplicationController');
 
 
+// web.php
+Route::get('/get-districts', [SchoolController::class, 'getDistricts'])->name('get.districts');
+Route::get('/get-sectors', [SchoolController::class, 'getSectors'])->name('get.sectors');
+Route::get('/schools/filter', [SchoolController::class, 'filter'])->name('schools.filter');
+
+
 
 
 
