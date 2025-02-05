@@ -288,7 +288,7 @@ foreach ($provinces as $province) {
     }
 }
 
-    return view('school.filtered', compact('myschools', 'provinces', 'schoolsBySector'));
+    return view('school.filtered', compact('schools', 'provinces', 'schoolsBySector'));
 }
     
 }

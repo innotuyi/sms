@@ -189,12 +189,16 @@
     <!-- Navigation Bar with Banner -->
     <nav class="navbar">
         <div class="brand">
-            <div>Rangishuri</div>
+            <a href="/" class="brand-link">
+                <img src="{{ asset('global_assets/Logo.png') }}" alt="Rangishuri Logo" class="brand-logo" style="width: 150px; height: auto;">
+            </a>
             <div class="banner-text">Welcome to Rangishuri - Your trusted partner for school concerns.</div>
         </div>
+        
+        
         <div class="auth-links">
             <a href="/">Register</a>
-            <a href="/">Login</a>
+            <a href="{{ route('auth.login') }}">Login</a>
         </div>
         <!-- Search Button on Same Level as Navbar -->
         <div class="search-button-container">

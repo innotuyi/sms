@@ -373,6 +373,11 @@ Route::get('/get-schools/{province}/{district}', function ($province, $district)
 Route::post('/login', [LoginController::class, 'login'])->name('login');
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
+Route::get('/auth', [LoginController::class, 'auth'])->name('auth.login');
+
+
+
+
 
 
 Route::get('/reset-password', [LoginController::class, 'login'])->name('password.request');

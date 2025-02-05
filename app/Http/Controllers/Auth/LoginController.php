@@ -44,7 +44,7 @@ class LoginController extends Controller
                 foreach ($sectors as $sector) {
                     // Fetch all schools in the sector
                     $schools = DB::table('schools')
-                        ->select('id', 'school_name')
+                        ->select('id', 'school_name','school_code')
                         ->where('province', $province->province)
                         ->where('district', $district->district)
                         ->where('sector', $sector->sector)
@@ -100,5 +100,51 @@ class LoginController extends Controller
     {
         Auth::logout();
         return redirect('/')->with('status', 'You have been logged out.');
+    }
+
+
+    public function auth() {
+
+       // Fetch distinct provinces
+       $provinces = DB::table('schools')
+       ->select('province')
+       ->distinct()
+       ->get();
+
+   // Fetch all schools grouped by province → district → sector
+   $schoolsBySector = [];
+   foreach ($provinces as $province) {
+       // Get all districts in the province
+       $districts = DB::table('schools')
+           ->select('district')
+           ->where('province', $province->province)
+           ->distinct()
+           ->get();
+
+       foreach ($districts as $district) {
+           // Get all sectors in the district
+           $sectors = DB::table('schools')
+               ->select('sector')
+               ->where('province', $province->province)
+               ->where('district', $district->district)
+               ->distinct()
+               ->get();
+
+           foreach ($sectors as $sector) {
+               // Fetch all schools in the sector
+               $schools = DB::table('schools')
+                   ->select('id', 'school_name','school_code')
+                   ->where('province', $province->province)
+                   ->where('district', $district->district)
+                   ->where('sector', $sector->sector)
+                   ->get();
+
+               // Store data in an associative array
+               $schoolsBySector[$province->province][$district->district][$sector->sector] = $schools;
+           }
+       }
+   }
+
+   return view('login', compact('provinces', 'schoolsBySector'));
     }
 }
