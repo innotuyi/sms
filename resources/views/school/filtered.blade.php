@@ -7,12 +7,17 @@
         border-radius: 8px;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
+
+    .bg-primary {
+        background-color:yellow !important;
+        color: white;
+    }
     .form-group label {
         font-weight: bold;
-        color: #1B3A57;
+        color: #002C5C;
     }
     .btn-primary {
-        background-color: #1B3A57;
+        background-color: #002C5C;
         border: none;
     }
     .btn-primary:hover {

@@ -12,7 +12,7 @@
 
         /* Navigation Bar Styling */
         .navbar {
-            background-color: #1B3A57;
+            background-color: #002C5C;
             /* Dark blue */
             color: white;
             display: flex;
@@ -60,6 +60,14 @@
             background-color: #AEDFF7;
             color: #1B3A57;
         }
+
+        .auth-search-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            /* Keep elements close together */
+        }
+
 
         /* Search Button Styling */
         .search-button-container {
@@ -187,24 +195,28 @@
 <body>
 
     <!-- Navigation Bar with Banner -->
+    <!-- Navigation Bar -->
     <nav class="navbar">
         <div class="brand">
             <a href="/" class="brand-link">
-                <img src="{{ asset('global_assets/Logo.png') }}" alt="Rangishuri Logo" class="brand-logo" style="width: 150px; height: auto;">
+                <img src="{{ asset('global_assets/Logo.png') }}" alt="Rangishuri Logo" class="brand-logo"
+                    style="width: 150px; height: auto;">
             </a>
             <div class="banner-text">Welcome to Rangishuri - Your trusted partner for school concerns.</div>
         </div>
-        
-        
-        <div class="auth-links">
-            <a href="/">Register</a>
-            <a href="{{ route('auth.login') }}">Login</a>
-        </div>
-        <!-- Search Button on Same Level as Navbar -->
-        <div class="search-button-container">
-            <button id="searchButton" class="btn btn-primary">Search Schools</button>
+
+        <!-- Group Login, Register, and Search Together -->
+        <div class="auth-search-container">
+            <div class="auth-links">
+                <a href="/">Register</a>
+                <a href="{{ route('auth.login') }}">Login</a>
+            </div>
+            <div class="search-button-container">
+                <button id="searchButton" class="btn btn-primary">Search Schools</button>
+            </div>
         </div>
     </nav>
+
 
     <!-- Region Dropdowns Section -->
     <div class="region-links">
@@ -285,68 +297,74 @@
     </div>
 
     <script>
-    $(document).ready(function() {
-        // Toggle Districts
-        $(".district-link").click(function(e) {
-            e.preventDefault();
-            $(this).next(".district-sectors").slideToggle();
-        });
+        $(document).ready(function() {
+            // Toggle Districts
+            $(".district-link").click(function(e) {
+                e.preventDefault();
+                $(this).next(".district-sectors").slideToggle();
+            });
 
-        // Toggle Schools when clicking a sector
-        $(".sector-link").click(function(e) {
-            e.preventDefault();
-            $(this).next(".school-list").slideToggle();
-        });
+            // Toggle Schools when clicking a sector
+            $(".sector-link").click(function(e) {
+                e.preventDefault();
+                $(this).next(".school-list").slideToggle();
+            });
 
-        // Show/Hide search form
-        $('#searchButton').click(function() {
-            $('.search-container').slideToggle();
-        });
+            // Show/Hide search form
+            $('#searchButton').click(function() {
+                $('.search-container').slideToggle();
+            });
 
-        // Populate districts based on selected province
-        $('#province').change(function() {
-            let province = $(this).val();
-            $('#district').html('<option value="">Select District</option>');
-            $('#sector').html('<option value="">Select Sector</option>');
+            // Populate districts based on selected province
+            $('#province').change(function() {
+                let province = $(this).val();
+                $('#district').html('<option value="">Select District</option>');
+                $('#sector').html('<option value="">Select Sector</option>');
 
-            if (province) {
-                $.ajax({
-                    url: "{{ route('get.districts') }}",
-                    type: "GET",
-                    data: { province: province },
-                    success: function(response) {
-                        if (response.districts.length > 0) {
-                            $.each(response.districts, function(key, district) {
-                                $('#district').append('<option value="' + district + '">' + district + '</option>');
-                            });
+                if (province) {
+                    $.ajax({
+                        url: "{{ route('get.districts') }}",
+                        type: "GET",
+                        data: {
+                            province: province
+                        },
+                        success: function(response) {
+                            if (response.districts.length > 0) {
+                                $.each(response.districts, function(key, district) {
+                                    $('#district').append('<option value="' + district +
+                                        '">' + district + '</option>');
+                                });
+                            }
                         }
-                    }
-                });
-            }
-        });
+                    });
+                }
+            });
 
-        // Populate sectors based on selected district
-        $('#district').change(function() {
-            let district = $(this).val();
-            $('#sector').html('<option value="">Select Sector</option>');
+            // Populate sectors based on selected district
+            $('#district').change(function() {
+                let district = $(this).val();
+                $('#sector').html('<option value="">Select Sector</option>');
 
-            if (district) {
-                $.ajax({
-                    url: "{{ route('get.sectors') }}",
-                    type: "GET",
-                    data: { district: district },
-                    success: function(response) {
-                        if (response.sectors.length > 0) {
-                            $.each(response.sectors, function(key, sector) {
-                                $('#sector').append('<option value="' + sector + '">' + sector + '</option>');
-                            });
+                if (district) {
+                    $.ajax({
+                        url: "{{ route('get.sectors') }}",
+                        type: "GET",
+                        data: {
+                            district: district
+                        },
+                        success: function(response) {
+                            if (response.sectors.length > 0) {
+                                $.each(response.sectors, function(key, sector) {
+                                    $('#sector').append('<option value="' + sector +
+                                        '">' + sector + '</option>');
+                                });
+                            }
                         }
-                    }
-                });
-            }
+                    });
+                }
+            });
         });
-    });
-</script>
+    </script>
 
 
 </body>

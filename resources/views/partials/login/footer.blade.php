@@ -11,7 +11,7 @@
     }
 
     footer {
-        background-color: #0c2a66;
+        background-color: #002C5C;
         color: white;
         padding: 13px 0;
     }
@@ -47,7 +47,7 @@
     .copyright {
         text-align: center;
         padding: 20px;
-        background-color: #0b1f4f;
+        background-color: #002C5C;
     }
 </style>
 
