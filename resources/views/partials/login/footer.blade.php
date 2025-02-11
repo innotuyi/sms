@@ -90,6 +90,6 @@
 
     <!-- Copyright Section (Always at Bottom) -->
     <div class="copyright">
-        <p>&copy; 2024 Rangishuri All Rights Reserved.</p>
+        <p>&copy; 2024 School-Connect All Rights Reserved.</p>
     </div>
 </footer>

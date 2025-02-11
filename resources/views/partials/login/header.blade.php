@@ -202,7 +202,7 @@
                 <img src="{{ asset('global_assets/Logo.png') }}" alt="Rangishuri Logo" class="brand-logo"
                     style="width: 150px; height: auto;">
             </a>
-            <div class="banner-text">Welcome to Rangishuri - Your trusted partner for school concerns.</div>
+            <div class="banner-text">Welcome to School-Connect - Your trusted partner for school concerns.</div>
         </div>
 
         <!-- Group Login, Register, and Search Together -->
@@ -234,7 +234,7 @@
                                             data-sector="{{ $sector }}">{{ $sector }}</a>
                                         <div class="school-list" style="display: none;">
                                             @foreach ($schools as $school)
-                                                <a href="{{ route('school.show', $school->id) }}" class="school-link">
+                                                <a href="{{ route('school.show', $school->school_code) }}" class="school-link">
                                                     {{ $school->school_name }}
                                                 </a>
                                             @endforeach

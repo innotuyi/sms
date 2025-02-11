@@ -2,72 +2,40 @@
 
 @section('content')
 <div class="container-fluid">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header text-center">
-                    <h1>{{ $school->school_name }}</h1>
-                </div>
 
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <ul class="list-group">
-                                <li class="list-group-item"><strong>Province:</strong> {{ $school->province }}</li>
-                                <li class="list-group-item"><strong>District:</strong> {{ $school->district }}</li>
-                                <li class="list-group-item"><strong>School Type:</strong> {{ $school->school_status }}</li>
+    {{-- @dd($schools) --}}
+
+    <h1>{{ $groups[$schoolCode]['school_name'] }}</h1>
+    <ul>
+        <li><strong>Province:</strong> {{ $groups[$schoolCode]['province'] }}</li>
+        <li><strong>District:</strong> {{ $groups[$schoolCode]['district'] }}</li>
+        <li><strong>School Type:</strong> {{ $groups[$schoolCode]['school_status'] }}</li>
+    </ul>
+
+    <h3>Available Options</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Grade</th>
+                <th>Level</th>
+                <th>Combination</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach ($groups[$schoolCode]['options'] as $option)
+                <tr>
+                    <td>{{ $option['grade'] }}</td>
+                    <td>{{ $option['level'] }}</td>
+                    <td>{{ $option['combination'] }}</td>
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
+</div>
+@endsection
 
 
-                            
-                            </ul>
-                        </div>
-                    </div>
 
-                    <div class="row mt-3">
-                        <div class="col-md-12">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h4>School Information</h4>
-                                </div>
-                                <div class="card-body">
-                                    <div class="row">
-                                        {{-- <div class="col-md-4">
-                                            <div class="card text-center" data-toggle="modal" data-target="#optionAvailableModal">
-                                                <div class="card-body">
-                                                    <h5 class="card-title">Option Available</h5>
-                                                </div>
-                                            </div>
-                                        </div> --}}
-                                        <div class="col-md-4">
-                                            <div class="card text-center" data-toggle="modal" data-target="#studiesFacilitiesModal">
-                                                <div class="card-body">
-                                                    <h5 class="card-title">Studies Facilities</h5>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="card text-center" data-toggle="modal" data-target="#livingRoomsModal">
-                                                <div class="card-body">
-                                                    <h5 class="card-title">Living Rooms</h5>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row mt-3">
-                        <div class="col-md-12 text-center">
-                            <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#placementRequestModal">Request for Placement</a> 
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-    </div>
 </div>
 
 <div class="modal fade" id="optionAvailableModal" tabindex="-1" role="dialog" aria-labelledby="optionAvailableModalLabel" aria-hidden="true">
@@ -168,7 +136,7 @@
     </div>
 </div>
 
-<div class="modal fade" id="placementRequestModal" tabindex="-1" role="dialog" aria-labelledby="placementRequestModalLabel" aria-hidden="true">
+<dv class="modal fade" id="placementRequestModal" tabindex="-1" role="dialog" aria-labelledby="placementRequestModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header bg-primary text-white">
@@ -259,5 +227,5 @@ if \(</span>(this).val() === 'ordinary') {
     });
 </script>
 
-@endsection
+
 

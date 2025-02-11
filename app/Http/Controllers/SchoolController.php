@@ -15,7 +15,7 @@ class SchoolController extends Controller
     {
         $schools = School::all();
 
-    return view('school.index', compact('schools'));
+        return view('school.index', compact('schools'));
     }
 
     /**
@@ -47,62 +47,84 @@ class SchoolController extends Controller
         $school = School::create($data);
 
         return redirect()->route('school.index');
-
     }
 
-    public function show($id)
+    public function show($schoolCode)
     {
 
 
-                // Fetch distinct provinces
-                $provinces = DB::table('schools')
-                ->select('province')
+        // Fetch distinct provinces
+        $provinces = DB::table('schools')
+            ->select('province')
+            ->distinct()
+            ->get();
+
+        // Fetch all schools grouped by province → district → sector
+        $schoolsBySector = [];
+        foreach ($provinces as $province) {
+            // Get all districts in the province
+            $districts = DB::table('schools')
+                ->select('district')
+                ->where('province', $province->province)
                 ->distinct()
                 ->get();
-        
-            // Fetch all schools grouped by province → district → sector
-            $schoolsBySector = [];
-            foreach ($provinces as $province) {
-                // Get all districts in the province
-                $districts = DB::table('schools')
-                    ->select('district')
+
+            foreach ($districts as $district) {
+                // Get all sectors in the district
+                $sectors = DB::table('schools')
+                    ->select('sector')
                     ->where('province', $province->province)
+                    ->where('district', $district->district)
                     ->distinct()
                     ->get();
-        
-                foreach ($districts as $district) {
-                    // Get all sectors in the district
-                    $sectors = DB::table('schools')
-                        ->select('sector')
+
+                foreach ($sectors as $sector) {
+                    // Fetch all schools in the sector
+                    $schools = DB::table('schools')
+                        ->select('id','school_code', 'school_name')
                         ->where('province', $province->province)
                         ->where('district', $district->district)
-                        ->distinct()
+                        ->where('sector', $sector->sector)
                         ->get();
-        
-                    foreach ($sectors as $sector) {
-                        // Fetch all schools in the sector
-                        $schools = DB::table('schools')
-                            ->select('id', 'school_name')
-                            ->where('province', $province->province)
-                            ->where('district', $district->district)
-                            ->where('sector', $sector->sector)
-                            ->get();
-        
-                        // Store data in an associative array
-                        $schoolsBySector[$province->province][$district->district][$sector->sector] = $schools;
-                    }
+
+                    // Store data in an associative array
+                    $schoolsBySector[$province->province][$district->district][$sector->sector] = $schools;
                 }
             }
+        }
 
 
         // Fetch school details
-        $school = DB::table('schools')->find($id);
+        $groups = DB::table('schools')
+        ->where('school_code', $schoolCode) // Use $school instead of $id
+        ->get()
+        ->groupBy('school_code')
+        ->map(function ($items) {
+            $first = $items->first(); // Get the first entry as the main school info
 
-        if (!$school) {
-            abort(404, 'School not found');
-        }
+            return [
+                'id' => $first->id,
+                'school_name' => $first->school_name,
+                'school_status' => $first->school_status,
+                'school_level' => $first->school_level,
+                'province' => $first->province,
+                'district' => $first->district,
+                'sector' => $first->sector,
+                'options' => $items->map(function ($item) {
+                    return [
+                        'grade' => $item->grade,
+                        'level' => $item->level,
+                        'combination' => $item->combination,
+                    ];
+                })->values(), // Keeping only necessary fields for options
+            ];
+        });
 
-        return view('school.show', compact(['school', 'provinces', 'schoolsBySector']));
+
+
+
+
+        return view('school.show', compact(['groups', 'schoolCode', 'provinces', 'schoolsBySector']));
     }
 
     public function showByDistrict($province, $district)
@@ -153,30 +175,27 @@ class SchoolController extends Controller
         try {
             // Check if the school exists in the database
             $school = School::findOrFail($id);
-    
+
             // Check if the school is referenced in the 'settings' table (or any other related table)
             $isReferencedInSettings = \DB::table('settings') // assuming 'settings' is the table name
                 ->where('school_id', $id) // assuming 'school_id' is the foreign key in the settings table
                 ->exists();
-    
+
             if ($isReferencedInSettings) {
                 // If the school is referenced in the 'settings' table, return an error message
                 return redirect()->route('school.index')->with('error', 'School cannot be deleted because it is referenced in the settings.');
             }
-    
+
             // Delete the school if no references exist in the 'settings' table
             $school->delete();
-    
+
             return redirect()->route('school.index')->with('success', 'School deleted successfully.');
-    
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             // If the school with the given ID is not found
             return redirect()->route('school.index')->with('error', 'School not found.');
-        
         } catch (\Illuminate\Database\QueryException $e) {
             // If there is a database connection error (network issue, etc.)
             return redirect()->route('school.index')->with('error', 'A network error occurred. Please try again later.');
-        
         } catch (\Exception $e) {
             // Catch any other general exceptions
             return redirect()->route('school.index')->with('error', 'An error occurred while deleting the school.');
@@ -185,62 +204,59 @@ class SchoolController extends Controller
 
 
 
-public function getDistricts(Request $request)
-{
-    $province = $request->input('province');
-    $districts = School::where('province', $province)->distinct()->pluck('district');
-    return response()->json(['districts' => $districts]);
-}
-
-public function getSectors(Request $request)
-{
-    $district = $request->input('district');
-    $sectors = School::where('district', $district)->distinct()->pluck('sector');
-    return response()->json(['sectors' => $sectors]);
-}
-
-public function filter(Request $request)
-{
-
-
-
-    $query = School::query();
-
-    if ($request->has('province') && $request->province) {
-        $query->where('province', 'like', '%' . trim($request->province) . '%');
+    public function getDistricts(Request $request)
+    {
+        $province = $request->input('province');
+        $districts = School::where('province', $province)->distinct()->pluck('district');
+        return response()->json(['districts' => $districts]);
     }
-    
-    if ($request->has('district') && $request->district) {
-        $query->where('district', 'like', '%' . trim($request->district) . '%');
+
+    public function getSectors(Request $request)
+    {
+        $district = $request->input('district');
+        $sectors = School::where('district', $district)->distinct()->pluck('sector');
+        return response()->json(['sectors' => $sectors]);
     }
-    
-    if ($request->has('sector') && $request->sector) {
-        $query->where('sector', 'like', '%' . trim($request->sector) . '%');
-    }
-    
-    if ($request->has('combination') && $request->combination) {
-        $query->where('combination', 'like', '%' . trim($request->combination) . '%');
-    }
-    
-    // Debug the raw SQL query and bindings
-    // dd($query->toSql(), $query->getBindings());
 
-    $myschools = $query->select([
-        'id',
-        'school_name',
-        'province',
-        'district',
-        'sector',
-        'combination'
-    ])->get();
-    
-    
-    
-
-    // dd($schools->toArray());
+    public function filter(Request $request)
+    {
 
 
 
+        $query = School::query();
+
+        if ($request->has('province') && $request->province) {
+            $query->where('province', 'like', '%' . trim($request->province) . '%');
+        }
+
+        if ($request->has('district') && $request->district) {
+            $query->where('district', 'like', '%' . trim($request->district) . '%');
+        }
+
+        if ($request->has('sector') && $request->sector) {
+            $query->where('sector', 'like', '%' . trim($request->sector) . '%');
+        }
+
+        if ($request->has('combination') && $request->combination) {
+            $query->where('combination', 'like', '%' . trim($request->combination) . '%');
+        }
+
+        // Debug the raw SQL query and bindings
+        // dd($query->toSql(), $query->getBindings());
+
+        $myschools = $query->select([
+            'id',
+            'school_name',
+            'province',
+            'district',
+            'sector',
+            'combination'
+        ])->get();
+
+
+
+
+        // dd($schools->toArray());
 
 
 
@@ -248,48 +264,49 @@ public function filter(Request $request)
 
 
 
-    // Fetch distinct provinces
-    $provinces = DB::table('schools')
-    ->select('province')
-    ->distinct()
-    ->get();
 
-// Fetch all schools grouped by province → district → sector
-$schoolsBySector = [];
-foreach ($provinces as $province) {
-    // Get all districts in the province
-    $districts = DB::table('schools')
-        ->select('district')
-        ->where('province', $province->province)
-        ->distinct()
-        ->get();
 
-    foreach ($districts as $district) {
-        // Get all sectors in the district
-        $sectors = DB::table('schools')
-            ->select('sector')
-            ->where('province', $province->province)
-            ->where('district', $district->district)
+
+        // Fetch distinct provinces
+        $provinces = DB::table('schools')
+            ->select('province')
             ->distinct()
             ->get();
 
-        foreach ($sectors as $sector) {
-            // Fetch all schools in the sector
-            $schools = DB::table('schools')
-                ->select('id', 'school_name')
+        // Fetch all schools grouped by province → district → sector
+        $schoolsBySector = [];
+        foreach ($provinces as $province) {
+            // Get all districts in the province
+            $districts = DB::table('schools')
+                ->select('district')
                 ->where('province', $province->province)
-                ->where('district', $district->district)
-                ->where('sector', $sector->sector)
+                ->distinct()
                 ->get();
 
-            // Store data in an associative array
-            $schoolsBySector[$province->province][$district->district][$sector->sector] = $schools;
+            foreach ($districts as $district) {
+                // Get all sectors in the district
+                $sectors = DB::table('schools')
+                    ->select('sector')
+                    ->where('province', $province->province)
+                    ->where('district', $district->district)
+                    ->distinct()
+                    ->get();
+
+                foreach ($sectors as $sector) {
+                    // Fetch all schools in the sector
+                    $schools = DB::table('schools')
+                        ->select('id', 'school_name', 'school_code')
+                        ->where('province', $province->province)
+                        ->where('district', $district->district)
+                        ->where('sector', $sector->sector)
+                        ->get();
+
+                    // Store data in an associative array
+                    $schoolsBySector[$province->province][$district->district][$sector->sector] = $schools;
+                }
+            }
         }
+
+        return view('school.filtered', compact('schools', 'provinces', 'schoolsBySector', "myschools"));
     }
 }
-
-    return view('school.filtered', compact('schools', 'provinces', 'schoolsBySector', "myschools"));
-}
-    
-}
-
