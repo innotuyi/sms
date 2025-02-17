@@ -63,7 +63,7 @@ class ChildApplicationController extends Controller
         // Create the child application
         ChildApplication::create($validatedData);
     
-        return response()->json(['message' => 'Application submitted successfully!'], 200);
+        return redirect()->route('child.index')->with('success', 'Application submitted successfully!');
     }
 
     /**

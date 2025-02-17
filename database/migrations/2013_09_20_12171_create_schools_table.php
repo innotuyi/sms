@@ -27,6 +27,7 @@ class CreateSchoolsTable extends Migration
             $table->string('trade')->nullable();
             $table->string('combination')->nullable();
             $table->string('area')->nullable();
+            $table->string('level_status')->nullable();
             $table->string('address')->nullable();
             $table->string('phone_number')->nullable();
             $table->string('email')->unique()->nullable();

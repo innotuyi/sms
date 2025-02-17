@@ -33,6 +33,8 @@
                             <th>Grade</th>
                             <th>Combination</th>
                             <th>Area</th>
+                            <th>level status</th>
+
                             <th>Established Year</th>
                             <th>Actions</th>
                         </tr>
@@ -52,6 +54,9 @@
                                 <td>{{ $school->level ?? 'N/A' }}</td>
                                 <td>{{ $school->combination ?? 'N/A' }}</td>
                                 <td>{{ $school->area ?? 'N/A' }}</td>
+                                <td>{{ $school->level_status ?? 'N/A' }}</td>
+
+
                                 <td>{{ $school->established_year ?? 'N/A' }}</td>
                                 <td>
                                     <form action="{{ route('school.destroy', $school->id) }}" method="POST" style="display:inline;">

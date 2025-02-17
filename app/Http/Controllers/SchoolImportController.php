@@ -51,6 +51,7 @@ class SchoolImportController extends Controller
                         'level' => $cells[8] ?? null,  
                         'combination' => $cells[9] ?? null,  
                         'area' => $cells[10] ?? null,  
+                        'level_status' => $cells[11] ?? null, 
                         // Add other columns as necessary
                     ]);
                 }

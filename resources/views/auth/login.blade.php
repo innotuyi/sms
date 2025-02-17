@@ -181,7 +181,25 @@
 @extends('layouts.login_master')
 
 <style>
-    <style>.card {
+    <style>
+        #photoCarousel {
+        max-height: 300px; /* Adjust height as needed */
+        overflow: hidden;
+    }
+
+    #photoCarousel .carousel-item img {
+        height: 400px; /* Match the container height */
+        object-fit: cover; /* Crop images to fit without distortion */
+    }
+
+    .carousel-caption {
+        background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+        padding: 10px;
+        border-radius: 5px;
+    }
+    
+    
+    .card {
         border: none;
         transition: transform 0.3s ease;
     }
@@ -206,6 +224,52 @@
 </style>
 
 @section('content')
+
+
+<div class="container">
+    <div id="photoCarousel" class="carousel slide mb-5" data-ride="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img src="{{ asset('global_assets/basketball_playground.jpg') }}" class="d-block w-100" alt="Slide 1">
+                <div class="carousel-caption d-none d-md-block">
+                    <h5>Basketball Playground</h5>
+                    <p>Experience the best basketball courts for students.</p>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <img src="{{ asset('global_assets/football_playground.jpg') }}" class="d-block w-100" alt="Slide 2">
+                <div class="carousel-caption d-none d-md-block">
+                    <h5>Football Playground</h5>
+                    <p>Where champions are made on the field.</p>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <img src="{{ asset('global_assets/volleyball_playground.jpg') }}" class="d-block w-100" alt="Slide 3">
+                <div class="carousel-caption d-none d-md-block">
+                    <h5>Volleyball Playground</h5>
+                    <p>Perfect for thrilling volleyball matches.</p>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <img src="{{ asset('global_assets/basketball_playground.jpg') }}" class="d-block w-100" alt="Slide 4">
+                <div class="carousel-caption d-none d-md-block">
+                    <h5>Outdoor Basketball Court</h5>
+                    <p>Enjoy basketball in an open and scenic environment.</p>
+                </div>
+            </div>
+        </div>
+        <a class="carousel-control-prev" href="#photoCarousel" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+        </a>
+        <a class="carousel-control-next" href="#photoCarousel" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+        </a>
+    </div>
+</div>
+
+
     <div class="container py-5">
         <div class="row">
             <!-- Vision Card -->

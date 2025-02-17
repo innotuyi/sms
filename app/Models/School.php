@@ -20,6 +20,7 @@ class School extends Model
         'level',
         'combination',
         'area',
+        'level_status',
         'address',
         'phone_number',
         'email',

@@ -343,6 +343,7 @@ Route::resource('bus_attendance', 'BusAttendanceController');
 Route::get('/', [LoginController::class, 'showLoginForm']);
 
 // routes/web.php
+Route::get('/past-papers/filter', [PastPaperController::class, 'filter']);
 
 Route::get('/single/{school}', [SchoolController::class, 'show'])->name('school.show');
 Route::get('/districts/{province}/{district}', [SchoolController::class, 'showByDistrict'])->name('districts.show');

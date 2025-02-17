@@ -64,7 +64,7 @@
         .auth-search-container {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 0px;
             /* Keep elements close together */
         }
 
@@ -156,7 +156,7 @@
             display: none;
             /* Initially hidden */
             margin: 20px auto;
-            max-width: 800px;
+            max-width: 900px;
             padding: 20px;
             background-color: #fff;
             border-radius: 8px;
@@ -265,7 +265,7 @@
                         </select>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <div class="form-group">
                         <label for="district">District</label>
                         <select class="form-control" id="district" name="district">
@@ -273,7 +273,7 @@
                         </select>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <div class="form-group">
                         <label for="sector">Sector</label>
                         <select class="form-control" id="sector" name="sector">
@@ -281,7 +281,19 @@
                         </select>
                     </div>
                 </div>
-                <div class="col-md-3">
+
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label for="level_status">Level Status</label>
+                        <select class="form-control" id="level_status" name="level_status">
+                            <option value="">Select Level</option>
+                            <option value="O-LEVEL">O-LEVEL</option>
+                            <option value="A-LEVEL">A-LEVEL</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-md-2">
                     <div class="form-group">
                         <label for="combination">Combination</label>
                         <input type="text" class="form-control" id="combination" name="combination"

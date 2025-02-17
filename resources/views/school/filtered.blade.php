@@ -43,6 +43,10 @@
                         <p class="card-text"><strong>District:</strong> {{ $school->district ?? 'N/A' }}</p>
                         <p class="card-text"><strong>Sector:</strong> {{ $school->sector ?? 'N/A' }}</p>
                         <p class="card-text"><strong>Combination:</strong> {{ $school->combination ?? 'N/A' }}</p>
+                        <p class="card-text"><strong>Level status:</strong> {{ $school->level_status ?? 'N/A' }}</p>
+                        <p class="card-text"><strong>School status:</strong> {{ $school->school_level ?? 'N/A' }}</p>
+
+
                     </div>
                 </div>
             </div>

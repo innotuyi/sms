@@ -7,6 +7,23 @@ use Illuminate\Http\Request;
 
 class PastPaperController extends Controller
 {
+
+
+    public function filter(Request $request)
+    {
+        $type = $request->query('type');
+
+        if ($type === 'all') {
+            $pastPapers = PastPaper::all();
+        } elseif ($type === 'academic_year') {
+            $pastPapers = PastPaper::orderBy('academic_year', 'desc')->get();
+        } else {
+            $pastPapers = PastPaper::where('type', $type)->get();
+        }
+
+        return response()->json($pastPapers);
+    }
+
     // Display a listing of the past papers
     public function index()
     {
@@ -30,14 +47,14 @@ class PastPaperController extends Controller
             'level' => 'required|in:Primary,O\'level,A\'level',
             'document' => 'required|file|mimes:pdf|max:2048', // Ensure the file is a valid PDF
         ]);
-    
+
         // Handle file upload
         if ($request->hasFile('document')) { // Use 'document' here as per your validation rule
             $file = $request->file('document'); // Use 'document'
             $fileName = time() . '_' . $file->getClientOriginalName();
             $file->storeAs('public/past_papers', $fileName); // Store the file in the 'public/past_papers' directory
         }
-    
+
         // Save the data in the database
         PastPaper::create([
             'title' => $validated['title'],
@@ -47,10 +64,10 @@ class PastPaperController extends Controller
             'level' => $validated['level'],
             'file_name' => $fileName ?? null, // Use null if the file is not uploaded (unlikely with validation)
         ]);
-    
+
         return redirect()->route('past_papers.index')->with('success', 'Past paper uploaded successfully!');
     }
-    
+
 
     // Display the specified past paper
     public function show($id)
