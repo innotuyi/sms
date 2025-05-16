@@ -187,6 +187,15 @@
                                 class="icon-windows2"></i> <span> Classes</span></a>
                     </li>
 
+                    {{-- Manage Universities --}}
+                    <li class="nav-item">
+                        <a href="{{ route('universities.index') }}"
+                            class="nav-link {{ in_array(Route::currentRouteName(), ['universities.index', 'universities.create', 'universities.edit', 'universities.show']) ? 'active' : '' }}">
+                            <i class="icon-graduation"></i> 
+                            <span>Universities</span>
+                        </a>
+                    </li>
+
                     {{-- Manage Dorms --}}
                     <li class="nav-item">
                         <a href="{{ route('dorms.index') }}"

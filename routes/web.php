@@ -26,6 +26,7 @@ use App\Http\Controllers\StudentTransportController;
 use App\Http\Controllers\SuperAdmin\SettingController;
 use App\Http\Controllers\SupportTeam\StudentRecordController;
 use App\Http\Controllers\VehicleController;
+use App\Http\Controllers\UniversityController;
 
 
 
@@ -183,6 +184,11 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('get_class_subjects/{class_id}', 'AjaxController@get_class_subjects')->name('get_class_subjects');
     });
 
+    // Universities Management Routes
+    Route::resource('universities', 'UniversityController');
+    Route::get('universities/district/{district}', 'UniversityController@getByDistrict')->name('universities.by.district');
+    Route::get('universities/type/{type}', 'UniversityController@getByType')->name('universities.by.type');
+
 });
 
 /************************ SUPER ADMIN ****************************/
@@ -256,7 +262,6 @@ Route::get('/permissions', [PermissionController::class, 'index'])->name('permis
 Route::post('/permissions/{student_id}', [PermissionController::class, 'requestPermission'])->name('permissions.request');
 
 Route::get('/parent/permissions', [PermissionController::class, 'childPermissions'])->name('parent.permissions');
-
 
 
 Route::get('books', [BookController::class, 'index'])->name('books.index');
