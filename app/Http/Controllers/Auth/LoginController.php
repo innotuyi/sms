@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use DB;
+use App\Models\University;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -55,8 +56,13 @@ class LoginController extends Controller
                 }
             }
         }
+
+        // Fetch universities
+        $universities = University::orderBy('name')
+            ->select('id', 'name', 'type', 'district', 'address', 'website', 'phone_number', 'accreditation_status')
+            ->get();
     
-        return view('auth.login', compact('provinces', 'schoolsBySector'));
+        return view('auth.login', compact('provinces', 'schoolsBySector', 'universities'));
     }
     
 
@@ -105,6 +111,12 @@ class LoginController extends Controller
 
     public function auth() {
 
+
+        $provinces = DB::table('schools')
+        ->select('province')
+        ->distinct()
+        ->get();
+
        // Fetch distinct provinces
        $provinces = DB::table('schools')
        ->select('province')
@@ -143,8 +155,14 @@ class LoginController extends Controller
                $schoolsBySector[$province->province][$district->district][$sector->sector] = $schools;
            }
        }
+
+
+        // Fetch universities
+        $universities = University::orderBy('name')
+            ->select('id', 'name', 'type', 'district', 'address', 'website', 'phone_number', 'accreditation_status')
+            ->get();
    }
 
-   return view('login', compact('provinces', 'schoolsBySector'));
+   return view('login', compact('provinces', 'schoolsBySector', 'universities'));
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\School;
+use App\Models\University;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -121,10 +122,16 @@ class SchoolController extends Controller
         });
 
 
+         // Fetch universities
+        $universities = University::orderBy('name')
+            ->select('id', 'name', 'type', 'district', 'address', 'website', 'phone_number', 'accreditation_status')
+            ->get();
 
 
 
-        return view('school.show', compact(['groups', 'schoolCode', 'provinces', 'schoolsBySector']));
+
+
+        return view('school.show', compact(['groups', 'schoolCode', 'provinces', 'schoolsBySector'], 'universities'));
     }
 
     public function showByDistrict($province, $district)
@@ -288,9 +295,16 @@ class SchoolController extends Controller
                     $schoolsBySector[$province->province][$district->district][$sector->sector] = $schools;
                 }
             }
+
+
+                // Fetch universities
+        $universities = University::orderBy('name')
+            ->select('id', 'name', 'type', 'district', 'address', 'website', 'phone_number', 'accreditation_status')
+            ->get();
+
         }
     
-        return view('school.filtered', compact('schools', 'provinces', 'schoolsBySector', "myschools"));
+        return view('school.filtered', compact('schools', 'provinces', 'schoolsBySector', "myschools", 'universities'));
     }
     
 }

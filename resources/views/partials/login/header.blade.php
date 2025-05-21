@@ -43,9 +43,10 @@
         .auth-links {
             display: flex;
             gap: 10px;
+            align-items: center;
         }
 
-        .auth-links a {
+        .auth-links a, .universities-btn {
             color: white;
             text-decoration: none;
             padding: 6px 12px;
@@ -54,9 +55,14 @@
             text-align: center;
             transition: all 0.3s ease;
             font-size: 13px;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
 
-        .auth-links a:hover {
+        .auth-links a:hover, .universities-btn:hover, .universities-btn.active {
             background-color: #AEDFF7;
             color: #1B3A57;
         }
@@ -64,10 +70,8 @@
         .auth-search-container {
             display: flex;
             align-items: center;
-            gap: 0px;
-            /* Keep elements close together */
+            gap: 15px;
         }
-
 
         /* Search Button Styling */
         .search-button-container {
@@ -189,6 +193,122 @@
                 font-size: 14px;
             }
         }
+
+        /* Universities Dropdown Styling */
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .universities-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .universities-btn {
+            background: none;
+            border: none;
+            color: white;
+            padding: 8px 16px;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .universities-btn i {
+            font-size: 18px;
+        }
+
+        .universities-content {
+            display: none;
+            position: fixed;
+            top: 60px;
+            right: 20px;
+            background-color: white;
+            min-width: 300px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            z-index: 1000;
+            border-radius: 8px;
+            padding: 16px;
+        }
+
+        .universities-content.show {
+            display: block;
+        }
+
+        .universities-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .universities-header h3 {
+            color: #002C5C;
+            margin: 0;
+            font-size: 16px;
+        }
+
+        .universities-filters {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .universities-filters select {
+            padding: 4px 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 13px;
+        }
+
+        .university-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .university-item {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+            transition: background-color 0.3s;
+        }
+
+        .university-item:hover {
+            background-color: #f8f9fa;
+        }
+
+        .university-item h4 {
+            color: #002C5C;
+            margin: 0 0 8px 0;
+            font-size: 14px;
+        }
+
+        .university-item .badge {
+            font-size: 11px;
+            padding: 4px 8px;
+            border-radius: 12px;
+            margin-right: 4px;
+        }
+
+        .university-item p {
+            margin: 4px 0;
+            font-size: 12px;
+            color: #666;
+        }
+
+        .university-item a {
+            color: #0056b3;
+            text-decoration: none;
+        }
+
+        .university-item a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 
@@ -205,9 +325,13 @@
             <div class="banner-text">Welcome to School-Connect - Your trusted partner for school concerns.</div>
         </div>
 
-        <!-- Group Login, Register, and Search Together -->
+        <!-- Group Login, Register, Search, and Universities Together -->
         <div class="auth-search-container">
             <div class="auth-links">
+                <button class="universities-btn" id="universitiesBtn">
+                    <i class="icon-graduation"></i>
+                    Universities
+                </button>
                 <a href="/">Register</a>
                 <a href="{{ route('auth.login') }}">Login</a>
             </div>
@@ -217,6 +341,49 @@
         </div>
     </nav>
 
+    <!-- Universities Content -->
+    <div class="universities-content" id="universitiesContent">
+        <div class="universities-header">
+            <h3>Universities in Rwanda</h3>
+        </div>
+        
+        <div class="universities-filters">
+            <select id="type-filter">
+                <option value="">All Types</option>
+                <option value="PUBLIC">Public</option>
+                <option value="PRIVATE">Private</option>
+            </select>
+            <select id="accreditation-filter">
+                <option value="">All Status</option>
+                <option value="Accredited">Accredited</option>
+                <option value="Provisional">Provisional</option>
+                <option value="Pending">Pending</option>
+            </select>
+        </div>
+
+        <div class="university-list">
+            @foreach($universities as $university)
+            <div class="university-item" 
+                 data-type="{{ $university->type }}" 
+                 data-accreditation="{{ $university->accreditation_status }}">
+                <h4>
+                    {{ $university->name }}
+                    <span class="badge badge-{{ $university->type == 'PUBLIC' ? 'primary' : 'info' }}">
+                        {{ $university->type }}
+                    </span>
+                    @if($university->accreditation_status == 'Accredited')
+                        <span class="badge badge-success">Accredited</span>
+                    @endif
+                </h4>
+                <p><i class="icon-location3"></i> {{ $university->address }}, {{ $university->district }}</p>
+                @if($university->website)
+                    <p><i class="icon-earth"></i> <a href="{{ $university->website }}" target="_blank">Visit Website</a></p>
+                @endif
+                <p><i class="icon-phone"></i> {{ $university->phone_number ?? 'N/A' }}</p>
+            </div>
+            @endforeach
+        </div>
+    </div>
 
     <!-- Region Dropdowns Section -->
     <div class="region-links">
@@ -375,6 +542,45 @@
                     });
                 }
             });
+
+            // Universities toggle
+            $('#universitiesBtn').click(function(e) {
+                e.stopPropagation();
+                $(this).toggleClass('active');
+                $('#universitiesContent').toggleClass('show');
+            });
+
+            // Close universities content when clicking outside
+            $(document).click(function(e) {
+                if (!$(e.target).closest('#universitiesContent, #universitiesBtn').length) {
+                    $('#universitiesContent').removeClass('show');
+                    $('#universitiesBtn').removeClass('active');
+                }
+            });
+
+            // Filter functionality
+            function filterUniversities() {
+                var typeFilter = $('#type-filter').val();
+                var accreditationFilter = $('#accreditation-filter').val();
+                
+                $('.university-item').each(function() {
+                    var $item = $(this);
+                    var type = $item.data('type');
+                    var accreditation = $item.data('accreditation');
+                    
+                    var typeMatch = !typeFilter || type === typeFilter;
+                    var accreditationMatch = !accreditationFilter || accreditation === accreditationFilter;
+                    
+                    if (typeMatch && accreditationMatch) {
+                        $item.show();
+                    } else {
+                        $item.hide();
+                    }
+                });
+            }
+
+            // Event listeners
+            $('#type-filter, #accreditation-filter').change(filterUniversities);
         });
     </script>
 
