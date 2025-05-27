@@ -23,6 +23,14 @@
     .btn-primary:hover {
         background-color: #2D5069;
     }
+    .school-card {
+        cursor: pointer;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .school-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
 </style>
 @section('content')
 
@@ -34,21 +42,22 @@
     <div class="row">
         @forelse ($myschools as $school)
             <div class="col-md-4 mb-4">
-                <div class="card shadow-lg h-100">
-                    <div class="card-header bg-primary text-white">
-                        <h5 class="card-title">{{ $school->school_name }}</h5>
+                <a href="{{ route('school.show', $school->school_code) }}" class="text-decoration-none">
+                    <div class="card shadow-lg h-100 school-card">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="card-title">{{ $school->school_name }}</h5>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text"><strong>Province:</strong> {{ $school->province ?? 'N/A' }}</p>
+                            <p class="card-text"><strong>District:</strong> {{ $school->district ?? 'N/A' }}</p>
+                            <p class="card-text"><strong>Sector:</strong> {{ $school->sector ?? 'N/A' }}</p>
+                            <p class="card-text"><strong>Combination:</strong> {{ $school->combination ?? 'N/A' }}</p>
+                            <p class="card-text"><strong>Level status:</strong> {{ $school->level_status ?? 'N/A' }}</p>
+                            <p class="card-text"><strong>School status:</strong> {{ $school->school_level ?? 'N/A' }}</p>
+                            <p class="card-text"><strong>School Type:</strong> {{ $school->school_status ?? 'N/A' }}</p>
+                        </div>
                     </div>
-                    <div class="card-body">
-                        <p class="card-text"><strong>Province:</strong> {{ $school->province ?? 'N/A' }}</p>
-                        <p class="card-text"><strong>District:</strong> {{ $school->district ?? 'N/A' }}</p>
-                        <p class="card-text"><strong>Sector:</strong> {{ $school->sector ?? 'N/A' }}</p>
-                        <p class="card-text"><strong>Combination:</strong> {{ $school->combination ?? 'N/A' }}</p>
-                        <p class="card-text"><strong>Level status:</strong> {{ $school->level_status ?? 'N/A' }}</p>
-                        <p class="card-text"><strong>School status:</strong> {{ $school->school_level ?? 'N/A' }}</p>
-
-
-                    </div>
-                </div>
+                </a>
             </div>
         @empty
             <div class="col-12 text-center">

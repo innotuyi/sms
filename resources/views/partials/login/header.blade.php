@@ -309,6 +309,40 @@
         .university-item a:hover {
             text-decoration: underline;
         }
+
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #002C5C;
+            padding: 20px 0;
+            position: relative;
+        }
+        .navbar-center-title {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .navbar-title {
+            text-align: center;
+            color: white;
+        }
+        .navbar-title .welcome {
+            font-size: 1.2rem;
+            font-weight: 400;
+            letter-spacing: 2px;
+        }
+        .navbar-title .main-title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+        .navbar-title .subtitle {
+            font-size: 1rem;
+            color: #ffe600;
+            letter-spacing: 2px;
+        }
     </style>
 </head>
 
@@ -322,9 +356,14 @@
                 <img src="{{ asset('global_assets/Logo.png') }}" alt="Rangishuri Logo" class="brand-logo"
                     style="width: 150px; height: auto;">
             </a>
-            <div class="banner-text">Welcome to School-Connect - Your trusted partner for school concerns.</div>
         </div>
-
+        <div class="navbar-center-title">
+            <div class="navbar-title">
+                <span class="welcome">WELCOME TO</span><br>
+                <span class="main-title">SCHOOL CONNECT</span><br>
+                <span class="subtitle">YOUR TRUSTED PARTNER FOR SCHOOL CONCERNS</span>
+            </div>
+        </div>
         <!-- Group Login, Register, Search, and Universities Together -->
         <div class="auth-search-container">
             <div class="auth-links">

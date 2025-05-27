@@ -40,19 +40,18 @@ class SchoolImportController extends Controller
                 // Ensure that the row has the necessary columns
                 if (count($cells) >= 4) {
                     School::create([
-                        'school_code' => $cells[0] ?? null,  // Assuming column 1 is school_code
-                        'school_name' => $cells[1] ?? null,  // Assuming column 2 is school_name
-                        'school_status' => $cells[2] ?? null,     // Assuming column 3 is province
-                        'school_level' => $cells[3] ?? null,     // Assuming column 4 is district
-                        'province' => $cells[4] ?? null,     // Assuming column 4 is district
-                        'district' => $cells[5] ?? null,     // Assuming column 4 is district
-                        'sector' => $cells[6] ?? null,  
-                        'grade' => $cells[7] ?? null,  
-                        'level' => $cells[8] ?? null,  
-                        'combination' => $cells[9] ?? null,  
-                        'area' => $cells[10] ?? null,  
-                        'level_status' => $cells[11] ?? null, 
-                        // Add other columns as necessary
+                        'school_code' => $cells[0] ?? null,  // Column 1 is school_code
+                        'school_name' => $cells[1] ?? null,  // Column 2 is school_name
+                        'school_status' => $cells[2] ?? null,  // Column 3 is school_status
+                        'school_level' => $cells[3] ?? null,  // Column 4 is school_level
+                        'province' => $cells[4] ?? null,     // Column 5 is province
+                        'district' => $cells[5] ?? null,     // Column 6 is district
+                        'sector' => $cells[6] ?? null,       // Column 7 is sector
+                        'grade' => $cells[7] ?? null,        // Column 8 is grade
+                        'level' => $cells[8] ?? null,        // Column 9 is level
+                        'combination' => $cells[9] ?? null,  // Column 10 is combination
+                        'area' => $cells[10] ?? null,        // Column 11 is area
+                        'level_status' => $cells[11] ?? null, // Column 12 is level_status
                     ]);
                 }
             }

@@ -248,17 +248,17 @@ class SchoolController extends Controller
             $query->where('combination', 'like', '%' . trim($request->combination) . '%');
         }
     
-     
-    
         $myschools = $query->select([
             'id',
+            'school_code',
             'school_name',
             'province',
             'district',
             'sector',
             'combination',
             'level_status',
-            'school_level'
+            'school_level',
+            'school_status'
         ])->get();
     
         // Fetch distinct provinces
@@ -295,14 +295,12 @@ class SchoolController extends Controller
                     $schoolsBySector[$province->province][$district->district][$sector->sector] = $schools;
                 }
             }
+        }
 
-
-                // Fetch universities
+        // Fetch universities
         $universities = University::orderBy('name')
             ->select('id', 'name', 'type', 'district', 'address', 'website', 'phone_number', 'accreditation_status')
             ->get();
-
-        }
     
         return view('school.filtered', compact('schools', 'provinces', 'schoolsBySector', "myschools", 'universities'));
     }
