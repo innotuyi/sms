@@ -371,7 +371,7 @@
                     <i class="icon-graduation"></i>
                     Universities
                 </button>
-                <a href="/">Register</a>
+                {{-- <a href="/">Register</a> --}}
                 <a href="{{ route('auth.login') }}">Login</a>
             </div>
             <div class="search-button-container">
