@@ -227,6 +227,13 @@ class SchoolController extends Controller
 
     public function filter(Request $request)
     {
+        \Log::info('SchoolController@filter method was hit', [
+            'request_data' => $request->all(),
+            'url' => $request->fullUrl(),
+            'method' => $request->method(),
+            'headers' => $request->headers->all()
+        ]);
+
         $query = School::query();
     
         if ($request->has('province') && $request->province) {
@@ -305,4 +312,8 @@ class SchoolController extends Controller
         return view('school.filtered', compact('schools', 'provinces', 'schoolsBySector', "myschools", 'universities'));
     }
     
+    public function nonexistentMethod()
+    {
+        throw new \Exception('This is a test error to see if error handling is working');
+    }
 }

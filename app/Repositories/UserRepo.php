@@ -5,7 +5,7 @@ namespace App\Repositories;
 use App\Models\BloodGroup;
 use App\Models\StaffRecord;
 use App\Models\UserType;
-use App\User;
+use App\Models\User;
 
 
 class UserRepo {
@@ -71,5 +71,12 @@ class UserRepo {
     public function getBloodGroups()
     {
         return BloodGroup::orderBy('name')->get();
+    }
+
+    // Get all users for a specific school (used for school admin user management)
+    public function getAllBySchool($schoolId)
+    {
+        \Log::info('getAllBySchool called', ['school_id' => $schoolId]);
+        return User::where('school_id', $schoolId)->orderBy('name', 'asc')->get();
     }
 }

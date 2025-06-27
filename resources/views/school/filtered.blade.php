@@ -1,5 +1,6 @@
 <!-- filtered.blade.php -->
 @extends('layouts.login_master')
+
 <style>
     .search-container {
         background-color: #fff;
@@ -32,10 +33,8 @@
         box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
     }
 </style>
+
 @section('content')
-
-
-
 <div class="container py-5">
     <h2 class="text-center mb-4">Filtered Schools</h2>
   
@@ -66,10 +65,4 @@
         @endforelse
     </div>
 </div>
-
-
-
-
-
-
 @endsection

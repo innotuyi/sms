@@ -8,6 +8,7 @@ use App\Http\Requests\MyClass\ClassUpdate;
 use App\Repositories\MyClassRepo;
 use App\Repositories\UserRepo;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class MyClassController extends Controller
 {
@@ -15,7 +16,7 @@ class MyClassController extends Controller
 
     public function __construct(MyClassRepo $my_class, UserRepo $user)
     {
-        $this->middleware('teamSA', ['except' => ['destroy',] ]);
+        $this->middleware('teamSAT', ['except' => ['destroy',] ]);
         $this->middleware('super_admin', ['only' => ['destroy',] ]);
 
         $this->my_class = $my_class;
@@ -24,7 +25,7 @@ class MyClassController extends Controller
 
     public function index()
     {
-        $d['my_classes'] = $this->my_class->all();
+        $d['my_classes'] = $this->my_class->getAllBySchool(Auth::user()->school_id);
         $d['class_types'] = $this->my_class->getTypes();
 
         return view('pages.support_team.classes.index', $d);
@@ -33,16 +34,19 @@ class MyClassController extends Controller
     public function store(ClassCreate $req)
     {
         $data = $req->all();
-        $mc = $this->my_class->create($data);
+        $data['school_id'] = Auth::user()->school_id;
+        $mc = $this->my_class->createWithSchool($data);
 
         // Create Default Section
-        $s =['my_class_id' => $mc->id,
+        $s = [
+            'my_class_id' => $mc->id,
             'name' => 'A',
             'active' => 1,
             'teacher_id' => NULL,
+            'school_id' => Auth::user()->school_id,
         ];
 
-        $this->my_class->createSection($s);
+        $this->my_class->createSectionWithSchool($s);
 
         return Qs::jsonStoreOk();
     }

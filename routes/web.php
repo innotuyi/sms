@@ -19,91 +19,121 @@ use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ResourceController;
 use App\Http\Controllers\RoutingController;
 use App\Http\Controllers\SchoolController;
+use App\Http\Controllers\PublicSchoolController;
 use App\Http\Controllers\SchoolImportController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\StudentRoutingController;
 use App\Http\Controllers\StudentTransportController;
+use App\Http\Controllers\SuperAdmin\SchoolManagementController;
 use App\Http\Controllers\SuperAdmin\SettingController;
 use App\Http\Controllers\SupportTeam\StudentRecordController;
+use App\Http\Controllers\SupportTeam\PromotionController;
+use App\Http\Controllers\SupportTeam\UserController;
+use App\Http\Controllers\SupportTeam\MyClassController;
+use App\Http\Controllers\SupportTeam\SectionController;
+use App\Http\Controllers\SupportTeam\SubjectController;
+use App\Http\Controllers\SupportTeam\GradeController;
+use App\Http\Controllers\SupportTeam\ExamController;
+use App\Http\Controllers\SupportTeam\DormController;
+use App\Http\Controllers\SupportTeam\PaymentController;
+use App\Http\Controllers\SupportTeam\TimeTableController;
+use App\Http\Controllers\SupportTeam\PinController;
+use App\Http\Controllers\SupportTeam\MarkController;
 use App\Http\Controllers\VehicleController;
 use App\Http\Controllers\UniversityController;
+use App\Http\Controllers\MyAccountController;
+use App\Http\Controllers\AjaxController;
+use App\Http\Controllers\MyParent\MyController;
+use App\Http\Controllers\VisitingScheduleController;
+use App\Http\Controllers\FeedingTimetableController;
 
 
 
 //Route::get('/test', 'TestController@index')->name('test');
-Route::get('/privacy-policy', [HomeController::class, 'privacy_policy'])->name('privacy_policy');
-Route::get('/terms-of-use', [HomeController::class, 'terms_of_use'])->name('terms_of_use');
 
 
-Route::group(['middleware' => 'auth'], function () {
+
+Route::get('testfilter', [PublicSchoolController::class, 'filter'])->name('testfilter');
+
+
+// Public routes that don't require authentication
+Route::middleware(['web'])->group(function () {
+    Route::get('/privacy-policy', [HomeController::class, 'privacy_policy'])->name('privacy_policy');
+    Route::get('/terms-of-use', [HomeController::class, 'terms_of_use'])->name('terms_of_use');
+    Route::get('/schools/{school_code}', [PublicSchoolController::class, 'show'])->name('school.show');
+    Route::get('/public-controller-test', [PublicSchoolController::class, 'publicTest']);
+});
+
+// Protected routes that require authentication
+Route::middleware(['web', 'auth'])->group(function () {
     Route::get('/home', [HomeController::class, 'dashboard'])->name('home');
     Route::get('/dashboard', [HomeController::class, 'dashboard'])->name('dashboard');
 
 
     Route::group(['prefix' => 'my_account'], function() {
-        Route::get('/', 'MyAccountController@edit_profile')->name('my_account');
-        Route::put('/', 'MyAccountController@update_profile')->name('my_account.update');
-        Route::put('/change_password', 'MyAccountController@change_pass')->name('my_account.change_pass');
+        Route::get('/', [MyAccountController::class, 'edit_profile'])->name('my_account');
+        Route::put('/', [MyAccountController::class, 'update_profile'])->name('my_account.update');
+        Route::put('/change_password', [MyAccountController::class, 'change_pass'])->name('my_account.change_pass');
     });
 
     /*************** Support Team *****************/
-    Route::group(['namespace' => 'SupportTeam',], function(){
+    Route::group([], function(){
 
         /*************** Students *****************/
         Route::group(['prefix' => 'students'], function(){
-            Route::get('reset_pass/{st_id}', 'StudentRecordController@reset_pass')->name('st.reset_pass');
-            Route::get('graduated', 'StudentRecordController@graduated')->name('students.graduated');
-            Route::put('not_graduated/{id}', 'StudentRecordController@not_graduated')->name('st.not_graduated');
-            Route::get('list/{class_id}', 'StudentRecordController@listByClass')->name('students.list')->middleware('teamSAT');
+            Route::get('reset_pass/{st_id}', [StudentRecordController::class, 'reset_pass'])->name('st.reset_pass');
+            Route::get('graduated', [StudentRecordController::class, 'graduated'])->name('students.graduated');
+            Route::put('not_graduated/{id}', [StudentRecordController::class, 'not_graduated'])->name('st.not_graduated');
+            Route::get('list/{class_id}', [StudentRecordController::class, 'listByClass'])->name('students.list')->middleware('teamSAT');
 
             /* Promotions */
-            Route::post('promote_selector', 'PromotionController@selector')->name('students.promote_selector');
-            Route::get('promotion/manage', 'PromotionController@manage')->name('students.promotion_manage');
-            Route::delete('promotion/reset/{pid}', 'PromotionController@reset')->name('students.promotion_reset');
-            Route::delete('promotion/reset_all', 'PromotionController@reset_all')->name('students.promotion_reset_all');
-            Route::get('promotion/{fc?}/{fs?}/{tc?}/{ts?}', 'PromotionController@promotion')->name('students.promotion');
-            Route::post('promote/{fc}/{fs}/{tc}/{ts}', 'PromotionController@promote')->name('students.promote');
+            Route::post('promote_selector', [PromotionController::class, 'selector'])->name('students.promote_selector');
+            Route::get('promotion/manage', [PromotionController::class, 'manage'])->name('students.promotion_manage');
+            Route::delete('promotion/reset/{pid}', [PromotionController::class, 'reset'])->name('students.promotion_reset');
+            Route::delete('promotion/reset_all', [PromotionController::class, 'reset_all'])->name('students.promotion_reset_all');
+            Route::get('promotion/{fc?}/{fs?}/{tc?}/{ts?}', [PromotionController::class, 'promotion'])->name('students.promotion');
+            Route::post('promote/{fc}/{fs}/{tc}/{ts}', [PromotionController::class, 'promote'])->name('students.promote');
 
         });
 
         /*************** Users *****************/
         Route::group(['prefix' => 'users'], function(){
-            Route::get('reset_pass/{id}', 'UserController@reset_pass')->name('users.reset_pass');
+            Route::get('reset_pass/{id}', [UserController::class, 'reset_pass'])->name('users.reset_pass');
         });
 
         /*************** TimeTables *****************/
         Route::group(['prefix' => 'timetables'], function(){
-            Route::get('/', 'TimeTableController@index')->name('tt.index');
+            Route::get('/', [TimeTableController::class, 'index'])->name('tt.index');
 
             Route::group(['middleware' => 'teamSA'], function() {
-                Route::post('/', 'TimeTableController@store')->name('tt.store');
-                Route::put('/{tt}', 'TimeTableController@update')->name('tt.update');
-                Route::delete('/{tt}', 'TimeTableController@delete')->name('tt.delete');
+                Route::post('/', [TimeTableController::class, 'store'])->name('tt.store');
+                Route::put('/{tt}', [TimeTableController::class, 'update'])->name('tt.update');
+                Route::delete('/{tt}', [TimeTableController::class, 'delete'])->name('tt.delete');
             });
 
             /*************** TimeTable Records *****************/
             Route::group(['prefix' => 'records'], function(){
 
                 Route::group(['middleware' => 'teamSA'], function(){
-                    Route::get('manage/{ttr}', 'TimeTableController@manage')->name('ttr.manage');
-                    Route::post('/', 'TimeTableController@store_record')->name('ttr.store');
-                    Route::get('edit/{ttr}', 'TimeTableController@edit_record')->name('ttr.edit');
-                    Route::put('/{ttr}', 'TimeTableController@update_record')->name('ttr.update');
+                    Route::get('manage/{ttr}', [TimeTableController::class, 'manage'])->name('ttr.manage');
+                    Route::post('/', [TimeTableController::class, 'store_record'])->name('ttr.store');
+                    Route::get('edit/{ttr}', [TimeTableController::class, 'edit_record'])->name('ttr.edit');
+                    Route::put('/{ttr}', [TimeTableController::class, 'update_record'])->name('ttr.update');
                 });
 
-                Route::get('show/{ttr}', 'TimeTableController@show_record')->name('ttr.show');
-                Route::get('print/{ttr}', 'TimeTableController@print_record')->name('ttr.print');
-                Route::delete('/{ttr}', 'TimeTableController@delete_record')->name('ttr.destroy');
+                Route::get('show/{ttr}', [TimeTableController::class, 'show_record'])->name('ttr.show');
+                Route::get('print/{ttr}', [TimeTableController::class, 'print_record'])->name('ttr.print');
+                Route::delete('/{ttr}', [TimeTableController::class, 'delete_record'])->name('ttr.destroy');
 
             });
 
             /*************** Time Slots *****************/
             Route::group(['prefix' => 'time_slots', 'middleware' => 'teamSA'], function(){
-                Route::post('/', 'TimeTableController@store_time_slot')->name('ts.store');
-                Route::post('/use/{ttr}', 'TimeTableController@use_time_slot')->name('ts.use');
-                Route::get('edit/{ts}', 'TimeTableController@edit_time_slot')->name('ts.edit');
-                Route::delete('/{ts}', 'TimeTableController@delete_time_slot')->name('ts.destroy');
-                Route::put('/{ts}', 'TimeTableController@update_time_slot')->name('ts.update');
+                Route::post('/', [TimeTableController::class, 'store_time_slot'])->name('ts.store');
+                Route::post('/use/{ttr}', [TimeTableController::class, 'use_time_slot'])->name('ts.use');
+                Route::get('edit/{ts}', [TimeTableController::class, 'edit_time_slot'])->name('ts.edit');
+                Route::delete('/{ts}', [TimeTableController::class, 'delete_time_slot'])->name('ts.destroy');
+                Route::put('/{ts}', [TimeTableController::class, 'update_time_slot'])->name('ts.update');
             });
 
         });
@@ -111,24 +141,24 @@ Route::group(['middleware' => 'auth'], function () {
         /*************** Payments *****************/
         Route::group(['prefix' => 'payments'], function(){
 
-            Route::get('manage/{class_id?}', 'PaymentController@manage')->name('payments.manage');
-            Route::get('invoice/{id}/{year?}', 'PaymentController@invoice')->name('payments.invoice');
-            Route::get('receipts/{id}', 'PaymentController@receipts')->name('payments.receipts');
-            Route::get('pdf_receipts/{id}', 'PaymentController@pdf_receipts')->name('payments.pdf_receipts');
-            Route::post('select_year', 'PaymentController@select_year')->name('payments.select_year');
-            Route::post('select_class', 'PaymentController@select_class')->name('payments.select_class');
-            Route::delete('reset_record/{id}', 'PaymentController@reset_record')->name('payments.reset_record');
-            Route::post('pay_now/{id}', 'PaymentController@pay_now')->name('payments.pay_now');
+            Route::get('manage/{class_id?}', [PaymentController::class, 'manage'])->name('payments.manage');
+            Route::get('invoice/{id}/{year?}', [PaymentController::class, 'invoice'])->name('payments.invoice');
+            Route::get('receipts/{id}', [PaymentController::class, 'receipts'])->name('payments.receipts');
+            Route::get('pdf_receipts/{id}', [PaymentController::class, 'pdf_receipts'])->name('payments.pdf_receipts');
+            Route::post('select_year', [PaymentController::class, 'select_year'])->name('payments.select_year');
+            Route::post('select_class', [PaymentController::class, 'select_class'])->name('payments.select_class');
+            Route::delete('reset_record/{id}', [PaymentController::class, 'reset_record'])->name('payments.reset_record');
+            Route::post('pay_now/{id}', [PaymentController::class, 'pay_now'])->name('payments.pay_now');
         });
 
         /*************** Pins *****************/
         Route::group(['prefix' => 'pins'], function(){
-            Route::get('create', 'PinController@create')->name('pins.create');
-            Route::get('/', 'PinController@index')->name('pins.index');
-            Route::post('/', 'PinController@store')->name('pins.store');
-            Route::get('enter/{id}', 'PinController@enter_pin')->name('pins.enter');
-            Route::post('verify/{id}', 'PinController@verify')->name('pins.verify');
-            Route::delete('/', 'PinController@destroy')->name('pins.destroy');
+            Route::get('create', [PinController::class, 'create'])->name('pins.create');
+            Route::get('/', [PinController::class, 'index'])->name('pins.index');
+            Route::post('/', [PinController::class, 'store'])->name('pins.store');
+            Route::get('enter/{id}', [PinController::class, 'enter_pin'])->name('pins.enter');
+            Route::post('verify/{id}', [PinController::class, 'verify'])->name('pins.verify');
+            Route::delete('/', [PinController::class, 'destroy'])->name('pins.destroy');
         });
 
         /*************** Marks *****************/
@@ -136,66 +166,96 @@ Route::group(['middleware' => 'auth'], function () {
 
            // FOR teamSA
             Route::group(['middleware' => 'teamSA'], function(){
-                Route::get('batch_fix', 'MarkController@batch_fix')->name('marks.batch_fix');
-                Route::put('batch_update', 'MarkController@batch_update')->name('marks.batch_update');
-                Route::get('tabulation/{exam?}/{class?}/{sec_id?}', 'MarkController@tabulation')->name('marks.tabulation');
-                Route::post('tabulation', 'MarkController@tabulation_select')->name('marks.tabulation_select');
-                Route::get('tabulation/print/{exam}/{class}/{sec_id}', 'MarkController@print_tabulation')->name('marks.print_tabulation');
+                Route::get('batch_fix', [MarkController::class, 'batch_fix'])->name('marks.batch_fix');
+                Route::put('batch_update', [MarkController::class, 'batch_update'])->name('marks.batch_update');
+                Route::get('tabulation/{exam?}/{class?}/{sec_id?}', [MarkController::class, 'tabulation'])->name('marks.tabulation');
+                Route::post('tabulation', [MarkController::class, 'tabulation_select'])->name('marks.tabulation_select');
+                Route::get('tabulation/print/{exam}/{class}/{sec_id}', [MarkController::class, 'print_tabulation'])->name('marks.print_tabulation');
             });
 
             // FOR teamSAT
             Route::group(['middleware' => 'teamSAT'], function(){
-                Route::get('/', 'MarkController@index')->name('marks.index');
-                Route::get('manage/{exam}/{class}/{section}/{subject}', 'MarkController@manage')->name('marks.manage');
-                Route::put('update/{exam}/{class}/{section}/{subject}', 'MarkController@update')->name('marks.update');
-                Route::put('comment_update/{exr_id}', 'MarkController@comment_update')->name('marks.comment_update');
-                Route::put('skills_update/{skill}/{exr_id}', 'MarkController@skills_update')->name('marks.skills_update');
-                Route::post('selector', 'MarkController@selector')->name('marks.selector');
-                Route::get('bulk/{class?}/{section?}', 'MarkController@bulk')->name('marks.bulk');
-                Route::post('bulk', 'MarkController@bulk_select')->name('marks.bulk_select');
+                Route::get('/', [MarkController::class, 'index'])->name('marks.index');
+                Route::get('manage/{exam}/{class}/{section}/{subject}', [MarkController::class, 'manage'])->name('marks.manage');
+                Route::put('update/{exam}/{class}/{section}/{subject}', [MarkController::class, 'update'])->name('marks.update');
+                Route::put('comment_update/{exr_id}', [MarkController::class, 'comment_update'])->name('marks.comment_update');
+                Route::put('skills_update/{skill}/{exr_id}', [MarkController::class, 'skills_update'])->name('marks.skills_update');
+                Route::post('selector', [MarkController::class, 'selector'])->name('marks.selector');
+                Route::get('bulk/{class?}/{section?}', [MarkController::class, 'bulk'])->name('marks.bulk');
+                Route::post('bulk', [MarkController::class, 'bulk_select'])->name('marks.bulk_select');
             });
 
-            Route::get('select_year/{id}', 'MarkController@year_selector')->name('marks.year_selector');
-            Route::post('select_year/{id}', 'MarkController@year_selected')->name('marks.year_select');
-            Route::get('show/{id}/{year}', 'MarkController@show')->name('marks.show');
-            Route::get('print/{id}/{exam_id}/{year}', 'MarkController@print_view')->name('marks.print');
+            Route::get('select_year/{id}', [MarkController::class, 'year_selector'])->name('marks.year_selector');
+            Route::post('select_year/{id}', [MarkController::class, 'year_selected'])->name('marks.year_select');
+            Route::get('show/{id}/{year}', [MarkController::class, 'show'])->name('marks.show');
+            Route::get('print/{id}/{exam_id}/{year}', [MarkController::class, 'print_view'])->name('marks.print');
 
         });
 
-        Route::resource('students', 'StudentRecordController');
+        Route::resource('students', StudentRecordController::class);
 
         Route::post('/admit', [StudentController::class, 'registerStudent'])->name('admit.student');
         
-        Route::resource('users', 'UserController');
-        Route::resource('classes', 'MyClassController');
-        Route::resource('sections', 'SectionController');
-        Route::resource('subjects', 'SubjectController');
-        Route::resource('grades', 'GradeController');
-        Route::resource('exams', 'ExamController');
-        Route::resource('dorms', 'DormController');
-        Route::resource('payments', 'PaymentController');
+        Route::resource('users', UserController::class);
+        Route::resource('classes', MyClassController::class);
+        Route::resource('sections', SectionController::class);
+        Route::resource('subjects', SubjectController::class);
+        Route::resource('grades', GradeController::class);
+        Route::resource('exams', ExamController::class);
+        Route::resource('dorms', DormController::class);
+        
+        Route::resource('payments', PaymentController::class);
 
     });
 
     /************************ AJAX ****************************/
     Route::group(['prefix' => 'ajax'], function() {
-        Route::get('get_lga/{state_id}', 'AjaxController@get_lga')->name('get_lga');
-        Route::get('get_class_sections/{class_id}', 'AjaxController@get_class_sections')->name('get_class_sections');
-        Route::get('get_class_subjects/{class_id}', 'AjaxController@get_class_subjects')->name('get_class_subjects');
+        Route::get('get_lga/{state_id}', [AjaxController::class, 'get_lga'])->name('get_lga');
+        Route::get('get_class_sections/{class_id}', [AjaxController::class, 'get_class_sections'])->name('get_class_sections');
+        Route::get('get_class_subjects/{class_id}', [AjaxController::class, 'get_class_subjects'])->name('get_class_subjects');
     });
 
     // Universities Management Routes
-    Route::resource('universities', 'UniversityController');
-    Route::get('universities/district/{district}', 'UniversityController@getByDistrict')->name('universities.by.district');
-    Route::get('universities/type/{type}', 'UniversityController@getByType')->name('universities.by.type');
+    Route::resource('universities', UniversityController::class);
+    Route::get('universities/district/{district}', [UniversityController::class, 'getByDistrict'])->name('universities.by.district');
+    Route::get('universities/type/{type}', [UniversityController::class, 'getByType'])->name('universities.by.type');
+
+    // School Management Routes (outside of namespace group)
+    Route::get('/schools/testfilter', [SchoolController::class, 'filter'])->name('schools.testfilter');
+    Route::resource('schools', SchoolController::class);
+    Route::get('schools/import', [SchoolImportController::class, 'showImportForm'])->name('schools.import');
+    Route::post('schools/import', [SchoolImportController::class, 'import'])->name('schools.import.process');
+
+    Route::get('support_team/documentation', function() {
+        return view('pages.support_team.documentation');
+    })->name('support_team.documentation');
+
+    // School Info Center Routes
+    Route::group(['prefix' => 'school-info', 'middleware' => ['auth', 'teamSA']], function() {
+        Route::resource('visiting-schedules', VisitingScheduleController::class);
+        Route::resource('feeding-timetables', FeedingTimetableController::class);
+    });
 
 });
 
 /************************ SUPER ADMIN ****************************/
-Route::group(['namespace' => 'SuperAdmin','middleware' => 'super_admin', 'prefix' => 'super_admin'], function(){
+Route::group(['middleware' => 'admin_or_super_admin', 'prefix' => 'super_admin'], function(){
 
-    Route::get('/settings', 'SettingController@index')->name('settings');
-    Route::put('/settings', 'SettingController@update')->name('settings.update');
+    Route::get('/settings', [SettingController::class, 'index'])->name('settings');
+    Route::put('/settings', [SettingController::class, 'update'])->name('settings.update');
+    Route::post('/settings/assign', [SettingController::class, 'assignSetting'])->name('super_admin.assign_setting');
+    Route::get('/settings/{id}/edit', [SettingController::class, 'edit'])->name('settings.edit');
+    Route::delete('/settings/{id}', [SettingController::class, 'destroy'])->name('settings.destroy');
+
+    Route::get('manage-schools', [SchoolManagementController::class, 'index'])->name('super_admin.schools.index');
+    Route::get('manage-schools/create', [SchoolManagementController::class, 'create'])->name('super_admin.schools.create');
+    Route::post('manage-schools', [SchoolManagementController::class, 'store'])->name('super_admin.schools.store');
+    Route::get('manage-schools/toggle-status/{id}', [SchoolManagementController::class, 'toggleStatus'])->name('super_admin.schools.toggle-status');
+    Route::get('manage-schools/reset-admin-password/{id}', [SchoolManagementController::class, 'resetAdminPassword'])->name('super_admin.schools.reset-admin-password');
+    Route::get('manage-schools/{id}/edit', [SchoolManagementController::class, 'edit'])->name('super_admin.schools.edit');
+    Route::put('manage-schools/{id}', [SchoolManagementController::class, 'update'])->name('super_admin.schools.update');
+    Route::post('manage-schools/{id}/add-admin', [SchoolManagementController::class, 'addAdmin'])->name('super_admin.schools.add-admin');
+    Route::get('school-admins', [SchoolManagementController::class, 'listAdmins'])->name('super_admin.schools.admins');
 
 });
 
@@ -207,11 +267,11 @@ Route::get('/settings/{id}/edit', [SettingController::class, 'edit'])->name('set
 Route::delete('/settings/{id}', [SettingController::class, 'destroy'])->name('settings.destroy'); // For deleting a setting
 
 
-Route::get('/school', [SchoolController::class, 'index'])->name('school.index'); // For the main page
+/*Route::get('/school', [SchoolController::class, 'index'])->name('school.index'); // For the main page
 Route::post('/school/store', [SchoolController::class, 'store'])->name('school.store'); // For the main page
 Route::get('/school/edit', [SchoolController::class, 'edit'])->name('school.edit'); // For the main page
 Route::get('/school/{id}', [SchoolController::class, 'update'])->name('school.update'); // For the main page
-Route::delete('/school{id}', [SchoolController::class, 'destroy'])->name('school.destroy'); // For the main page
+Route::delete('/school{id}', [SchoolController::class, 'destroy'])->name('school.destroy'); // For the main page*/
 
 
 
@@ -232,9 +292,9 @@ Route::delete('/school{id}', [SchoolController::class, 'destroy'])->name('school
 
 
 /************************ PARENT ****************************/
-Route::group(['namespace' => 'MyParent','middleware' => 'my_parent',], function(){
+Route::group(['middleware' => 'my_parent',], function(){
 
-    Route::get('/my_children', 'MyController@children')->name('my_children');
+    Route::get('/my_children', [MyController::class, 'children'])->name('my_children');
 
 });
 
@@ -266,8 +326,9 @@ Route::get('/parent/permissions', [PermissionController::class, 'childPermission
 
 Route::get('books', [BookController::class, 'index'])->name('books.index');
 Route::get('books/search', [BookController::class, 'search'])->name('books.search');
+Route::get('books/suggestions', [BookController::class, 'getSuggestions'])->name('books.suggestions');
 
-Route::get('loans', [LoanController::class, 'index'])->name('loans.index');;;
+Route::get('loans', [LoanController::class, 'index'])->name('loans.index');
 Route::post('loans/borrow', [LoanController::class, 'borrow'])->name('loans.borrow');
 Route::post('loans/{id}/return', [LoanController::class, 'return']);
 
@@ -276,7 +337,7 @@ Route::post('resources/upload', [ResourceController::class, 'upload'])->name('re
 
 Route::get('past-papers', [PastPaperController::class, 'index'])->name('past_papers.index');
 
-Route::resource('past_papers', 'PastPaperController');
+Route::resource('past_papers', PastPaperController::class);
 
 // // Display a list of all books
 // Route::get('/books', [BookController::class, 'index'])->name('books.index');
@@ -297,10 +358,10 @@ Route::resource('past_papers', 'PastPaperController');
 // Route::delete('books/{id}', [BookController::class, 'destroy'])->name('books.destroy');
 
 
-Route::resource('books', 'BookController');
+Route::resource('books', BookController::class);
 
 Route::middleware(['auth'])->group(function () {
-    Route::resource('expenses', 'ExpenseController');
+    Route::resource('expenses', ExpenseController::class);
     Route::put('expenses/{expense}/approve', [ExpenseController::class, 'approve'])->name('expenses.approve');
     Route::put('expenses/{expense}/reject', [ExpenseController::class, 'reject'])->name('expenses.reject');
 });
@@ -341,16 +402,18 @@ Route::prefix('vehicles')->group(function () {
     Route::put('/{id}', [RoutingController::class, 'update'])->name('routes.update'); // Update route
     Route::delete('/{id}', [RoutingController::class, 'destroy'])->name('routes.destroy'); // Delete a route
 
-    Route::resource('student_transports', 'StudentTransportController');
+    Route::resource('student_transports', StudentTransportController::class);
 
-Route::resource('bus_attendance', 'BusAttendanceController');
+Route::resource('bus_attendance', BusAttendanceController::class);
 
 Route::get('/', [LoginController::class, 'showLoginForm']);
+Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 
 // routes/web.php
 Route::get('/past-papers/filter', [PastPaperController::class, 'filter']);
 
 Route::get('/single/{school}', [SchoolController::class, 'show'])->name('school.show');
+
 Route::get('/districts/{province}/{district}', [SchoolController::class, 'showByDistrict'])->name('districts.show');
 Route::get('schools/import', [SchoolImportController::class, 'showImportForm'])->name('school.import.form');
 Route::post('schools/import', [SchoolImportController::class, 'import'])->name('school.import');
@@ -381,28 +444,26 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 Route::get('/auth', [LoginController::class, 'auth'])->name('auth.login');
 
-
-
-
-
-
 Route::get('/reset-password', [LoginController::class, 'login'])->name('password.request');
 
-    Route::resource('student_transports', 'StudentTransportController');
 
 
-Route::resource('bus_attendance', 'BusAttendanceController');
-
-Route::resource('routes', 'RoutingController');
 
 
-Route::resource('child-applications', 'ChildApplicationController');
+
+Route::resource('student_transports', StudentTransportController::class);
+
+Route::resource('bus_attendance', BusAttendanceController::class);
+
+Route::resource('routes', RoutingController::class);
+
+
+Route::resource('child-applications', ChildApplicationController::class);
 
 
 // web.php
 Route::get('/get-districts', [SchoolController::class, 'getDistricts'])->name('get.districts');
 Route::get('/get-sectors', [SchoolController::class, 'getSectors'])->name('get.sectors');
-Route::get('/schools/filter', [SchoolController::class, 'filter'])->name('schools.filter');
 
 
 
@@ -430,6 +491,75 @@ Route::get('/schools/filter', [SchoolController::class, 'filter'])->name('school
 //     Route::post('/update', [VehicleTrackingController::class, 'update'])->name('tracking.update'); // Update tracking data
 // });
 
+
+
+
+
+
+
+
+
+
+// School Management Routes (Super Admin Only)
+Route::middleware(['auth', 'super_admin'])->group(function () {
+    Route::get('/schools', [App\Http\Controllers\SuperAdmin\SchoolManagementController::class, 'index'])->name('schools.index');
+    Route::get('/schools/create', [App\Http\Controllers\SuperAdmin\SchoolManagementController::class, 'create'])->name('schools.create');
+    Route::post('/schools', [App\Http\Controllers\SuperAdmin\SchoolManagementController::class, 'store'])->name('schools.store');
+    Route::get('/schools/{id}/edit', [App\Http\Controllers\SuperAdmin\SchoolManagementController::class, 'edit'])->name('schools.edit');
+    Route::put('/schools/{id}', [App\Http\Controllers\SuperAdmin\SchoolManagementController::class, 'update'])->name('schools.update');
+    Route::get('/schools/{id}/toggle-status', [App\Http\Controllers\SuperAdmin\SchoolManagementController::class, 'toggleStatus'])->name('schools.toggle-status');
+    Route::get('/schools/{id}/reset-admin-password', [App\Http\Controllers\SuperAdmin\SchoolManagementController::class, 'resetAdminPassword'])->name('schools.reset-admin-password');
+});
+
+
+
+
+
+
+
+
+
+
+Route::get('/test-public', function() {
+    \Log::info('Test public route was hit!');
+    return 'This is public!';
+});
+
+Route::get('/school-events', function () {
+    return view('pages.school.events');
+})->name('school-events.index');
+
+Route::get('/school-resources', function () {
+    return view('pages.school.resources');
+})->name('school-resources.index');
+
+Route::get('/school-staff', function () {
+    return view('pages.school.staff');
+})->name('school-staff.index');
+
+Route::get('/school-facilities', function () {
+    return view('pages.school.facilities');
+})->name('school-facilities.index');
+
+Route::get('/school-health', function () {
+    return view('pages.school.health');
+})->name('school-health.index');
+
+Route::get('/school-transport', function () {
+    return view('pages.school.transport');
+})->name('school-transport.index');
+
+Route::get('/school-library', function () {
+    return view('pages.school.library');
+})->name('school-library.index');
+
+Route::get('/school-safety', function () {
+    return view('pages.school.safety');
+})->name('school-safety.index');
+
+Route::get('/school-maintenance', function () {
+    return view('pages.school.maintenance');
+})->name('school-maintenance.index');
 
 
 

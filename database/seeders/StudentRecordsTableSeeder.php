@@ -25,28 +25,29 @@ class StudentRecordsTableSeeder extends Seeder
     protected function createManyStudentRecords(int $count)
     {
         $sections = Section::all();
-        $schools = School::all(); // Fetch all schools
+        $schools = School::all();
+        $counter = 1;
 
         foreach ($sections as $section) {
-            foreach ($schools as $school) { // Loop through schools
-                User::factory()
-                    ->has(
-                        StudentRecord::factory()
-                            ->state([
-                                'section_id' => $section->id,
-                                'my_class_id' => $section->my_class_id,
-                                'school_id' => $school->id, // Assign school_id
-                                'user_id' => function (User $user) {
-                                    return ['user_id' => $user->id];
-                                },
-                            ]),
-                        'student_record'
-                    )
-                    ->count($count)
-                    ->create([
+            foreach ($schools as $school) {
+                for ($i = 1; $i <= $count; $i++) {
+                    $counter++;
+                    $timestamp = time();
+                    $user = User::factory()->create([
                         'user_type' => 'student',
-                        'password' => Hash::make('student'),
+                        'username' => 'student_' . $timestamp . '_' . $counter,
+                        'password' => Hash::make('demo123'),
+                        'school_id' => $school->id,
+                        'code' => 'STU-' . $timestamp . '-' . $counter,
                     ]);
+
+                    StudentRecord::factory()->create([
+                        'section_id' => $section->id,
+                        'my_class_id' => $section->my_class_id,
+                        'school_id' => $school->id,
+                        'user_id' => $user->id,
+                    ]);
+                }
             }
         }
     }
@@ -54,21 +55,24 @@ class StudentRecordsTableSeeder extends Seeder
     protected function createStudentRecord()
     {
         $section = Section::first();
-        $school = School::first(); // Fetch the first school
+        $school = School::first();
+        $timestamp = time();
 
         $user = User::factory()->create([
-            'name' => 'NZAYISENGA EMMANUEL',
+            'name' => 'Demo Student One',
             'user_type' => 'student',
-            'username' => 'student',
-            'password' => Hash::make('cj'),
-            'email' => 'student@student.com',
+            'username' => 'student_' . $timestamp . '_1',
+            'password' => Hash::make('demo123'),
+            'email' => 'student1@demo.school.com',
+            'school_id' => $school->id,
+            'code' => 'STU-' . $timestamp . '-1',
         ]);
 
         StudentRecord::factory()->create([
             'my_class_id' => $section->my_class_id,
             'user_id' => $user->id,
             'section_id' => $section->id,
-            'school_id' => $school->id, // Assign the school_id
+            'school_id' => $school->id,
         ]);
     }
 }

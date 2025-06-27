@@ -7,6 +7,8 @@ use DB;
 use App\Models\University;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\User;
+use App\Models\School;
 
 class LoginController extends Controller
 {
@@ -61,7 +63,7 @@ class LoginController extends Controller
         $universities = University::orderBy('name')
             ->select('id', 'name', 'type', 'district', 'address', 'website', 'phone_number', 'accreditation_status')
             ->get();
-    
+
         return view('auth.login', compact('provinces', 'schoolsBySector', 'universities'));
     }
     
@@ -76,25 +78,71 @@ class LoginController extends Controller
      */
     public function login(Request $request)
     {
-        // Validate the input
         $request->validate([
-            'identity' => 'required|string',
+            'username' => 'required|string',
             'password' => 'required|string',
         ]);
 
-        // Attempt to log in using the provided credentials
         $credentials = [
-            filter_var($request->identity, FILTER_VALIDATE_EMAIL) ? 'email' : 'username' => $request->identity,
+            'username' => $request->username,
             'password' => $request->password,
         ];
 
-        if (Auth::attempt($credentials, $request->remember)) {
-            // Authentication passed
-            return redirect()->intended('/dashboard')->with('status', 'Welcome back!');
+        if (Auth::attempt($credentials)) {
+            $user = Auth::user();
+            
+            // Check user type and redirect accordingly
+            switch ($user->user_type) {
+                case 'admin':
+                    // Verify school exists and is active
+                    $school = School::where('id', $user->school_id)
+                        ->where('is_active', true)
+                        ->first();
+
+                    if (!$school) {
+                        Auth::logout();
+                        return back()->withErrors([
+                            'username' => 'Your school account is not active or does not exist.',
+                        ]);
+                    }
+
+                    // Set school session data
+                    session(['school_id' => $user->school_id]);
+                    session(['school_name' => $school->school_name]);
+                    break;
+
+                case 'super_admin':
+                    // Super admin can access everything
+                    break;
+
+                case 'teacher':
+                case 'student':
+                case 'parent':
+                case 'accountant':
+                    // Verify school exists and is active
+                    $school = School::where('id', $user->school_id)
+                        ->where('is_active', true)
+                        ->first();
+
+                    if (!$school) {
+                        Auth::logout();
+                        return back()->withErrors([
+                            'username' => 'Your school account is not active or does not exist.',
+                        ]);
+                    }
+
+                    // Set school session data
+                    session(['school_id' => $user->school_id]);
+                    session(['school_name' => $school->school_name]);
+                    break;
+            }
+            
+            return redirect()->intended('dashboard');
         }
 
-        // Authentication failed
-        return back()->withErrors(['identity' => 'Invalid login ID or password.'])->withInput($request->only('identity', 'remember'));
+        return back()->withErrors([
+            'username' => 'The provided credentials do not match our records.',
+        ]);
     }
 
     /**
@@ -102,67 +150,60 @@ class LoginController extends Controller
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function logout()
+    public function logout(Request $request)
     {
         Auth::logout();
-        return redirect('/')->with('status', 'You have been logged out.');
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        return redirect('/');
     }
 
 
     public function auth() {
-
-
         $provinces = DB::table('schools')
-        ->select('province')
-        ->distinct()
-        ->get();
+            ->select('province')
+            ->distinct()
+            ->get();
 
-       // Fetch distinct provinces
-       $provinces = DB::table('schools')
-       ->select('province')
-       ->distinct()
-       ->get();
+        // Fetch all schools grouped by province → district → sector
+        $schoolsBySector = [];
+        foreach ($provinces as $province) {
+            // Get all districts in the province
+            $districts = DB::table('schools')
+                ->select('district')
+                ->where('province', $province->province)
+                ->distinct()
+                ->get();
 
-   // Fetch all schools grouped by province → district → sector
-   $schoolsBySector = [];
-   foreach ($provinces as $province) {
-       // Get all districts in the province
-       $districts = DB::table('schools')
-           ->select('district')
-           ->where('province', $province->province)
-           ->distinct()
-           ->get();
+            foreach ($districts as $district) {
+                // Get all sectors in the district
+                $sectors = DB::table('schools')
+                    ->select('sector')
+                    ->where('province', $province->province)
+                    ->where('district', $district->district)
+                    ->distinct()
+                    ->get();
 
-       foreach ($districts as $district) {
-           // Get all sectors in the district
-           $sectors = DB::table('schools')
-               ->select('sector')
-               ->where('province', $province->province)
-               ->where('district', $district->district)
-               ->distinct()
-               ->get();
+                foreach ($sectors as $sector) {
+                    // Fetch all schools in the sector
+                    $schools = DB::table('schools')
+                        ->select('id', 'school_name','school_code')
+                        ->where('province', $province->province)
+                        ->where('district', $district->district)
+                        ->where('sector', $sector->sector)
+                        ->get();
 
-           foreach ($sectors as $sector) {
-               // Fetch all schools in the sector
-               $schools = DB::table('schools')
-                   ->select('id', 'school_name','school_code')
-                   ->where('province', $province->province)
-                   ->where('district', $district->district)
-                   ->where('sector', $sector->sector)
-                   ->get();
-
-               // Store data in an associative array
-               $schoolsBySector[$province->province][$district->district][$sector->sector] = $schools;
-           }
-       }
-
+                    // Store data in an associative array
+                    $schoolsBySector[$province->province][$district->district][$sector->sector] = $schools;
+                }
+            }
+        }
 
         // Fetch universities
         $universities = University::orderBy('name')
             ->select('id', 'name', 'type', 'district', 'address', 'website', 'phone_number', 'accreditation_status')
             ->get();
-   }
 
-   return view('login', compact('provinces', 'schoolsBySector', 'universities'));
+        return view('login', compact('provinces', 'schoolsBySector', 'universities'));
     }
 }

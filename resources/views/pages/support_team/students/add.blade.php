@@ -8,7 +8,29 @@
             {{-- {!! Qs::getPanelOptions() !!} --}}
         </div>
 
-        <form id="ajax-reg" method="post" enctype="multipart/form-data"   action="{{ route('admit.student') }}" data-fouc>
+        @php
+            $user = Auth::user();
+            $school = $user->school ?? null;
+        @endphp
+
+        @if (session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
+
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <strong>There were some problems with your input:</strong>
+                <ul class="mb-0">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
+        <form id="ajax-reg" method="post" enctype="multipart/form-data" action="{{ route('admit.student') }}" data-fouc>
             @csrf
             <fieldset>
                 <!-- Collapse Toggle Button -->
@@ -16,7 +38,6 @@
                     data-target="#personalDataForm" aria-expanded="false" aria-controls="personalDataForm">
                     <i class="fa fa-chevron-down"></i>Complete Personal Data
                 </button>
-
                 <!-- Start Card (with collapse functionality) -->
                 <div class="collapse" id="personalDataForm">
                     <div class="card">
@@ -26,16 +47,9 @@
                             <div class="row">
                                 <div class="col-md-3 mb-2">
                                     <div class="form-group">
-                                        <label for="school_id">School: <span class="text-danger">*</span></label>
-                                        <select name="school_id" id="school_id" class="form-control" required>
-                                            <option value="">-- Select School --</option>
-                                            @foreach ($schools as $school)
-                                                <option value="{{ $school->id }}"
-                                                    {{ old('school_id') == $school->id ? 'selected' : '' }}>
-                                                    {{ $school->school_name }}
-                                                </option>
-                                            @endforeach
-                                        </select>
+                                        <label>School: <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" value="{{ $school ? $school->school_name : '' }}" readonly>
+                                        <input type="hidden" name="school_id" value="{{ $school ? $school->id : '' }}">
                                     </div>
                                 </div>
                                 <div class="col-md-3 mb-2">
@@ -60,7 +74,6 @@
                                     </div>
                                 </div>
                             </div>
-
                             <!-- Contact Information -->
                             <div class="row">
                                 <div class="col-md-3">
@@ -98,10 +111,8 @@
                                     </div>
                                 </div>
                             </div>
-
                             <!-- Birth Date and Location -->
                             <div class="row">
-
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="province">Province:</label>
@@ -138,7 +149,6 @@
                                     </div>
                                 </div>
                             </div>
-
                             <!-- Address Details -->
                             <div class="row">
                                 <div class="col-md-6">
@@ -161,17 +171,14 @@
                             </div>
                         </div>
                     </div>
-
+                </div>
             </fieldset>
-
-
             <fieldset>
                 <!-- Collapse Toggle Button -->
                 <button class="btn btn-primary ml-2 mb-3" type="button" data-toggle="collapse"
                     data-target="#studentForm" aria-expanded="false" aria-controls="studentForm">
                     <i class="fa fa-chevron-down"></i>Complete Student Data
                 </button>
-
                 <!-- Start Card (with collapse functionality) -->
                 <div class="collapse" id="studentForm">
                     <div class="card">
@@ -193,7 +200,6 @@
                                         </select>
                                     </div>
                                 </div>
-
                                 <!-- Section Field -->
                                 <div class="col-md-3 mb-2">
                                     <div class="form-group">
@@ -206,7 +212,6 @@
                                         </select>
                                     </div>
                                 </div>
-
                                 <!-- Parent Field -->
                                 <div class="col-md-3 mb-2">
                                     <div class="form-group">
@@ -221,7 +226,6 @@
                                         </select>
                                     </div>
                                 </div>
-
                                 <!-- Year Admitted Field -->
                                 <div class="col-md-3 mb-2">
                                     <div class="form-group">
@@ -239,7 +243,6 @@
                                     </div>
                                 </div>
                             </div>
-
                             <div class="row">
                                 <!-- Dormitory Field -->
                                 <div class="col-md-3 mb-2">
@@ -254,7 +257,6 @@
                                         @endforeach
                                     </select>
                                 </div>
-
                                 <!-- Dormitory Room No -->
                                 <div class="col-md-3 mb-2">
                                     <div class="form-group">
@@ -263,7 +265,6 @@
                                             class="form-control" value="{{ old('dorm_room_no') }}">
                                     </div>
                                 </div>
-
                                 <!-- Sport House -->
                                 <div class="col-md-3 mb-2">
                                     <div class="form-group">
@@ -272,8 +273,7 @@
                                             class="form-control" value="{{ old('house') }}">
                                     </div>
                                 </div>
-
-                                 <!-- Sport House -->
+                                 <!-- Destination -->
                                  <div class="col-md-3 mb-2">
                                     <div class="form-group">
                                         <label>Destination:</label>
@@ -307,7 +307,6 @@
                                             value="{{ old('student_number') }}">
                                     </div>
                                 </div>
-
                                    <!-- Departure Time -->
                                    <div class="col-md-3">
                                     <div class="form-group">
@@ -316,7 +315,6 @@
                                             class="form-control" value="{{ old('departure_time') }}">
                                     </div>
                                 </div>
-
                                 <!-- Arrival Date and Time -->
                                 <div class="col-md-3">
                                     <div class="form-group">
@@ -348,7 +346,6 @@
                                         </select>
                                     </div>
                                 </div>
-
                                 <!-- Other Kind of Insurance -->
                                 <div class="col-md-3">
                                     <div class="form-group">
@@ -357,7 +354,6 @@
                                             placeholder="Enter Other Insurance" value="{{ old('other_insurance') }}">
                                     </div>
                                 </div>
-
                                 <!-- Health Insurance -->
                                 <div class="col-md-3">
                                     <div class="form-group">
@@ -379,7 +375,6 @@
                                         </select>
                                     </div>
                                 </div>
-
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="special_insurance">Special Kind of Insurance:</label>
@@ -388,7 +383,6 @@
                                             value="{{ old('special_insurance') }}">
                                     </div>
                                 </div>
-
                                 <!-- School Fees Status -->
                                 <div class="col-md-3">
                                     <label for="fees_status">School Fees Status: <span
@@ -405,7 +399,6 @@
                                     </select>
                                 </div>
                             </div>
-
                             <!-- School Fees -->
                             <div class="row">
                                 <!-- Fees Details -->
@@ -416,7 +409,6 @@
                                             class="form-control" value="{{ old('fees_paid') }}">
                                     </div>
                                 </div>
-
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="remaining_fees">Remaining Amount:</label>
@@ -425,7 +417,6 @@
                                             value="{{ old('remaining_fees') }}">
                                     </div>
                                 </div>
-
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="balance_date">Date to Pay Balance:</label>
@@ -433,7 +424,6 @@
                                             value="{{ old('balance_date') }}">
                                     </div>
                                 </div>
-
                                 <!-- Specify Other Organization Paying Fees -->
                                 <div class="col-md-3">
                                     <div class="form-group">
@@ -444,7 +434,6 @@
                                     </div>
                                 </div>
                             </div>
-
                             <!-- Pocket Money -->
                             <div class="row">
                                 <div class="col-md-3">
@@ -455,7 +444,6 @@
                                             value="{{ old('pocket_money') }}">
                                     </div>
                                 </div>
-
                                 <!-- Go Home -->
                                 <!-- Pocket Money to Go Home -->
                                 <div class="col-md-3">
@@ -474,7 +462,6 @@
                                         </select>
                                     </div>
                                 </div>
-
                                 <!-- Pocket Money Amount (Appears only if Yes is selected) -->
                                 <div class="col-md-3" id="pocket_money_amount_field" style="display: none;">
                                     <div class="form-group">
@@ -484,7 +471,6 @@
                                             value="{{ old('pocket_money_amount') }}">
                                     </div>
                                 </div>
-
                                 <!-- Hygiene Materials -->
                                 <div class="col-md-3">
                                     <label for="hygiene_materials_complete">Hygiene Materials Submitted:</label>
@@ -508,8 +494,6 @@
             <div class="col-md-4">
                 <button type="submit" class="btn btn-primary">Submit</button>
             </div>
-
         </form>
-    </div>
     </div>
 @endsection

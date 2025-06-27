@@ -86,6 +86,72 @@
                                 <div>Legends & Alumni</div>
                             </button>
                         </div>
+                        <div class="col-md-3">
+                            <button class="btn btn-info btn-block h-100" data-toggle="modal" data-target="#visitingScheduleModal">
+                                <i class="fas fa-calendar-alt mb-2"></i>
+                                <div>Visiting Schedule</div>
+                            </button>
+                        </div>
+                        <div class="col-md-3">
+                            <button class="btn btn-success btn-block h-100" data-toggle="modal" data-target="#feedingTimetableModal">
+                                <i class="fas fa-utensils mb-2"></i>
+                                <div>Feeding Timetable</div>
+                            </button>
+                        </div>
+                        {{-- <div class="col-md-3">
+                            <a href="{{ route('school-events.index') }}" class="btn btn-warning btn-block h-100">
+                                <i class="fas fa-calendar-check mb-2"></i>
+                                <div>School Events</div>
+                            </a>
+                        </div>
+                        <div class="col-md-3">
+                            <a href="{{ route('school-resources.index') }}" class="btn btn-secondary btn-block h-100">
+                                <i class="fas fa-box mb-2"></i>
+                                <div>School Resources</div>
+                            </a>
+                        </div>
+                        <div class="col-md-3">
+                            <a href="{{ route('school-staff.index') }}" class="btn btn-info btn-block h-100">
+                                <i class="fas fa-chalkboard-teacher mb-2"></i>
+                                <div>School Staff</div>
+                            </a>
+                        </div>
+                        <div class="col-md-3">
+                            <a href="{{ route('school-facilities.index') }}" class="btn btn-success btn-block h-100">
+                                <i class="fas fa-building mb-2"></i>
+                                <div>School Facilities</div>
+                            </a>
+                        </div>
+                        <div class="col-md-3">
+                            <a href="{{ route('school-safety.index') }}" class="btn btn-danger btn-block h-100">
+                                <i class="fas fa-shield-alt mb-2"></i>
+                                <div>Safety & Security</div>
+                            </a>
+                        </div>
+                        <div class="col-md-3">
+                            <a href="{{ route('school-transport.index') }}" class="btn btn-primary btn-block h-100">
+                                <i class="fas fa-bus mb-2"></i>
+                                <div>Transport Management</div>
+                            </a>
+                        </div>
+                        <div class="col-md-3">
+                            <a href="{{ route('school-library.index') }}" class="btn btn-warning btn-block h-100">
+                                <i class="fas fa-book mb-2"></i>
+                                <div>Library Management</div>
+                            </a>
+                        </div>
+                        <div class="col-md-3">
+                            <a href="{{ route('school-health.index') }}" class="btn btn-info btn-block h-100">
+                                <i class="fas fa-heartbeat mb-2"></i>
+                                <div>Health Services</div>
+                            </a>
+                        </div>
+                        <div class="col-md-3">
+                            <a href="{{ route('school-maintenance.index') }}" class="btn btn-secondary btn-block h-100">
+                                <i class="fas fa-tools mb-2"></i>
+                                <div>Maintenance</div>
+                            </a>
+                        </div> --}}
                     </div>
                 </div>
             </div>
@@ -647,78 +713,85 @@
                 </div>
             </div>
         </div>
+
+        <!-- Visiting Schedule Modal -->
+        <div class="modal fade" id="visitingScheduleModal" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header bg-info text-white">
+                        <h5 class="modal-title">Visiting Schedule</h5>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="alert alert-warning text-center font-weight-bold">
+                            Visiting is only allowed on the last Sunday of each month.
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead class="thead-light">
+                                    <tr>
+                                        <th>Month</th>
+                                        <th>Visiting Date</th>
+                                        <th>Visiting Hours</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>January</td><td>Sunday, January 26, 2025</td><td>10:00 AM – 4:00 PM</td></tr>
+                                    <tr><td>February</td><td>Sunday, February 23, 2025</td><td>10:00 AM – 4:00 PM</td></tr>
+                                    <tr><td>March</td><td>Sunday, March 30, 2025</td><td>10:00 AM – 4:00 PM</td></tr>
+                                    <tr><td>April</td><td>Sunday, April 27, 2025</td><td>10:00 AM – 4:00 PM</td></tr>
+                                    <!-- Add more months as needed -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Feeding Timetable Modal -->
+        <div class="modal fade" id="feedingTimetableModal" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header bg-success text-white">
+                        <h5 class="modal-title">High School Feeding Timetable</h5>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead class="thead-light">
+                                    <tr>
+                                        <th>Day</th>
+                                        <th>Morning</th>
+                                        <th>Lunch</th>
+                                        <th>Dinner</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>Monday</td><td>Igikoma + Umugati</td><td>Rice, beans, cooked greens (e.g., spinach), banana</td><td>Ugali, beef stew, cabbage</td></tr>
+                                    <tr><td>Tuesday</td><td>Ikoma</td><td>Posho (maize meal), groundnut sauce, boiled egg</td><td>Rice, chicken curry, mixed vegetables</td></tr>
+                                    <tr><td>Wednesday</td><td>Icyayi</td><td>Irish potatoes, peas stew, carrot salad</td><td>Spaghetti, tomato sauce with minced meat</td></tr>
+                                    <tr><td>Thursday</td><td>Irindazi nicyayi</td><td>Rice, fried fish (or egg), beans, avocado</td><td>Boiled cassava, beef stew, sukuma wiki (kale)</td></tr>
+                                    <tr><td>Friday</td><td>Igikoma + Umugati</td><td>Pilau (spiced rice), vegetable sauce, fruit</td><td>Posho, beans, steamed pumpkin leaves</td></tr>
+                                    <tr><td>Saturday</td><td>Igikoma + Umugati</td><td>Rice, chicken stew, green beans</td><td>Chapati, lentils, spinach</td></tr>
+                                    <tr><td>Sunday</td><td>Igikoma + Umugati</td><td>Matoke (steamed green bananas), peanut sauce, cabbage</td><td>Rice, goat meat stew, coleslaw</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <ul>
+                            <li>Fruit servings like banana, papaya, or orange can be included 2–3 times per week.</li>
+                            <li>Water or a light fruit juice should be served with meals.</li>
+                            <li>Protein sources are rotated (beans, eggs, beef, chicken, lentils) for variety.</li>
+                            <li>Meals are designed to be simple yet nutritious for adolescents.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 @endsection
-
-@push('styles')
-<style>
-    .btn-block {
-        padding: 1.5rem;
-        font-size: 1.1rem;
-        transition: all 0.3s ease;
-    }
-    
-    .btn-block:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    }
-    
-    .btn-block i {
-        font-size: 2rem;
-        display: block;
-        margin-bottom: 0.5rem;
-    }
-    
-    .badge {
-        font-size: 1rem;
-    }
-    
-    .table th {
-        font-weight: 600;
-        text-transform: uppercase;
-        font-size: 0.9rem;
-    }
-    
-    .card {
-        border: none;
-        border-radius: 10px;
-    }
-    
-    .card-header {
-        border-radius: 10px 10px 0 0 !important;
-    }
-
-    /* Fix for footer positioning */
-    .min-vh-100 {
-        min-height: 100vh;
-    }
-
-    .mt-auto {
-        margin-top: auto;
-    }
-
-    /* Adjust banner size */
-    .position-relative {
-        margin-top: 1rem;
-    }
-
-    /* Ensure modals are properly positioned */
-    .modal {
-        z-index: 1050;
-    }
-
-    /* Card header styling */
-    .card-header h3 {
-        font-size: 1.5rem;
-        font-weight: 600;
-    }
-
-    .card-header i {
-        color: inherit;
-    }
-</style>
-@endpush
 
 @push('scripts')
 <script>

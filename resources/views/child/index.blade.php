@@ -26,6 +26,7 @@
                             <th>Child Name</th>
                             <th>Category</th>
                             <th>Marks Percentage</th>
+                            <th>Marks Attachment</th>
                             <th>Parent Name</th>
                             <th>Actions</th>
                         </tr>
@@ -37,6 +38,13 @@
                                 <td>{{ $application->child_full_name }}</td>
                                 <td>{{ $application->category }}</td>
                                 <td>{{ $application->marks_percentage }}%</td>
+                                <td>
+                                    @if($application->marks_attachment)
+                                        <a href="{{ asset('storage/' . $application->marks_attachment) }}" target="_blank">View Attachment</a>
+                                    @else
+                                        N/A
+                                    @endif
+                                </td>
                                 <td>{{ $application->parent_full_name }}</td>
                                 <td>
                                     <a href="#" class="btn btn-warning" data-toggle="modal" data-target="#editApplicationModal" data-application="{{ $application }}">Edit</a>

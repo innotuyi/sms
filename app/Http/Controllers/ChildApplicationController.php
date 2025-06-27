@@ -62,10 +62,10 @@ class ChildApplicationController extends Controller
     
         // Create the child application
         ChildApplication::create($validatedData);
-    
-        return redirect()->route('child.index')->with('success', 'Application submitted successfully!');
-    }
 
+        return redirect()->back()->with('success', 'Application created successfully!');
+    
+    }
     /**
      * Display the specified resource.
      */
@@ -123,3 +123,7 @@ class ChildApplicationController extends Controller
         return redirect()->route('child.index')->with('success', 'Application deleted successfully!');
     }
 }
+
+
+
+

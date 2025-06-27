@@ -19,86 +19,75 @@ class UsersTableSeeder extends Seeder
     {
         DB::table('users')->delete();
 
-        $this->createNewUsers();
-        $this->createManyUsers( 3);
+        $this->createDemoUsers();
     }
 
-    protected function createNewUsers()
+    protected function createDemoUsers()
     {
-        $password = Hash::make('cj'); // Default user password
+        $password = Hash::make('demo123'); // Demo password
 
         $d = [
-
-            ['name' => 'Innocent',
+            [
+                'name' => 'Super Admin',
                 'email' => 'cj@cj.com',
                 'username' => 'cj',
-                'password' => $password,
+                'password' => Hash::make('cj'),
                 'user_type' => 'super_admin',
-                'code' => strtoupper(Str::random(10)),
+                'code' => 'SUPER-ADMIN-001',
+                'school_id' => null,
                 'remember_token' => Str::random(10),
             ],
-
-            ['name' => 'Admin',
-            'email' => 'admin@admin.com',
-            'password' => $password,
-            'user_type' => 'admin',
-            'username' => 'admin',
-            'code' => strtoupper(Str::random(10)),
-            'remember_token' => Str::random(10),
+            [
+                'name' => 'Demo Admin',
+                'email' => 'admin@demo.school.com',
+                'username' => 'admin',
+                'password' => $password,
+                'user_type' => 'admin',
+                'code' => 'DEMO-ADMIN-001',
+                'school_id' => 1,
+                'remember_token' => Str::random(10),
             ],
-
-            ['name' => 'Teacher Gervais ',
-                'email' => 'teacher@teacher.com',
-                'user_type' => 'teacher',
+            [
+                'name' => 'Demo Teacher',
+                'email' => 'teacher@demo.school.com',
                 'username' => 'teacher',
                 'password' => $password,
-                'code' => strtoupper(Str::random(10)),
+                'user_type' => 'teacher',
+                'code' => 'DEMO-TEACH-001',
+                'school_id' => 1,
                 'remember_token' => Str::random(10),
             ],
-
-            ['name' => 'Parent Eric',
-                'email' => 'parent@parent.com',
-                'user_type' => 'parent',
+            [
+                'name' => 'Demo Parent',
+                'email' => 'parent@demo.school.com',
                 'username' => 'parent',
                 'password' => $password,
-                'code' => strtoupper(Str::random(10)),
+                'user_type' => 'parent',
+                'code' => 'DEMO-PARENT-001',
+                'school_id' => 1,
                 'remember_token' => Str::random(10),
             ],
-
-            ['name' => 'Accountant Alice',
-                'email' => 'accountant@accountant.com',
-                'user_type' => 'accountant',
+            [
+                'name' => 'Demo Accountant',
+                'email' => 'accountant@demo.school.com',
                 'username' => 'accountant',
                 'password' => $password,
-                'code' => strtoupper(Str::random(10)),
+                'user_type' => 'accountant',
+                'code' => 'DEMO-ACC-001',
+                'school_id' => 1,
                 'remember_token' => Str::random(10),
             ],
+            [
+                'name' => 'Demo Student',
+                'email' => 'student@demo.school.com',
+                'username' => 'student',
+                'password' => $password,
+                'user_type' => 'student',
+                'code' => 'DEMO-STUD-001',
+                'school_id' => 1,
+                'remember_token' => Str::random(10),
+            ]
         ];
         DB::table('users')->insert($d);
-    }
-
-    protected function createManyUsers(int $count)
-    {
-        $data = [];
-        $user_type = Qs::getAllUserTypes(['super_admin', 'librarian', 'student']);
-
-        for($i = 1; $i <= $count; $i++){
-
-            foreach ($user_type as $k => $ut){
-
-                $data[] = ['name' => ucfirst($user_type[$k]).' '.$i,
-                    'email' => $user_type[$k].$i.'@'.$user_type[$k].'.com',
-                    'user_type' => $user_type[$k],
-                    'username' => $user_type[$k].$i,
-                    'password' => Hash::make($user_type[$k]),
-                    'code' => strtoupper(Str::random(10)),
-                    'remember_token' => Str::random(10),
-                ];
-
-            }
-
-        }
-
-        DB::table('users')->insert($data);
     }
 }

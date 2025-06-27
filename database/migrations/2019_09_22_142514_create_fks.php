@@ -112,6 +112,17 @@ class CreateFks extends Migration
 
     public function down()
     {
-
+        // Commented out to avoid errors if foreign key does not exist
+        // Schema::table('grades', function (Blueprint $table) {
+        //     $table->dropForeign(['class_type_id']);
+        // });
+        // Schema::table('marks', function (Blueprint $table) {
+        //     $table->dropForeign(['student_id']);
+        //     $table->dropForeign(['my_class_id']);
+        //     $table->dropForeign(['section_id']);
+        //     $table->dropForeign(['subject_id']);
+        //     $table->dropForeign(['exam_id']);
+        //     $table->dropForeign(['grade_id']); // Commented out to avoid error if foreign key does not exist
+        // });
     }
 }

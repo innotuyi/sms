@@ -13,7 +13,7 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        //
+        Commands\CustomBackupCommand::class,
     ];
 
     /**
@@ -24,8 +24,11 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')
-        //          ->hourly();
+        // Run backup daily at 1:00 AM
+        $schedule->command('backup:custom')
+                ->daily()
+                ->at('01:00')
+                ->appendOutputTo(storage_path('logs/backup.log'));
     }
 
     /**

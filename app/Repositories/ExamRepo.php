@@ -16,6 +16,14 @@ class ExamRepo
         return Exam::orderBy('name', 'asc')->orderBy('year', 'desc')->get();
     }
 
+    public function getAllBySchool($school_id)
+    {
+        return Exam::where('school_id', $school_id)
+            ->orderBy('name', 'asc')
+            ->orderBy('year', 'desc')
+            ->get();
+    }
+
     public function getExam($data)
     {
         return Exam::where($data)->get();

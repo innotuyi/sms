@@ -139,4 +139,34 @@ class MyClassRepo
         return Subject::orderBy('name', 'asc')->with(['my_class', 'teacher'])->get();
     }
 
+    public function getAllBySchool($school_id)
+    {
+        return MyClass::where('school_id', $school_id)->orderBy('name', 'asc')->get();
+    }
+
+    public function getAllSectionsBySchool($school_id)
+    {
+        return Section::where('school_id', $school_id)->orderBy('name', 'asc')->with(['my_class', 'teacher'])->get();
+    }
+
+    public function getAllSubjectsBySchool($school_id)
+    {
+        return Subject::where('school_id', $school_id)->orderBy('name', 'asc')->with(['teacher', 'my_class'])->get();
+    }
+
+    public function createWithSchool($data)
+    {
+        return MyClass::create($data);
+    }
+
+    public function createSectionWithSchool($data)
+    {
+        return Section::create($data);
+    }
+
+    public function createSubjectWithSchool($data)
+    {
+        return Subject::create($data);
+    }
+
 }

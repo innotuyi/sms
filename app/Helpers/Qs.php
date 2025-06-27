@@ -55,7 +55,7 @@ class Qs
 
     public static function getTeamSA()
     {
-        return ['admin', 'super_admin'];
+        return ['super_admin', 'admin'];
     }
 
     public static function getTeamAccount()
@@ -143,62 +143,62 @@ class Qs
 
     public static function userIsTeamAccount()
     {
-        return in_array(Auth::user()->user_type, self::getTeamAccount());
+        return Auth::check() && in_array(Auth::user()->user_type, self::getTeamAccount());
     }
 
     public static function userIsTeamSA()
     {
-        return in_array(Auth::user()->user_type, self::getTeamSA());
+        return Auth::check() && in_array(Auth::user()->user_type, self::getTeamSA());
     }
 
     public static function userIsTeamSAT()
     {
-        return in_array(Auth::user()->user_type, self::getTeamSAT());
+        return Auth::check() && in_array(Auth::user()->user_type, self::getTeamSAT());
     }
 
     public static function userIsAcademic()
     {
-        return in_array(Auth::user()->user_type, self::getTeamAcademic());
+        return Auth::check() && in_array(Auth::user()->user_type, self::getTeamAcademic());
     }
 
     public static function userIsAdministrative()
     {
-        return in_array(Auth::user()->user_type, self::getTeamAdministrative());
+        return Auth::check() && in_array(Auth::user()->user_type, self::getTeamAdministrative());
     }
 
     public static function userIsAdmin()
     {
-        return Auth::user()->user_type == 'admin';
+        return Auth::check() && in_array(Auth::user()->user_type, ['admin', 'school_admin']);
     }
 
     public static function getUserType()
     {
-        return Auth::user()->user_type;
+        return Auth::check() ? Auth::user()->user_type : null;
     }
 
     public static function userIsSuperAdmin()
     {
-        return Auth::user()->user_type == 'super_admin';
+        return Auth::check() && Auth::user()->user_type == 'super_admin';
     }
 
     public static function userIsStudent()
     {
-        return Auth::user()->user_type == 'student';
+        return Auth::check() && Auth::user()->user_type == 'student';
     }
 
     public static function userIsTeacher()
     {
-        return Auth::user()->user_type == 'teacher';
+        return Auth::check() && Auth::user()->user_type == 'teacher';
     }
 
     public static function userIsParent()
     {
-        return Auth::user()->user_type == 'parent';
+        return Auth::check() && Auth::user()->user_type == 'parent';
     }
 
     public static function userIsStaff()
     {
-        return in_array(Auth::user()->user_type, self::getStaff());
+        return Auth::check() && in_array(Auth::user()->user_type, self::getStaff());
     }
 
     public static function getStaff($remove=[])
@@ -221,7 +221,7 @@ class Qs
 
     public static function userIsPTA()
     {
-        return in_array(Auth::user()->user_type, self::getPTA());
+        return Auth::check() && in_array(Auth::user()->user_type, self::getPTA());
     }
 
     public static function userIsMyChild($student_id, $parent_id)

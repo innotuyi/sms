@@ -6,7 +6,7 @@ use Eloquent;
 
 class MyClass extends Eloquent
 {
-    protected $fillable = ['name', 'class_type_id'];
+    protected $fillable = ['name', 'class_type_id', 'school_id'];
 
     public function section()
     {
@@ -21,5 +21,10 @@ class MyClass extends Eloquent
     public function student_record()
     {
         return $this->hasMany(StudentRecord::class);
+    }
+
+    public function subjects()
+    {
+        return $this->hasMany(\App\Models\Subject::class, 'my_class_id');
     }
 }

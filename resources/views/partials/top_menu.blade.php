@@ -2,6 +2,13 @@
     <div class="mt-2 mr-5">
         <a href="{{ route('dashboard') }}" class="d-inline-block">
             <h4 class="text-bold text-white">{{ Qs::getSystemName() }}</h4>
+            @if(auth()->check() && !auth()->user()->isSuperAdmin())
+                @if(auth()->user()->school)
+                    <h6 class="text-white">{{ auth()->user()->school->name }}</h6>
+                @else
+                    <h6 class="text-danger">School not found</h6>
+                @endif
+            @endif
         </a>
     </div>
     {{--  <div class="navbar-brand">
@@ -36,23 +43,28 @@
 
             <li class="nav-item dropdown dropdown-user">
                 <a href="#" class="navbar-nav-link dropdown-toggle" data-toggle="dropdown">
-                    <img style="width: 38px; height:38px;" src="{{ Auth::user()->photo }}" class="rounded-circle"
-                        alt="photo">
-                    <span>{{ Auth::user()->name }}</span>
+                    @auth
+                        <img style="width: 38px; height:38px;" src="{{ Auth::user()->photo ?? asset('global_assets/images/placeholders/placeholder.jpg') }}" class="rounded-circle" alt="photo">
+                        <span>{{ Auth::user()->name ?? 'User' }}</span>
+                    @else
+                        <img style="width: 38px; height:38px;" src="{{ asset('global_assets/images/placeholders/placeholder.jpg') }}" class="rounded-circle" alt="photo">
+                        <span>Guest</span>
+                    @endauth
                 </a>
 
                 <div class="dropdown-menu dropdown-menu-right">
-                    {{-- <a href="{{ Qs::userIsStudent() ? route('students.show', Qs::hash(Qs::findStudentRecord(Auth::user()->id)->id)) : route('users.show', Qs::hash(Auth::user()->id)) }}" class="dropdown-item"><i class="icon-user-plus"></i> My profile</a> --}}
-                    <div class="dropdown-divider"></div>
-                    <a href="{{ route('my_account') }}" class="dropdown-item"><i class="icon-cog5"></i> Account
-                        settings</a>
-                    <a href="{{ route('logout') }}"
-                        onclick="event.preventDefault();
-          document.getElementById('logout-form').submit();"
-                        class="dropdown-item"><i class="icon-switch2"></i> Logout</a>
-                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                        @csrf
-                    </form>
+                    @auth
+                        <a href="{{ route('my_account') }}" class="dropdown-item"><i class="icon-cog5"></i> Account settings</a>
+                        <a href="{{ route('logout') }}"
+                            onclick="event.preventDefault();
+                            document.getElementById('logout-form').submit();"
+                            class="dropdown-item"><i class="icon-switch2"></i> Logout</a>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                            @csrf
+                        </form>
+                    @else
+                        <a href="{{ route('login') }}" class="dropdown-item"><i class="icon-switch2"></i> Login</a>
+                    @endauth
                 </div>
             </li>
         </ul>

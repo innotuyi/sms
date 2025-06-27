@@ -17,7 +17,7 @@ class GradeController extends Controller
         $this->exam = $exam;
         $this->my_class = $my_class;
 
-        $this->middleware('teamSA', ['except' => ['destroy',] ]);
+        $this->middleware('teamSAT', ['except' => ['destroy',] ]);
         $this->middleware('super_admin', ['only' => ['destroy',] ]);
     }
 

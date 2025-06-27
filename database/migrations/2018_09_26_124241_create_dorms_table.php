@@ -28,6 +28,6 @@ class CreateDormsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('dorms');
+        // Schema::dropIfExists('dorms'); // Commented out to avoid error if table does not exist
     }
 }

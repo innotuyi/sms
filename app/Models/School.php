@@ -28,8 +28,13 @@ class School extends Model
         'established_year',
         'school_type',
         'registration_number',
+        'is_active',
     ];
     
+    public function admin()
+    {
+        return $this->hasOne(User::class, 'school_id')->where('user_type', 'admin');
+    }
 }
 
 

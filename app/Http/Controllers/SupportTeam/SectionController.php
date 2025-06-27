@@ -8,6 +8,7 @@ use App\Http\Requests\Section\SectionUpdate;
 use App\Repositories\MyClassRepo;
 use App\Http\Controllers\Controller;
 use App\Repositories\UserRepo;
+use Illuminate\Support\Facades\Auth;
 
 class SectionController extends Controller
 {
@@ -15,7 +16,7 @@ class SectionController extends Controller
 
     public function __construct(MyClassRepo $my_class, UserRepo $user)
     {
-        $this->middleware('teamSA', ['except' => ['destroy',] ]);
+        $this->middleware('teamSAT', ['except' => ['destroy',] ]);
         $this->middleware('super_admin', ['only' => ['destroy',] ]);
 
         $this->my_class = $my_class;
@@ -24,8 +25,8 @@ class SectionController extends Controller
 
     public function index()
     {
-        $d['my_classes'] = $this->my_class->all();
-        $d['sections'] = $this->my_class->getAllSections();
+        $d['my_classes'] = $this->my_class->getAllBySchool(Auth::user()->school_id);
+        $d['sections'] = $this->my_class->getAllSectionsBySchool(Auth::user()->school_id);
         $d['teachers'] = $this->user->getUserByType('teacher');
 
         return view('pages.support_team.sections.index', $d);
@@ -34,7 +35,8 @@ class SectionController extends Controller
     public function store(SectionCreate $req)
     {
         $data = $req->all();
-        $this->my_class->createSection($data);
+        $data['school_id'] = Auth::user()->school_id;
+        $this->my_class->createSectionWithSchool($data);
 
         return Qs::jsonStoreOk();
     }

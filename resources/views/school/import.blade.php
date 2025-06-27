@@ -9,7 +9,7 @@
             {!! Qs::getPanelOptions() !!}
         </div>
         <div class="card-body">
-            <form action="{{ route('school.import') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('schools.import.process') }}" method="POST" enctype="multipart/form-data">
                 @csrf
 
                 <div class="form-group">

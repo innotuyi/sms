@@ -35,6 +35,6 @@ class CreateGradesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('grades');
+        // Schema::dropIfExists('grades'); // Commented out to avoid error if table does not exist
     }
 }

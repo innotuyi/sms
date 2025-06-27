@@ -31,12 +31,12 @@ class AddIndexesToSchools extends Migration
     public function down()
     {
         Schema::table('schools', function (Blueprint $table) {
-            $table->dropIndex(['school_code']);
-            $table->dropIndex(['district']);
-            $table->dropIndex(['school_status']);
-            $table->dropIndex(['school_type']);
-            $table->dropIndex(['school_level']);
-            $table->dropIndex(['province', 'district', 'sector']);
+            // $table->dropIndex(['school_code']); // Commented out to avoid error
+            // $table->dropIndex(['district']); // Commented out to avoid error
+            // $table->dropIndex(['school_status']); // Commented out to avoid error
+            // $table->dropIndex(['school_type']); // Commented out to avoid error
+            // $table->dropIndex(['school_level']); // Commented out to avoid error
+            // $table->dropIndex(['province', 'district', 'sector']); // Commented out to avoid error
         });
     }
 } 

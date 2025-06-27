@@ -59,7 +59,7 @@
     <div class="footer-container">
         <!-- Left Section (Description) -->
         <div class="footer-section">
-            <p>Sure! Imagine a website designed to assist students in choosing the right school based on location and specialization.</p>
+            <p>SCHOOL CONNECT is a platform designed to assist students in choosing the right school based on location and specialization, making school information accessible and easy to compare.</p>
             <div class="social-icons">
                 <a href="#"><i class="fab fa-facebook"></i></a>
                 <a href="#"><i class="fab fa-twitter"></i></a>
@@ -82,14 +82,16 @@
         <div class="footer-section">
             <h3>Get In Touch</h3>
             <p><i class="fas fa-map-marker-alt"></i> KN 224 St-Kigali</p>
-            <p><i class="fas fa-envelope"></i> contact@rangishuri.rw</p>
+            <p><i class="fas fa-envelope"></i> contact@schoolconnect.rw</p>
             <p><i class="fas fa-phone"></i> +250 788 861 433</p>
-            <p><i class="fas fa-clock"></i> Mon-Fri 9:00AM - 5:00PM</p>
         </div>
     </div>
 
     <!-- Copyright Section (Always at Bottom) -->
     <div class="copyright">
-        <p>&copy; 2024 School-Connect All Rights Reserved.</p>
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 8px;">
+            <img src="{{ asset('global_assets/Logo.png') }}" alt="SCHOOL CONNECT Logo" style="height: 50px; width: auto;">
+            <p>&copy; 2024 SCHOOL CONNECT. All Rights Reserved.</p>
+        </div>
     </div>
 </footer>

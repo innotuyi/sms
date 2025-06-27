@@ -353,7 +353,7 @@
     <nav class="navbar">
         <div class="brand">
             <a href="/" class="brand-link">
-                <img src="{{ asset('global_assets/Logo.png') }}" alt="Rangishuri Logo" class="brand-logo"
+                <img src="{{ asset('global_assets/Logo.png') }}" alt="SCHOOL CONNECT Logo" class="brand-logo"
                     style="width: 150px; height: auto;">
             </a>
         </div>
@@ -401,6 +401,9 @@
         </div>
 
         <div class="university-list">
+            @php
+                $universities = $universities ?? [];
+            @endphp
             @foreach($universities as $university)
             <div class="university-item" 
                  data-type="{{ $university->type }}" 
@@ -458,7 +461,7 @@
     <!-- Search Form -->
     <div class="search-container">
         <h3 style="text-align: center; color: #1B3A57; margin-bottom: 20px;">Search Schools</h3>
-        <form id="searchForm" action="{{ route('schools.filter') }}" method="GET">
+        <form id="searchForm" action="{{ route('testfilter') }}" method="GET">
             <div class="row">
                 <div class="col-md-3">
                     <div class="form-group">

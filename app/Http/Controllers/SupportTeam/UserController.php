@@ -20,7 +20,7 @@ class UserController extends Controller
 
     public function __construct(UserRepo $user, LocationRepo $loc, MyClassRepo $my_class)
     {
-        $this->middleware('teamSA', ['only' => ['index', 'store', 'edit', 'update']]);
+        $this->middleware('teamSAT', ['only' => ['index', 'store', 'edit', 'update']]);
         $this->middleware('super_admin', ['only' => ['reset_pass', 'destroy']]);
 
         $this->user = $user;
@@ -35,7 +35,7 @@ class UserController extends Controller
 
         $d['user_types'] = Qs::userIsAdmin() ? $ut2 : $ut;
         $d['states'] = $this->loc->getStates();
-        $d['users'] = $this->user->getPTAUsers();
+        $d['users'] = $this->user->getAllBySchool(Auth::user()->school_id);
         $d['nationals'] = $this->loc->getAllNationals();
         $d['blood_groups'] = $this->user->getBloodGroups();
         return view('pages.support_team.users.index', $d);
@@ -73,6 +73,7 @@ class UserController extends Controller
         $data['user_type'] = $user_type;
         $data['photo'] = Qs::getDefaultUserImage();
         $data['code'] = strtoupper(Str::random(10));
+        $data['school_id'] = Auth::user()->school_id;
 
         $user_is_staff = in_array($user_type, Qs::getStaff());
         $user_is_teamSA = in_array($user_type, Qs::getTeamSA());
@@ -83,7 +84,7 @@ class UserController extends Controller
 
         $staff_id = Qs::getAppCode() . '/STAFF/' . date('Y/m', strtotime($emp_date)) . '/' . mt_rand(1000, 9999);
 
-        $data['username'] = $uname = ($user_is_teamSA) ? $req->username : $staff_id;
+        $data['username'] = $uname = $req->username;
 
         $pass = $req->password ?: $user_type;
         $data['password'] = Hash::make($pass);
@@ -108,6 +109,7 @@ class UserController extends Controller
             $d2 = $req->only(Qs::getStaffRecord());
             $d2['user_id'] = $user->id;
             $d2['code'] = $staff_id;
+            $d2['school_id'] = Auth::user()->school_id;
             $this->user->createStaffRecord($d2);
         }
 
@@ -133,11 +135,7 @@ class UserController extends Controller
         $data['name'] = ucwords($req->name);
         $data['user_type'] = $user_type;
 
-        if ($user_is_staff && !$user_is_teamSA) {
-            $data['username'] = Qs::getAppCode() . '/STAFF/' . date('Y/m', strtotime($req->emp_date)) . '/' . mt_rand(1000, 9999);
-        } else {
-            $data['username'] = $user->username;
-        }
+        $data['username'] = $req->username ?: $user->username;
 
         if ($req->hasFile('photo')) {
             $photo = $req->file('photo');

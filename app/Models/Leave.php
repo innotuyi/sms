@@ -10,6 +10,21 @@ class Leave extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id', 'leave_type', 'start_date', 'end_date', 'reason', 'status', 'approved_by', 'approved_at',
+        'user_id', 'leave_type', 'start_date', 'end_date', 'reason', 'status', 'approved_by', 'approved_at', 'school_id'
     ];
+
+    public function school()
+    {
+        return $this->belongsTo(School::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function approver()
+    {
+        return $this->belongsTo(User::class, 'approved_by');
+    }
 }

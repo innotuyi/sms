@@ -3,15 +3,15 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\School; // Assuming you have the School model
-use Box\Spout\Reader\Common\Creator\ReaderEntityFactory; // Use the updated Spout Reader
+use App\Models\School;
+use Box\Spout\Reader\Common\Creator\ReaderEntityFactory;
 use Validator;
 
 class SchoolImportController extends Controller
 {
     public function showImportForm()
     {
-        return view('school.import'); // A view with the import form
+        return view('school.import');
     }
 
     public function import(Request $request)
